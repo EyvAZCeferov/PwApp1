@@ -1,0 +1,39 @@
+{
+    "loginregister":{
+        "login":{
+            "title":"Daxil ol"
+        },
+        "forgetpass":{
+            "title":"Şifrəmi unuttum"
+        }
+    },
+    "form":{
+        "labels":{
+            "phonenumb":"Telefon nömrəsi",
+            "password":"Şifrə"
+        },
+        "buttons":{
+            "login":"Daxil ol",
+            "register":"Qeydiyyatdan keç",
+            "continue":"Davam et",
+            "backlogin":"Girişə qayıt"
+        },
+        "validation":{
+            "loginregister":{
+                "login":{
+                    "success":"Daxil oldunuz."
+                },
+                "register":{
+                    "success":"Qeydiyyatdan keçdiniz."
+                },
+                "forgetpass":{
+                    "success":"Yeniləmə şifrəsi göndərildi.",
+                    "error":"Alınmadı. Yenidən yoxlayın."
+                }
+            }
+        }
+    },
+    "program":{
+        "pw":"Pay and Win"
+    }
+}
