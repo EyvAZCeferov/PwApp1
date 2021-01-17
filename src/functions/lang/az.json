@@ -5,6 +5,14 @@
         },
         "forgetpass":{
             "title":"Şifrəmi unuttum"
+        },
+        "programlock":{
+            "useFingerPrint":"Giriş üçün barmaq izinizdən istifadə edin",
+            "namesurname":"Ad Soyad"
+        },
+        "mobileverify":{
+            "title":"Şifrəni daxil edin",
+            "desc":"Daxil etdiyiniz telefon nömrəsinə gələn qısa şifrəni daxil edin."
         }
     },
     "form":{
@@ -35,5 +43,15 @@
     },
     "program":{
         "pw":"Pay and Win"
+    },
+    "actions":{
+        "cancel":"Ləğv et"
+    },
+    "tabs":{
+        "home":"Əsas səhifə",
+        "barcode":"Barkod",
+        "bucket":"Səbət",
+        "campaigns":"Kampaniyalar",
+        "info":"Məlumat"
     }
 }

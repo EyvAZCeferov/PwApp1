@@ -19,6 +19,8 @@ import {t} from "../../../functions/lang";
 import AsyncStorage from '@react-native-community/async-storage';
 import DropdownAlert from "react-native-dropdownalert";
 // import {ProgramLockContext} from "../../../../../Functions/Hooks/Authentication/Lock/ProgramLockContext";
+import {setting} from '../../../functions/standart/helper';
+
 
 var reqems = '';
 export default class ProgramLock extends React.Component {
@@ -61,8 +63,9 @@ export default class ProgramLock extends React.Component {
     }
 
     async getInfo() {
-        var token='eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5Mjc4MDk5NC05MWYyLTQ2MGMtYmMzYy0wNmQ0YTM0MGI2YmUiLCJqdGkiOiIwYjUwMGE1N2I1OTU2ZWMwMGFiM2JjNWZiZDUzZTU4ZWEzZWY2ZTg0OGNjNTYwZGNlMzg3Y2Y0YWFlMWFmYTRmMmExN2JiNmNlNGE3NTI0MCIsImlhdCI6MTYxMDQ0OTc4OCwibmJmIjoxNjEwNDQ5Nzg4LCJleHAiOjE2NDE5ODU3ODcsInN1YiI6IjkiLCJzY29wZXMiOltdfQ.OD2qxyEMhEiMTms9oSbfMyTIr_4zs9YUkfbstdXkaw74MfHeF_AsKbU0O0BfvHuhZX71JgotdUCBfvyqHu0wQlxXpH5T5QiGSjdBJOJt4_hdg7l1MWHx9IDzvpQpd_ScHN34TD1xxikVQcIlNg54Cc_uA25dCfCtxRKPPy7NLF3tZxJbWJWA2a1rfZDlzPXlYggAqapMsAW95k2ZbluhEk3fAlZ-s9Rf-7ZhWqMaAIPZ3_AxBooQMiKwG8T1TqN0zzy0PmpdlypPMHgb9xWnN_gQhmDQPkUDPaWaPv0L-HS8lyNfVup8sKHVE4TTKhTfBmokRh55EuSyk590A4-KyfgAYnD3J5SItvbbvDc3nN4QZmtI7S2PIOknqYnCiaAd3JYNrRtCbBhKgunf3IhoEYCqpUoAYA-_0oiUYxkS6qiTCje1_EoLoEqgl-lT3m2ub2ZXd6OsviixlMotyoHNtwEJnIePPMYnqotUQIt73EcQ7nXethcalN-qyKaGWt5AdFnYJ_SkZAl_tYLhvZDGeO8imL_tknt22rNiwlDwyN6S-xZz1ooMdu4Nl8DiJLqaN7gaB61WOhSfz25FbM8cXy_QXCzoJ5l97hEZmTSVoN3rI-scEtFbK41_i7a0JseYZTM2TBH8q09CW3BFWw01TKsr89UEPHgqydyKMiGdgEY';
-        fetch('https://examples.com/data.json', {
+        var token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5Mjc4MDk5NC05MWYyLTQ2MGMtYmMzYy0wNmQ0YTM0MGI2YmUiLCJqdGkiOiIwYjUwMGE1N2I1OTU2ZWMwMGFiM2JjNWZiZDUzZTU4ZWEzZWY2ZTg0OGNjNTYwZGNlMzg3Y2Y0YWFlMWFmYTRmMmExN2JiNmNlNGE3NTI0MCIsImlhdCI6MTYxMDQ0OTc4OCwibmJmIjoxNjEwNDQ5Nzg4LCJleHAiOjE2NDE5ODU3ODcsInN1YiI6IjkiLCJzY29wZXMiOltdfQ.OD2qxyEMhEiMTms9oSbfMyTIr_4zs9YUkfbstdXkaw74MfHeF_AsKbU0O0BfvHuhZX71JgotdUCBfvyqHu0wQlxXpH5T5QiGSjdBJOJt4_hdg7l1MWHx9IDzvpQpd_ScHN34TD1xxikVQcIlNg54Cc_uA25dCfCtxRKPPy7NLF3tZxJbWJWA2a1rfZDlzPXlYggAqapMsAW95k2ZbluhEk3fAlZ-s9Rf-7ZhWqMaAIPZ3_AxBooQMiKwG8T1TqN0zzy0PmpdlypPMHgb9xWnN_gQhmDQPkUDPaWaPv0L-HS8lyNfVup8sKHVE4TTKhTfBmokRh55EuSyk590A4-KyfgAYnD3J5SItvbbvDc3nN4QZmtI7S2PIOknqYnCiaAd3JYNrRtCbBhKgunf3IhoEYCqpUoAYA-_0oiUYxkS6qiTCje1_EoLoEqgl-lT3m2ub2ZXd6OsviixlMotyoHNtwEJnIePPMYnqotUQIt73EcQ7nXethcalN-qyKaGWt5AdFnYJ_SkZAl_tYLhvZDGeO8imL_tknt22rNiwlDwyN6S-xZz1ooMdu4Nl8DiJLqaN7gaB61WOhSfz25FbM8cXy_QXCzoJ5l97hEZmTSVoN3rI-scEtFbK41_i7a0JseYZTM2TBH8q09CW3BFWw01TKsr89UEPHgqydyKMiGdgEY";
+        var settingres=setting(token,'adminURL');
+        fetch(settingres+'/api/userdata/user', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -85,14 +88,14 @@ export default class ProgramLock extends React.Component {
         let enroll = await LocalAuthentication.isEnrolledAsync();
         if (enroll) {
             let authenticate = await LocalAuthentication.authenticateAsync({
-                promptMessage: t('fingerprintaccesstotheapplicationUseyourfingerprinttologin'),
-                cancelLabel: t('cancel'),
-                fallbackLabel: t('password'),
+                promptMessage: t('loginregister.programlock.useFingerPrint'),
+                cancelLabel: t('actions.cancel'),
+                fallbackLabel: t('form.labels.password'),
                 disableDeviceFallback: true
             });
             if (authenticate != null) {
                 if (authenticate.success) {
-                    this.dropDownAlertRef.alertWithType('success', t('signedIn'));
+                    this.dropDownAlertRef.alertWithType('success', t('form.validation.loginregister.login.success'));
                     this.completed()
                 }
             }
@@ -119,41 +122,18 @@ export default class ProgramLock extends React.Component {
 
     renderContent() {
         return (
-            <View style={styles.container}>
-                <DropdownAlert
-                    ref={ref => this.dropDownAlertRef = ref}
-                    useNativeDriver={true}
-                    closeInterval={1000}
-                    zIndex={5000}
-                    updateStatusBar={true}
-                    tapToCloseEnabled={true}
-                    showCancel={true}
-                    elevation={10}
-                    isInteraction={true}
-                    successImageSrc={succesImage}
-                />
-                <StatusBar backgroundColor="#fff" style="dark"/>
+            <View>
                 <View style={styles.header}>
-                    <DropdownAlert
-                        ref={ref => this.dropDownAlertRef = ref}
-                        useNativeDriver={true}
-                        closeInterval={1000}
-                        zIndex={5000}
-                        updateStatusBar={true}
-                        tapToCloseEnabled={true}
-                        showCancel={true}
-                        elevation={10}
-                        isInteraction={true}
-                        successImageSrc={succesImage}
-                    />
                     <ProgramLockHeader
                         {...this.props}
-                        userName={this.state.userName}
-                        userAvatar={this.state.userAvatar ? this.state.userAvatar : null}
+                        userData={this.state.userData}
                     />
                 </View>
                 <View style={styles.codefieldArena}>
-                    <CodeFieldInput completed={() => this.completed()} value={this.state.pass} {...this.props} />
+                    <CodeFieldInput
+                        completed={() => this.completed()}
+                        value={this.state.pass} {...this.props} 
+                      />
                 </View>
                 <View style={styles.buttons}>
                     <NumberButtons
@@ -161,8 +141,10 @@ export default class ProgramLock extends React.Component {
                         changeVal={(e) => this.changeVal(e)} {...this.props} />
                 </View>
                 <View style={styles.footer}>
-                    <FooterBar permission={this.state.hasFingerPrintHardware}
-                               callFingerPrint={() => this.fingerPrint()} {...this.props} />
+                    <FooterBar 
+                        permission={this.state.hasFingerPrintHardware}
+                        callFingerPrint={() => this.fingerPrint()} 
+                        {...this.props} />
                 </View>
             </View>
         )
@@ -170,54 +152,54 @@ export default class ProgramLock extends React.Component {
 
     render() {
         return (
-            <View>
-                <KeyboardAwareScrollView>
+            <KeyboardAwareScrollView style={{ flex:1 }}>
+                <View style={styles.container}>
                     <DropdownAlert
                         ref={ref => this.dropDownAlertRef = ref}
                         useNativeDriver={true}
                         closeInterval={1000}
-                        zIndex={5000}
                         updateStatusBar={true}
                         tapToCloseEnabled={true}
                         showCancel={true}
-                        elevation={10}
-                        isInteraction={true}
+                        elevation={5}
+                        isInteraction={false}
                         successImageSrc={succesImage}
                     />
+                    <StatusBar  backgroundColor="#7c9d32" style="light" />
                     {this.renderContent()}
-                </KeyboardAwareScrollView>
-            </View>
+                </View>
+            </KeyboardAwareScrollView>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: width,
-        height: height,
+        width:width,
+        height:height,
         backgroundColor: "#fff",
-        flexDirection: "column",
-        justifyContent: "space-between"
+        zIndex:99999,
     },
     header: {
         backgroundColor: "#fff",
         width: width,
-        height: (height / 2) - 100
+        maxHeight:'22%',
+        minHeight:'10%',
     },
     codefieldArena: {
-        height: 70,
+        maxHeight:'19%',
+        minHeight:'14%',
         width: width,
         backgroundColor: "#fff",
     },
     buttons: {
-        height: 290,
+        maxHeight:'54%',
+        minHeight:'10%',
         width: width,
     },
     footer: {
-        height: 80,
-        marginBottom: 15,
-        left: 0,
-        right: 0,
+        maxHeight:'8%',
+        minHeight:'4%',
         width: width,
     },
 });

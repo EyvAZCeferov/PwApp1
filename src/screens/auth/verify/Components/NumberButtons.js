@@ -5,34 +5,10 @@ import {Col, Grid, Row} from 'react-native-easy-grid';
 const {width} = Dimensions.get('window');
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 
-import {t} from "../../../../../../Lang";
-import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+import {t} from "../../../../functions/lang";
+import Textpopins from '../../../../functions/screenfunctions/text';
 
-function MyText(props) {
-    let [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-    });
-    if (!fontsLoaded) {
-        return (
-            <Text style={[{
-                fontSize: props.fontSize ? props.textColor : 18,
-                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
-                textAlign: "center"
-            }, props.style ? props.style : null]}>{props.children}</Text>
-        )
-    } else {
-        return (
-            <Text style={[{
-                fontSize: props.fontSize ? props.textColor : 18,
-                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
-                textAlign: "center",
-                fontFamily: "Poppins_400Regular"
-            }, props.style ? props.style : null]}>{props.children}</Text>
-        )
-    }
-}
-
-export default function NumberButton(props) {
+export default function NumberButtons(props) {
 
     function changeVal(e) {
         props.changeVal(e)
@@ -46,27 +22,26 @@ export default function NumberButton(props) {
     function RenderButtons() {
 
         return (
-            <View>
-                <Grid style={styles.grid}>
+            <Grid style={styles.grid}>
                     <Row style={styles.alignCenter}>
                         <Grid style={styles.alignCenter}>
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity
                                     style={[styles.btn, styles.btnPress]}
                                     onPress={() => changeVal(1)}>
-                                    <Text style={styles.btnText}>1</Text>
+                                    <Textpopins style={styles.btnText}>1</Textpopins>
                                 </TouchableOpacity>
                             </Col>
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(2)}>
-                                    <MyText style={styles.btnText} children="2"/>
+                                    <Textpopins style={styles.btnText} children="2"/>
                                 </TouchableOpacity>
                             </Col>
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(3)}>
-                                    <MyText style={styles.btnText} children="3"/>
+                                    <Textpopins style={styles.btnText} children="3"/>
                                 </TouchableOpacity>
                             </Col>
                         </Grid>
@@ -76,19 +51,19 @@ export default function NumberButton(props) {
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(4)}>
-                                    <MyText style={styles.btnText} children="4"/>
+                                    <Textpopins style={styles.btnText} children="4"/>
                                 </TouchableOpacity>
                             </Col>
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(5)}>
-                                    <MyText style={styles.btnText} children={5}/>
+                                    <Textpopins style={styles.btnText} children={5}/>
                                 </TouchableOpacity>
                             </Col>
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(6)}>
-                                    <MyText style={styles.btnText} children={6}/>
+                                    <Textpopins style={styles.btnText} children={6}/>
                                 </TouchableOpacity>
                             </Col>
                         </Grid>
@@ -98,19 +73,19 @@ export default function NumberButton(props) {
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(7)}>
-                                    <MyText style={styles.btnText} children={7}/>
+                                    <Textpopins style={styles.btnText} children={7}/>
                                 </TouchableOpacity>
                             </Col>
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(8)}>
-                                    <MyText style={styles.btnText} children={8}/>
+                                    <Textpopins style={styles.btnText} children={8}/>
                                 </TouchableOpacity>
                             </Col>
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(9)}>
-                                    <MyText style={styles.btnText} children={9}/>
+                                    <Textpopins style={styles.btnText} children={9}/>
                                 </TouchableOpacity>
                             </Col>
                         </Grid>
@@ -121,14 +96,14 @@ export default function NumberButton(props) {
                                 <TouchableOpacity
                                     style={[styles.btn, styles.btnPress]}
                                     onPress={() => BackHandler.exitApp()}>
-                                    <MyText style={[styles.btnText, styles.cancText]}
-                                            children={t('cancel')}/>
+                                    <Textpopins style={[styles.btnText, styles.cancText]}
+                                            children={t('actions.cancel')}/>
                                 </TouchableOpacity>
                             </Col>
                             <Col style={styles.alignCenter}>
                                 <TouchableOpacity style={[styles.btn, styles.btnPress]}
                                                   onPress={() => changeVal(0)}>
-                                    <MyText style={styles.btnText} children={0}/>
+                                    <Textpopins style={styles.btnText} children={0}/>
                                 </TouchableOpacity>
                             </Col>
                             <Col style={styles.alignCenter}>
@@ -144,7 +119,6 @@ export default function NumberButton(props) {
                         </Grid>
                     </Row>
                 </Grid>
-            </View>
         );
     }
 
@@ -161,15 +135,15 @@ export default function NumberButton(props) {
 const styles = StyleSheet.create({
     container: {
         width: width,
-        height: 290,
+        height: '100%',
         backgroundColor: 'transparent',
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
     },
     grid: {
-        width: width - 50,
-        height: 290,
+        width: width - 45,
+        height: '100%',
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',

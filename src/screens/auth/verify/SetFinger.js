@@ -1,27 +1,25 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 import {StatusBar} from "expo-status-bar";
 import {AntDesign, Entypo} from '@expo/vector-icons'
-import {t} from "../../../../../Lang";
+import {t} from "../../../functions/lang";
 import AsyncStorage from '@react-native-community/async-storage';
 import * as LocalAuthentication from "expo-local-authentication";
-import {PasswordSetAndFingerSetContext} from "../../../../../Functions/Hooks/Authentication/FingerAndSetPass/PasswordSetAndFingerSetContext";
+// import {PasswordSetAndFingerSetContext} from "../../../../../Functions/Hooks/Authentication/FingerAndSetPass/PasswordSetAndFingerSetContext";
 
 const {width, height} = Dimensions.get("window");
 
 export default class SetFinger extends React.Component {
-    static contextType = PasswordSetAndFingerSetContext
+    // static contextType = PasswordSetAndFingerSetContext
 
     constructor(props) {
         super(props);
         this.state = {
             setFinger: false,
-            refresh: true
         }
     }
 
     componentDidMount() {
-        this.setState({refresh: true})
         this.getStat()
     }
 
@@ -45,9 +43,9 @@ export default class SetFinger extends React.Component {
                     if (enroll) {
                         let authenticate = await LocalAuthentication.authenticateAsync({
                             disableDeviceFallback: true,
-                            cancelLabel: t('cancel'),
-                            promptMessage: t('fingerprintlogin'),
-                            fallbackLabel: t('fingerprintlogin')
+                            promptMessage: t('loginregister.programlock.useFingerPrint'),
+                            cancelLabel: t('actions.cancel'),
+                            fallbackLabel: t('form.labels.password'),
                         });
                         if (authenticate !== null) {
                             if (authenticate.success) {
@@ -62,7 +60,6 @@ export default class SetFinger extends React.Component {
             }
         }
 
-        this.setState({refresh: false})
     }
 
     async onCancel() {
@@ -71,54 +68,37 @@ export default class SetFinger extends React.Component {
         sethaveLocalAuth(false)
     }
 
-    renderStateIcon() {
-        if (this.state.setFinger) {
-            return (
-                <AntDesign name='checkcircle' color="#fff" size={100}/>
-            )
-        } else {
-            return (
-                <Entypo name='fingerprint' color="#fff" size={100}/>
-            )
-        }
-    }
-
-    renderContent() {
-        if (this.state.refresh) {
-            return (
-                <View style={{flex: 1, justifyContent: "center", alignItems: "center", alignContent: "center"}}>
-                    <StatusBar backgroundColor="#fff" style="dark"/>
-                    <ActivityIndicator size="large" color="#7c9d32"/>
-                </View>
-            )
-        } else {
-            return (
-                <View style={styles.container}>
-                    <StatusBar backgroundColor="#7c9d32" style="light"/>
-                    <View style={styles.panel}>
-                        <View style={styles.topPanel}>
-                            <TouchableOpacity onPress={() => this.onCancel()} style={styles.cancelButton}>
-                                <AntDesign name="close" color="#fff" size={30}/>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={[styles.panel, {height: height / 4}]}>
-                        {this.renderStateIcon()}
-                    </View>
-                    <View style={styles.panel}>
-                        <Text
-                            style={styles.desc}>{t('fingerprintaccesstotheapplicationUseyourfingerprinttologin')}</Text>
-                    </View>
-                    <View style={styles.panel}/>
-                </View>
-            )
-        }
-    }
-
     render() {
         return (
-            <View>
-                {this.renderContent()}
+            <View style={styles.container}>
+                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <View style={styles.panel}>
+                    <View style={styles.topPanel}>
+                        <TouchableOpacity onPress={() => this.onCancel()} style={styles.cancelButton}>
+                            <AntDesign name="close" color="#fff" size={30}/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={[styles.panel, {height: height / 4}]}>
+                {this.state.setFinger ?
+                    (
+                        <TouchableOpacity onPress={() => this.getStat()}>
+                            <AntDesign name='checkcircle' color="#fff" size={100}/>
+                        </TouchableOpacity>
+                    )
+                :
+                    (
+                        <TouchableOpacity onPress={() => this.getStat()}>
+                            <Entypo name='fingerprint' color="#fff" size={100}/>
+                        </TouchableOpacity>
+                    )
+                }
+                </View>
+                <View style={styles.panel}>
+                    <Text
+                        style={styles.desc}>{t('loginregister.programlock.useFingerPrint')}</Text>
+                </View>
+                <View style={styles.panel}/>
             </View>
         )
     }

@@ -10,16 +10,17 @@ import {
 import {LiteCreditCardInput} from 'react-native-credit-card-input';
 import {t} from '../../../functions/lang';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+const succesImage = require('../../../../assets/images/Alert/tick.png');
 
 var {width} = Dimensions.get('window');
 const icon = require('../../../../assets/icon-ios.png');
 import {StatusBar} from "expo-status-bar";
-// import DropdownAlert from "react-native-dropdownalert";
+import DropdownAlert from "react-native-dropdownalert";
 import AsyncStorage from "@react-native-community/async-storage";
 import Textpopins from '../../../functions/screenfunctions/text';
 import customStyle from '../../../../assets/Theme';
 import Constants from 'expo-constants';
-
+import {makeid} from '../../../functions/standart/helper';
 
 export default class Register extends React.Component {
     constructor(props) {
@@ -31,31 +32,20 @@ export default class Register extends React.Component {
             data: [],
         };
     }
-
-    makeid(length) {
-        var result = '';
-        var characters =
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-    }
-
-    signUp = async () => {
+    signUp () {
         Keyboard.dismiss();
-        let cardId = this.makeid(15)
+        let cardId = makeid()
         if (this.state.phoneNumb !== null) {
             const cardDatas = {
                 cardId: cardId,
                 cardPass: this.state.pincode,
                 cardInfo: this.state.cardInfos,
             }
-            await AsyncStorage.setItem('haveFinger', '');
-            await AsyncStorage.setItem('localAuthPass', '');
+            // await AsyncStorage.setItem('haveFinger', '');
+            // await AsyncStorage.setItem('localAuthPass', '');
         }
-        this.dropDownAlertRef.alertWithType('info', t('form.validation.loginregister.register.success'));
+        this.dropDownAlertRef.alertWithType('success', t('form.validation.loginregister.register.success'));
+        this.props.navigation.navigate('MobileVerify');
         // this.dropDownAlertRef.alertWithType('error', t('form.validation.loginregister.forgetpass.error'));
     };
 
@@ -68,7 +58,17 @@ export default class Register extends React.Component {
         return (
             <KeyboardAwareScrollView style={styles.container}>
                 <StatusBar backgroundColor="#fff" style="dark"/>
-
+                <DropdownAlert
+                        ref={ref => this.dropDownAlertRef = ref}
+                        useNativeDriver={true}
+                        closeInterval={1000}
+                        updateStatusBar={true}
+                        tapToCloseEnabled={true}
+                        showCancel={true}
+                        elevation={5}
+                        isInteraction={false}
+                        successImageSrc={succesImage}
+                    />
                 <View style={[customStyle.centerItems, styles.mt]}>
 
                     <View style={styles.mt}>

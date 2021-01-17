@@ -1,10 +1,12 @@
 import React from 'react';
 import {StyleSheet, Dimensions, View, Text} from 'react-native';
-import {Button, Footer, FooterTab} from 'native-base';
+import {Button} from 'native-base';
+import {Col, Grid, Row} from 'react-native-easy-grid';
 
-var width = Dimensions.get('window').width;
+const {width,height} = Dimensions.get('window');
 import {Entypo, FontAwesome5} from '@expo/vector-icons';
-import {t} from "../../../../../../../Lang";
+import {t} from "../../../../../functions/lang";
+import Textpopins from '../../../../../functions/screenfunctions/text';
 
 export default class FooterBar extends React.Component {
     constructor(props) {
@@ -13,34 +15,60 @@ export default class FooterBar extends React.Component {
 
     render() {
         return (
-            <View>
-                {this.props.permission ? (
-                    <Footer style={styles.bgCol}>
-                        <Button vertical transparent style={[styles.bgCol, styles.oneButton]}
-                                onPress={() => this.props.navigation.navigate('Fp')}>
-                            <Entypo name="lock" size={24} color="#6d7587"/>
-                            <Text style={styles.colorAndFontSize}>
-                                {t('forgetPass')}
-                            </Text>
-                        </Button>
-                        <FooterTab style={styles.bgCol}>
-                            <Button style={[styles.bgCol, styles.oneButton]} onPress={() => this.props.callFingerPrint()} vertical
+            <View style={{ 
+                width:width,
+                height:"100%",
+                justifyContent: "center",
+                alignContent: "center",
+                alignItems: "center",
+                borderTopColor:"#7c9d32",
+                borderTopWidth:2,
+                }}>
+                {!this.props.permission ? (
+                    <Row>
+                        <Grid style={{ height:"100%" }}>
+                            <Col>
+                                <Button 
+                                    vertical
+                                    transparent 
+                                    style={{ width:"100%"}}
+                                    onPress={() => this.props.navigation.navigate('Fp')}>
+                                        <Entypo name="lock" size={24} color="#6d7587"/>
+                                        <Textpopins style={styles.colorAndFontSize}>
+                                            {t('loginregister.forgetpass.title')}?
+                                        </Textpopins>
+                                </Button>
+                            </Col>
+                            <Col>
+                                <Button 
+                                    vertical
+                                    style={{ width:"100%"}} 
+                                    onPress={() => this.props.callFingerPrint()} 
                                     transparent>
-                                <FontAwesome5 name="fingerprint" size={24} color="#6d7587"/>
-                                <Text style={styles.colorAndFontSize}>{t('fingerprintlogin')}</Text>
-                            </Button>
-                        </FooterTab>
-                    </Footer>
+                                        <FontAwesome5 name="fingerprint" size={24} color="#6d7587"/>
+                                        <Textpopins style={styles.colorAndFontSize}>
+                                            {t('loginregister.programlock.useFingerPrint')}
+                                        </Textpopins>
+                                </Button>
+                            </Col>
+                        </Grid>
+                    </Row>
                 ) : (
-                    <Footer style={styles.bgCol}>
-                        <Button vertical transparent style={[styles.bgCol, styles.oneButton]}
+                    <View style={{ 
+                        width:width/2,
+                        height:"100%",
+                        backgroundColor:"#fff",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        alignItems: "center"  }}>
+                        <Button vertical transparent style={styles.oneButton}
                                 onPress={() => this.props.navigation.navigate('Fp')}>
                             <Entypo name="lock" size={24} color="#6d7587"/>
-                            <Text style={styles.colorAndFontSize}>
-                                {t('forgetPass')}
-                            </Text>
+                            <Textpopins style={styles.colorAndFontSize}>
+                                {t('loginregister.forgetpass.title')}?
+                            </Textpopins>
                         </Button>
-                    </Footer>
+                    </View>
                 )}
             </View>
         );
@@ -48,27 +76,9 @@ export default class FooterBar extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    bgCol: {
-        borderColor: '#fff',
-        backgroundColor: "#fff",
-        width: width,
-        height: 70,
-        textAlign: 'center',
-        justifyContent: "center",
-        alignContent: "center",
-        alignItems: "center",
-    },
-    oneButton: {
-        width: width / 2,
-    },
     colorAndFontSize: {
-        borderColor: '#fff',
-        backgroundColor: "#fff",
         color: '#6d7587',
-        fontSize: 16,
-        textAlign: 'center',
-        justifyContent: "center",
-        alignContent: "center",
-        alignItems: "center",
+        fontSize: 15,
+        flexWrap:"wrap",
     },
 });

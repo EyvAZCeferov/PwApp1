@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import { Text,View,StyleSheet,Dimensions } from 'react-native'
 import {Poppins_400Regular,useFonts} from "@expo-google-fonts/poppins";
 
