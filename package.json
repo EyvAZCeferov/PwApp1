@@ -32,7 +32,7 @@
     "expo-sharing": "^8.5.0",
     "expo-status-bar": "^1.0.3",
     "fiction-expo-restart": "^1.0.6",
-    "firebase": "^8.2.2",
+    "firebase": "^8.2.3",
     "native-base": "^2.15.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",

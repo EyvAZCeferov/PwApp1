@@ -10,5 +10,8 @@ var firebaseConfig = {
     appId: '1:529946008622:web:7eaa8efcadd7aa4de113bf',
     measurementId: 'G-FD4T4X8TRP',
 };
-firebase.initializeApp(firebaseConfig);
+
+// if(!firebase.app().length){
+    firebase.initializeApp(firebaseConfig);
+// }
 export default firebase;

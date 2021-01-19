@@ -1,7 +1,8 @@
 import * as React from "react";
-import {NavigationContainer} from "@react-navigation/native";
+import {NavigationContainer, useLinkProps} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {enableScreens} from 'react-native-screens';
 import {getLang, t} from './src/functions/lang';
 import {AntDesign} from "@expo/vector-icons";
@@ -12,6 +13,7 @@ import store from './src/functions/store';
 import {Alert,View} from 'react-native';
 import {Root} from 'native-base';
 import TabComponent from './src/functions/screenfunctions/tabs/tabstyle';
+import DrawerStyle from './src/functions/screenfunctions/drawer/drawerstyle';
 enableScreens();
 
 // screens
@@ -27,6 +29,7 @@ import ProgramLock from './src/screens/auth/verify/programlock'
 import Home from './src/screens/tabs/home/home'
 import BarcodeStarter from './src/screens/tabs/barcode/barcodestarter';
 import BucketHome from './src/screens/tabs/bucket/BucketHome';
+import Campaigns from './src/screens/tabs/campaign/Campaigns';
 import Profile from './src/screens/tabs/info/profile';
 
 const AuthStack = createStackNavigator();
@@ -83,40 +86,35 @@ const VerifyStackScreen=(props)=>(
 );
 
 const Tabs=createBottomTabNavigator();
-const TabsScreen=(props)=>(
+const TabsScreen=()=>(
     <Tabs.Navigator
         headerMode="none"
         initialRouteName="Home"
-        activeColor="#7c9d32"
-        inactiveColor="rgba(0,0,0,.5)"
-        barStyle={{backgroundColor: '#fff',height:"100%", borderColor: '#fff', borderWidth: 0, borderRadius: 0}}
-        screenOptions={({route}) => ({
-            tabBarIcon: ({color = "#7c9d32"}) => {
-                const icons = {
-                    Home: 'home',
-                    BarcodeStarter: 'plus',
-                    // Campaign: 'paperclip',
-                    BucketHome: 'shoppingcart',
-                    Profile: 'profile',
-                };
-                return (
-                    <AntDesign
-                        name={icons[route.name]}
-                        color={color}
-                        size={25}
-                    />
-                )
-            },
-            tabBarColor: "#ffffff",
-        })}
     >
-    <Tabs.Screen name="Home" component={Home} options={{ 
-        tabBarButton:(props)=><TabComponent label={t('tabs.home')} />
+    <Tabs.Screen name="Home" component={HomeStackScreen} options={{ 
+        tabBarButton:(props)=><TabComponent labid="home" label={t('tabs.home')} {...props} />,
+     }}   />
+    <Tabs.Screen name="BarcodeStarter" component={BarcodeStarter} options={{ 
+        tabBarButton:(props)=><TabComponent labid="barcode" label={t('tabs.barcode')} {...props} />,
+     }}  />
+    <Tabs.Screen name="BucketHome" component={BucketHome}  options={{ 
+        tabBarButton:(props)=><TabComponent labid="bucket" label={t('tabs.bucket')} {...props} />,
      }} />
-    <Tabs.Screen name="BarcodeStarter" component={BarcodeStarter} />
-    <Tabs.Screen name="BucketHome" component={BucketHome} />
-    <Tabs.Screen name="Profile" component={Profile} />
+    <Tabs.Screen name="Campaigns" component={Campaigns} options={{ 
+        tabBarButton:(props)=><TabComponent labid="campaigns" label={t('tabs.campaigns')} {...props} />,
+     }} />
     </Tabs.Navigator>
+);
+
+const HomeStack=createDrawerNavigator();
+const HomeStackScreen=()=>(
+    <HomeStack.Navigator
+        headerMode="none"
+        initialRouteName="Home"
+        drawerContent={(props)=><DrawerStyle {...props} />}
+        >
+        <HomeStack.Screen name="Home" component={Home} />
+    </HomeStack.Navigator>
 );
 
 

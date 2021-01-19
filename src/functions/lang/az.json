@@ -15,6 +15,11 @@
             "desc":"Daxil etdiyiniz telefon nömrəsinə gələn qısa şifrəni daxil edin."
         }
     },
+    "home":{
+        "slidercards":{
+            "expiry":"Bitmə tarixi"
+        }
+    },
     "form":{
         "labels":{
             "phonenumb":"Telefon nömrəsi",
@@ -45,7 +50,8 @@
         "pw":"Pay and Win"
     },
     "actions":{
-        "cancel":"Ləğv et"
+        "cancel":"Ləğv et",
+        "noResult":"Məlumat tapılmadı",
     },
     "tabs":{
         "home":"Əsas səhifə",
@@ -53,5 +59,9 @@
         "bucket":"Səbət",
         "campaigns":"Kampaniyalar",
         "info":"Məlumat"
+    },
+    "drawer":{
+        "home":"Əsas səhifə",
+        "logout":"Çıxış et"
     }
 }
