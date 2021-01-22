@@ -43,15 +43,15 @@ export default function RecentOperations() {
 
     function renderItem({item, index}) {
         function marketTypeFunc() {
-            switch (item.market) {
-                case "Bazar Store":
-                    return <FontAwesome name="cc-visa" size={30} color="#7c9d32"/>
+            switch (item.type) {
+                case "barcode":
+                    return <FontAwesome name="barcode" size={30} color="#7c9d32"/>
                     break;
-                case "Araz":
-                    return <FontAwesome name="cc-mastercard" size={30} color="#7c9d32"/>
+                case "bucket":
+                    return <FontAwesome name="bucket" size={30} color="#7c9d32"/>
                     break;
                 default:
-                    return <FontAwesome name="credit-card" size={30} color="#7c9d32"/>
+                    return <FontAwesome name="shopping" size={30} color="#7c9d32"/>
             }
         }
 
@@ -63,7 +63,7 @@ export default function RecentOperations() {
                 var datas = [];
                 firebase
                     .database()
-                    .ref('users/' + user.uid + '/checks/' + id + '/products')
+                    .ref('users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/shoppings/' + id + '/products')
                     .on('value', (data) => {
                         if (data.numChildren() > 0 && data != null) {
                             data.forEach((data) => {
@@ -113,8 +113,8 @@ export default function RecentOperations() {
             <ListItem
                 thumbnail
                 onPress={() =>
-                    nav.navigate("OtherPages", {
-                        screen: 'OneCheck',
+                    nav.navigate({
+                        screen:'Check',
                         params: {
                             checkid: item.id,
                         }
@@ -123,16 +123,16 @@ export default function RecentOperations() {
                 key={index}
             >
                 <Left>
-                    <AntDesign name="shoppingcart" color="#7c9d32" size={24}/>
+                    {marketTypeFunc()}
                 </Left>
                 <Body>
-                    <MyText style={{fontSize: 22, color: "rgba(0,0,0,.8)", textAlign: "left"}} children={item.market}/>
-                    <MyText style={{fontSize: 14, color: "rgba(0,0,0,.6)", textAlign: "left"}}
+                    <Textpopins style={{fontSize: 22, color: "rgba(0,0,0,.8)", textAlign: "left"}} children={item.market}/>
+                    <Textpopins style={{fontSize: 14, color: "rgba(0,0,0,.6)", textAlign: "left"}}
                             children={convertStampDate(item.date)}/>
                 </Body>
                 <Right>
                     <Button transparent>
-                        <MyText children={sumPrice(item.id) + ' AZN'}/>
+                        <Textpopins children={sumPrice(item.id) + ' AZN'}/>
                     </Button>
                 </Right>
             </ListItem>
@@ -203,19 +203,24 @@ export default function RecentOperations() {
 
     return (
         <View style={{flex: 1}}>
-            <View sttyle={styles.panelHandle}>
+            <View>
                 <View style={{
+                    borderTopColor:"#7c9d32",
+                    borderTopWidth:4,
                     maxHeight: 60,
                     minHeight: 45,
                     width: width,
                 }}>
                     <View style={{
-                        marginHorizontal: 20,
                         justifyContent: "space-between",
+                        paddingHorizontal:12,
                         flexDirection: "row",
+                        alignContent:"center",
+                        alignItems:"center",
+                        flex:1,
                     }}>
-                        <Textpopins style={{color: "#7c9d32", marginVertical: 10}} children={t('recentoperations')}/>
-                        <Textpopins style={{color: "#7c9d32", marginVertical: 10}} children={t('yesterday')}/>
+                            <Text style={{color: "#7c9d32", fontSize:20,fontWeight:"bold"}} children={t('home.recentoperations.title')}/>
+                            <Text style={{color: "#7c9d32", fontSize:17}} children={t('home.recentoperations.time.yesterday')}/>
                     </View>
                 </View>
                 <View style={{height: height / 2.25, width: width, marginBottom: 20}}>
@@ -252,13 +257,6 @@ const styles = StyleSheet.create({
         color: '#BF360C',
         fontSize: 19,
         textAlign: 'center',
-    },
-    panelHandle: {
-        height: 300,
-        width: width,
-        backgroundColor: "#666",
-        borderRadius: 6,
-        alignSelf: "center",
     },
     noResult: {
         color: '#D50000',

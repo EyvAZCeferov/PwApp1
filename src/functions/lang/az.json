@@ -13,17 +13,67 @@
         "mobileverify":{
             "title":"Şifrəni daxil edin",
             "desc":"Daxil etdiyiniz telefon nömrəsinə gələn qısa şifrəni daxil edin."
+        },
+        "setpass":{
+            "newpassword":"Giriş şifrəsini daxil edin",
+            "repeatpassword":"Şifrəni təkrar daxil edin"
         }
     },
     "home":{
         "slidercards":{
             "expiry":"Bitmə tarixi"
+        },
+        "recentoperations":{
+            "title":"Sonuncu ödənişlər",
+            "time":{
+                "yesterday":"Dünən",
+                "today":"Bugün",
+                "thismonth":"Bu ay",
+                "thisyear":"Bu il",
+                "thisweek":"Bu həftə"
+            }
+        },
+        "notifications":{
+            "title":"Bildirimlər" 
+        }
+    },
+    "cards":{
+        "minimal":"Ən az 1 ədəd olmalıdır",
+        "cartadd":"Kart əlavə et"
+    },
+    "maps":{
+        "tablist":{
+            "title":"Xəritə listi"
+        },
+        "tabview":{
+            "title":"Xəritə görünüşü"
+        }
+    },
+    "history":{
+        "starttime":"Başlanğıc vaxtı",
+        "endtime":"Bitiş vaxtı",
+        "marketName":"Market adı"
+    },
+    "settings":{
+        "addfinger":"Barmaq izi əlavə et",
+        "listitems":{
+            "general":"Ümumi",
+            "langs":"Dil seç",
+            "security":"Güvənlik",
+            "changeloginpass":"Giriş şifrəsini dəyiş",
+            "fingerprint":"Barmaq izi",
+            "aboutapplication":"PW haqda",
+            "termofuse":"İstifadə şərtləri",
+            "programversion":"Versiya"
         }
     },
     "form":{
         "labels":{
             "phonenumb":"Telefon nömrəsi",
-            "password":"Şifrə"
+            "password":"Şifrə",
+            "email":"Elektron poçt",
+            "subject":"Mövzu",
+            "content":"Məzmun"
         },
         "buttons":{
             "login":"Daxil ol",
@@ -52,6 +102,13 @@
     "actions":{
         "cancel":"Ləğv et",
         "noResult":"Məlumat tapılmadı",
+        "wantdelete":"Silmək istədiyinizdən əminsiniz?",
+        "notrecovered":"Siləcəyiniz məlumat geri qaytarılmır.",
+        "delete":"Sil",
+        "deleted":"Silindi",
+        "readallnotifications":"Bütün bildirimləri oxundu işarələ.",
+        "submit":"Təsdiqlə",
+        "send":"Göndər"
     },
     "tabs":{
         "home":"Əsas səhifə",
@@ -62,6 +119,13 @@
     },
     "drawer":{
         "home":"Əsas səhifə",
+        "cards":"Kartlar",
+        "bonuses":"Bonus kartlar",
+        "accounts":"Hesab parametrləri",
+        "map":"Xəritə",
+        "history":"Tarixçə",
+        "contactus":"Bizimlə əlaqə",
+        "settings":"Parametrlər",
         "logout":"Çıxış et"
     }
 }

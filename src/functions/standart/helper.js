@@ -22,7 +22,7 @@ export function setting(token,field){
     }
 }
 
-export function makeid(type=null,length=16){
+export function makeid(length=16,type=null){
     if(type=="numb"){
             var result = '';
             var characters ='0123456789';

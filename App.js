@@ -25,12 +25,23 @@ import SetFinger from './src/screens/auth/verify/SetFinger';
 import MobileVerify from './src/screens/auth/verify/mobileverify';
 import ForgotPassword from './src/screens/auth/global/forgetpass';
 import ProgramLock from './src/screens/auth/verify/programlock'
+import SetPass from './src/screens/auth/verify/SetPass';
 
 import Home from './src/screens/tabs/home/home'
 import BarcodeStarter from './src/screens/tabs/barcode/barcodestarter';
 import BucketHome from './src/screens/tabs/bucket/BucketHome';
 import Campaigns from './src/screens/tabs/campaign/Campaigns';
-import Profile from './src/screens/tabs/info/profile';
+import Notification from './src/screens/tabs/home/notifications'
+import NotificationOne from './src/screens/tabs/home/notificationone'
+import Cards from './src/screens/tabs/info/cards';
+import Bonuses from './src/screens/tabs/info/bonuses';
+import Pininfo from './src/screens/tabs/info/pininfo';
+import Account from './src/screens/tabs/info/accounts';
+import Map from './src/screens/tabs/info/maps';
+import History from './src/screens/tabs/info/history';
+import Contactus from './src/screens/tabs/info/contactus';
+import Settings from './src/screens/tabs/info/settings';
+import Termofuse from './src/screens/tabs/info/termofuse';
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -106,17 +117,38 @@ const TabsScreen=()=>(
     </Tabs.Navigator>
 );
 
-const HomeStack=createDrawerNavigator();
+const HomeStack=createStackNavigator();
 const HomeStackScreen=()=>(
     <HomeStack.Navigator
         headerMode="none"
         initialRouteName="Home"
-        drawerContent={(props)=><DrawerStyle {...props} />}
         >
-        <HomeStack.Screen name="Home" component={Home} />
+        <HomeStack.Screen name="Home" component={HomeDrawerStackScreen} />
+        <HomeStack.Screen name="Notifications" component={Notification} />
+        <HomeStack.Screen name="Notification" component={NotificationOne} />
+        <HomeStack.Screen name="Pininfo" component={Pininfo} />
+        <HomeStack.Screen name="Termofuse" component={Termofuse} />
+        <HomeStack.Screen name="SetFinger" component={SetFinger} />
+        <HomeStack.Screen name="SetPass" component={SetPass} />
     </HomeStack.Navigator>
 );
 
+const HomeDrawerStack=createDrawerNavigator();
+const HomeDrawerStackScreen=()=>(
+    <HomeDrawerStack.Navigator
+            headerMode="none"
+            initialRouteName="Home"
+            drawerContent={(props)=><DrawerStyle {...props} />}>
+        <HomeDrawerStack.Screen  name="Home" component={Home} />
+        <HomeDrawerStack.Screen  name="Cards" component={Cards} />
+        <HomeDrawerStack.Screen  name="Bonuses" component={Bonuses} />
+        <HomeDrawerStack.Screen  name="Account" component={Account} />
+        <HomeDrawerStack.Screen  name="Maps" component={Map} />
+        <HomeDrawerStack.Screen  name="History" component={History} />
+        <HomeDrawerStack.Screen  name="Contactus" component={Contactus} />
+        <HomeDrawerStack.Screen  name="Settings" component={Settings} />
+    </HomeDrawerStack.Navigator>
+);
 
 export default function(props) {
     const [firstOpenSlider, setfirstOpenSlider] = React.useState(null);

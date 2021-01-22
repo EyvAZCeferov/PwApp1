@@ -1,14 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import {StyleSheet, Dimensions, SafeAreaView, View, FlatList, Animated, ActivityIndicator} from 'react-native';
 import firebase from '../../../../../functions/firebase/firebaseConfig';
 import CardOne from "./CardOne";
 
 const {width, height} = Dimensions.get('window');
-export default function SliderCards({props}) {
+export default function SliderCards() {
     const [cards, setcards] = React.useState(null)
     const [refreshing, setrefreshing] = React.useState(true)
 
     function getInfo() {
+        setrefreshing(true);
         var datas=[];
         firebase.database()
                 .ref('users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/cards')
@@ -24,10 +25,7 @@ export default function SliderCards({props}) {
 
     React.useEffect(() => {
         getInfo();
-        setInterval(() => {
-            getInfo()
-        }, 13000)
-    }, []);
+    },[]);
 
     function onHandleRefresh() {
         setrefreshing(true);
@@ -59,6 +57,7 @@ export default function SliderCards({props}) {
                     backgroundColor:"#fff",
                     justifyContent: 'center',
                 }}>
+                {!cards || cards==null ? getInfo() :(
                 <AnimatedFlatlist
                     vertical={true}
                     scrollEventThrottle={20}
@@ -75,6 +74,7 @@ export default function SliderCards({props}) {
                     ItemSeperatorComponent={ComponentSep}
                     {...{onScroll}}
                 />
+                )}
             </View>
         );
 
@@ -85,8 +85,7 @@ export default function SliderCards({props}) {
             <View>
                 {refreshing ? (
                     <View style={{
-                        width: width,
-                        height: "100%",
+                        flex: 1,
                         justifyContent: "center",
                         alignItems: "center",
                         alignContent: "center"
@@ -98,7 +97,7 @@ export default function SliderCards({props}) {
                         <SafeAreaView
                             style={{
                                 flex: 1,
-                                // paddingTop: height / 55,
+                                paddingTop: height / 55,
                             }}>
                             {renderCards()}
                         </SafeAreaView>
@@ -120,5 +119,6 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: 201,
+        backgroundColor:"#fff"
     },
 });

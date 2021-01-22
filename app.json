@@ -21,7 +21,10 @@
       "icon":"./assets/icon-ios.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.alov.payandwin",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "config":{
+        "googleMapsApiKey":"AIzaSyAnwXJXpo1gqAb6gVJ9PCmy0iBqJRflt80"
+      }
     },
     "android": {
       "package": "com.alov.payandwin",

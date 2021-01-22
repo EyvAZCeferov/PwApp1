@@ -22,6 +22,10 @@ export default class Home extends React.Component {
         this.renderContent();
     }
 
+    componentDidMount(){
+        this.renderContent();
+    }
+
     renderContent(){
         return(
             <View style={styles.contentArena}>
@@ -33,26 +37,23 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <View style={{ flex:1, backgroundColor:"#fff" }}>
-                <StatusBar style="dark" backgroundColor="#fff"/>
-                <SafeAreaView style={{ flex:1, marginTop:Constants.statusBarHeight }}>
-                    <View style={styles.header}>
-                        <Button
-                            transparent
-                            onPress={()=>this.props.navigation.toggleDrawer()}
-                            >
-                            <AntDesign name="menufold" size={24} color="#7c9d32"/>
-                        </Button>
-                        <Thumbnail source={icon} style={styles.icon}/>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.navigate('Notification')}>
-                            <Ionicons name="ios-notifications" size={24} color="#7c9d32"/>
-                        </Button>
-                    </View>
-                        {this.renderContent()}
-                </SafeAreaView>
-            </View>
+            <SafeAreaView style={{ flex:1 }}>
+                <View style={styles.header}>
+                    <Button
+                        transparent
+                        onPress={()=>this.props.navigation.toggleDrawer()}
+                        >
+                        <AntDesign name="menufold" size={24} color="#7c9d32"/>
+                    </Button>
+                    <Thumbnail source={icon} style={styles.icon}/>
+                    <Button
+                        transparent
+                        onPress={() => this.props.navigation.navigate('Notifications')}>
+                        <Ionicons name="ios-notifications" size={24} color="#7c9d32"/>
+                    </Button>
+                </View>
+                    {this.renderContent()}
+            </SafeAreaView>
         )
     }
 }
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
         paddingBottom:2,
         borderBottomColor:"#7c9d32",
         borderBottomWidth:2,
+        marginTop:Constants.statusBarHeight,
     },
     icon: {
         width: 45,
@@ -74,6 +76,6 @@ const styles = StyleSheet.create({
     },
     contentArena: {
        width:width,
-    //    backgroundColor:"red",
+    //    backgroundColor:"#fff",
     },
 });

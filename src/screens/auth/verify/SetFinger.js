@@ -24,7 +24,7 @@ export default class SetFinger extends React.Component {
     }
 
     async getStat() {
-        await AsyncStorage.setItem('haveFinger', '')
+        await AsyncStorage.removeItem('haveFinger');
         AsyncStorage.getItem('haveFinger').then((a) => {
             if (a !== null) {
                 this.setState({setFinger: true})
@@ -66,6 +66,7 @@ export default class SetFinger extends React.Component {
         await AsyncStorage.setItem('haveFinger', null)
         const {haveLocalAuth, sethaveLocalAuth} = this.context
         sethaveLocalAuth(false)
+        this.props.navigation.goBack();
     }
 
     render() {
