@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "529946008622",
+    "firebase_url": "https://storeapp1-ea810.firebaseio.com",
+    "project_id": "storeapp1-ea810",
+    "storage_bucket": "storeapp1-ea810.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529946008622:android:0be8417751f000c5e113bf",
+        "android_client_info": {
+          "package_name": "com.alov.payandwin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529946008622-k0ha7svcde0janjo4aisgiiqtil7l23j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529946008622-k0ha7svcde0janjo4aisgiiqtil7l23j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

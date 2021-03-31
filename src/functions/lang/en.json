@@ -1,0 +1,154 @@
+{
+    "loginregister":{
+        "login":{
+            "title":"Login"
+        },
+        "forgetpass":{
+            "title":"Forget password?"
+        },
+        "programlock":{
+            "useFingerPrint":"Giriş üçün barmaq izinizdən istifadə edin",
+            "namesurname":"Ad Soyad"
+        },
+        "mobileverify":{
+            "title":"Şifrəni daxil edin",
+            "desc":"Daxil etdiyiniz telefon nömrəsinə gələn qısa şifrəni daxil edin."
+        },
+        "setpass":{
+            "title":"Giriş şifrəsini təyin et",
+            "newpassword":"Giriş şifrəsini daxil edin",
+            "repeatpassword":"Şifrəni təkrar daxil edin"
+        }
+    },
+    "home":{
+        "slidercards":{
+            "expiry":"Bitmə tarixi"
+        },
+        "recentoperations":{
+            "title":"Sonuncu ödənişlər",
+            "time":{
+                "yesterday":"Dünən",
+                "today":"Bugün",
+                "thismonth":"Bu ay",
+                "thisyear":"Bu il",
+                "thisweek":"Bu həftə"
+            }
+        },
+        "notifications":{
+            "title":"Bildirimlər"
+        }
+    },
+    "cards":{
+        "minimal":"Ən az 1 ədəd olmalıdır",
+        "cartadd":"Kart əlavə et"
+    },
+    "maps":{
+        "tablist":{
+            "title":"Xəritə listi"
+        },
+        "tabview":{
+            "title":"Xəritə görünüşü"
+        }
+    },
+    "history":{
+        "starttime":"Başlanğıc vaxtı",
+        "endtime":"Bitiş vaxtı",
+        "marketName":"Market adı"
+    },
+    "settings":{
+        "addfinger":"Barmaq izi əlavə et",
+        "listitems":{
+            "general":"Ümumi",
+            "langs":"Dil seç",
+            "security":"Güvənlik",
+            "changeloginpass":"Giriş şifrəsini dəyiş",
+            "fingerprint":"Barmaq izi",
+            "aboutapplication":"PW haqda",
+            "termofuse":"İstifadə şərtləri",
+            "accounts":"Hesab parametrləri",
+            "programversion":"Versiya"
+        }
+    },
+    "bucket":{
+        "header":{
+            "tabtitle":"Səbət",
+            "search":"Axtar",
+            "wishList":{
+                "title":"Sevimlilər"
+            },
+            "cartlists":{
+                "title":"Səbətiniz"
+            }
+        }
+    },
+    "barcode":{
+        "starter":{
+            "selectmarket":"Marketi seçərək davam edin",
+            "orQr":"Qr kodunu oxudaraq davam edin"
+        },
+        "cardselect":{
+            "title":"Kart seçərək davam edin",
+            "selectCard":"Kart seç"
+        }
+    },
+    "form":{
+        "labels":{
+            "phonenumb":"Telefon nömrəsi",
+            "password":"Şifrə",
+            "email":"Elektron poçt",
+            "subject":"Mövzu",
+            "content":"Məzmun"
+        },
+        "buttons":{
+            "login":"Daxil ol",
+            "register":"Qeydiyyatdan keç",
+            "continue":"Davam et",
+            "backlogin":"Girişə qayıt"
+        },
+        "validation":{
+            "loginregister":{
+                "login":{
+                    "success":"Daxil oldunuz."
+                },
+                "register":{
+                    "success":"Qeydiyyatdan keçdiniz."
+                },
+                "forgetpass":{
+                    "success":"Yeniləmə şifrəsi göndərildi.",
+                    "error":"Alınmadı. Yenidən yoxlayın."
+                }
+            }
+        }
+    },
+    "program":{
+        "pw":"Pay and Win"
+    },
+    "actions":{
+        "cancel":"Ləğv et",
+        "noResult":"Məlumat tapılmadı",
+        "wantdelete":"Silmək istədiyinizdən əminsiniz?",
+        "notrecovered":"Siləcəyiniz məlumat geri qaytarılmır.",
+        "delete":"Sil",
+        "deleted":"Silindi",
+        "readallnotifications":"Bütün bildirimləri oxundu işarələ.",
+        "submit":"Təsdiqlə",
+        "send":"Göndər"
+    },
+    "tabs":{
+        "home":"Əsas səhifə",
+        "barcode":"Barkod",
+        "bucket":"Səbət",
+        "campaigns":"Kampaniyalar",
+        "info":"Məlumat"
+    },
+    "drawer":{
+        "home":"Əsas səhifə",
+        "cards":"Kartlar",
+        "bonuses":"Bonus kartlar",
+        "map":"Xəritə",
+        "history":"Tarixçə",
+        "contactus":"Bizimlə əlaqə",
+        "settings":"Parametrlər",
+        "logout":"Çıxış et"
+    }
+}
