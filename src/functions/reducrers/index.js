@@ -3,6 +3,6 @@ import bucketitems from './bucketitems';
 import wishitems from './wishlistitems';
 
 export default combineReducers({
-    bucketitems,
-    wishitems,
+    bucketitems:bucketitems,
+    wishitems:wishitems,
 })

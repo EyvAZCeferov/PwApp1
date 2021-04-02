@@ -35,7 +35,7 @@
             }
         },
         "notifications":{
-            "title":"Bildirimlər" 
+            "title":"Bildirimlər"
         }
     },
     "cards":{
@@ -131,7 +131,7 @@
         "delete":"Sil",
         "deleted":"Silindi",
         "readallnotifications":"Bütün bildirimləri oxundu işarələ.",
-        "submit":"Təsdiqlə",
+        "submit":"Təstiqlə",
         "send":"Göndər"
     },
     "tabs":{

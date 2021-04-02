@@ -1,5 +1,4 @@
 import React from "react";
-import {View, Text} from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
@@ -9,7 +8,6 @@ import {getLang, t} from "./src/functions/lang";
 import AsyncStorage from "@react-native-community/async-storage";
 import {Provider} from "react-redux";
 import store from "./src/functions/store";
-import {Alert} from "react-native";
 import {Root} from "native-base";
 import TabComponent from "./src/functions/screenfunctions/tabs/tabstyle";
 import DrawerStyle from "./src/functions/screenfunctions/drawer/drawerstyle";
@@ -17,7 +15,6 @@ import ShoppingList from "./src/screens/tabs/barcode/shoppingList";
 
 enableScreens();
 console.disableYellowBox = true;
-// screens
 import AppSlider from "./src/screens/appintro/appslider";
 import Splash from "./src/screens/Splash/Splash";
 
@@ -55,7 +52,6 @@ import Campaign from "./src/screens/tabs/campaign/campaign";
 import Customer from "./src/screens/tabs/campaign/customer";
 import ProductInfo from "./src/screens/tabs/bucket/productinfo";
 
-// Context
 import {ProgramLockContext} from "./src/functions/Hooks/Authentication/Lock/ProgramLockContext";
 import i18n from "ex-react-native-i18n";
 import * as  Localization from "expo-localization";
@@ -258,7 +254,7 @@ export default function (props) {
 
     function getFirstOpened(props) {
         return firstOpenSlider == null ? (
-            <AppSlider callfunc={() => changeStat()} {...props} />
+            <AppSlider callfunc={() => changeStat} {...props} />
         ) : (
             <NavigateAuth {...props} />
         );
@@ -281,13 +277,8 @@ export default function (props) {
         getLang();
         getfirstOpen();
         getFirstOpened();
-        setNormalLang()
+        getLang();
     }, []);
-
-    function setNormalLang() {
-        i18n.locale = "az";
-        Localization.locale = i18n.locale;
-    }
 
     function SystemOpen(props) {
         const [isready, setisReady] = React.useState(false);
@@ -302,8 +293,7 @@ export default function (props) {
     return (
         <Root>
             <NavigationContainer>
-                {/* <SystemOpen {...props} /> */}
-                <Splash />
+                <SystemOpen/>
             </NavigationContainer>
         </Root>
     );

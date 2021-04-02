@@ -3,10 +3,10 @@ import {
     Text,
     StyleSheet,
     Dimensions,
-    ScrollView,
     View,
     Alert,
     ActivityIndicator,
+    SafeAreaView
 } from "react-native";
 import {Button, Left, Right, ListItem, List, Body, Picker} from "native-base";
 import {
@@ -180,36 +180,11 @@ export default class Settings extends React.Component {
                                 <Entypo name="language" size={24} color="#6d7587"/>
                                 <Picker
                                     mode="dropdown"
-                                    iosIcon={
-                                        <Entypo
-                                            name="chevron-down"
-                                            size={24}
-                                            style={styles.pickerIcon}
-                                            color="#6d7587"
-                                        />
-                                    }
-                                    androidIcon={
-                                        <Entypo
-                                            name="chevron-down"
-                                            size={24}
-                                            style={styles.pickerIcon}
-                                            color="#6d7587"
-                                        />
-                                    }
-                                    icon={
-                                        <Entypo
-                                            name="chevron-down"
-                                            size={24}
-                                            style={styles.pickerIcon}
-                                            color="#6d7587"
-                                        />
-                                    }
                                     placeholder={t("language")}
                                     placeholderStyle={{color: "#bfc6ea"}}
-                                    placeholderIconColor="#6d7587"
                                     style={{
                                         color: "#6d7587",
-                                        width: 150,
+                                        width: width,
                                     }}
                                     selectedValue={this.state.selected}
                                     onValueChange={(val) => this.onValueChange(val)}
@@ -217,25 +192,16 @@ export default class Settings extends React.Component {
                                     <Picker.Item
                                         label="    Az"
                                         color="#6d7587"
-                                        icon={
-                                            <Feather name="check-circle" size={24} color="black"/>
-                                        }
                                         value="az"
                                     />
                                     <Picker.Item
                                         label="    En"
                                         color="#6d7587"
-                                        icon={
-                                            <Feather name="check-circle" size={24} color="black"/>
-                                        }
                                         value="en"
                                     />
                                     <Picker.Item
                                         label="    Ru"
                                         color="#6d7587"
-                                        icon={
-                                            <Feather name="check-circle" size={24} color="black"/>
-                                        }
                                         value="ru"
                                     />
                                 </Picker>

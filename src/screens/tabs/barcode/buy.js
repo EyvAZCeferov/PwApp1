@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  Keyboard,
 } from "react-native";
 import { Camera } from "expo-camera";
 import { StatusBar } from "expo-status-bar";

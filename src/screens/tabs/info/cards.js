@@ -282,7 +282,7 @@ export default class Cards extends React.Component {
               <List style={{ flex: 1 }}>{this.listComponent()}</List>
             </ScrollView>
           )}
-          
+
           <Fab
             active={this.state.active}
             direction="right"
@@ -292,7 +292,7 @@ export default class Cards extends React.Component {
           >
             <AntDesign name="plus" size={24} color="#fff" />
           </Fab>
-         
+
           <View>
             <Modal
               style={{
@@ -425,9 +425,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: "100%",
     lineHeight: 40,
-    borderColor: "#fff",
     backgroundColor: "#fff",
-    borderWidth: 3,
     paddingLeft: 10,
     color: "#6d7587",
     fontWeight: "bold",
