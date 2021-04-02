@@ -1,154 +1,155 @@
 {
     "loginregister":{
-        "login":{
-            "title":"Daxil ol"
-        },
-        "forgetpass":{
-            "title":"Şifrəmi unuttum"
-        },
-        "programlock":{
-            "useFingerPrint":"Giriş üçün barmaq izinizdən istifadə edin",
-            "namesurname":"Ad Soyad"
-        },
-        "mobileverify":{
-            "title":"Şifrəni daxil edin",
-            "desc":"Daxil etdiyiniz telefon nömrəsinə gələn qısa şifrəni daxil edin."
-        },
-        "setpass":{
-            "title":"Giriş şifrəsini təyin et",
-            "newpassword":"Giriş şifrəsini daxil edin",
-            "repeatpassword":"Şifrəni təkrar daxil edin"
-        }
+      "login":{
+        "title":"Авторизоваться"
+      },
+      "forgetpass":{
+        "title":"Забыть пароль"
+      },
+      "programlock":{
+        "useFingerPrint":"Используйте свой отпечаток пальца для входа в систему",
+        "namesurname":"Имя Фамилия"
+      },
+      "mobileverify":{
+        "title":"Введите пароль",
+        "desc":"Введите короткий код, который пришел на введенный вами номер телефона."
+      },
+      "setpass":{
+        "title":"Установить пароль",
+        "newpassword":"Введите пароль для входа",
+        "repeatpassword":"Введите пароль еще раз"
+      }
     },
     "home":{
-        "slidercards":{
-            "expiry":"Bitmə tarixi"
-        },
-        "recentoperations":{
-            "title":"Sonuncu ödənişlər",
-            "time":{
-                "yesterday":"Dünən",
-                "today":"Bugün",
-                "thismonth":"Bu ay",
-                "thisyear":"Bu il",
-                "thisweek":"Bu həftə"
-            }
-        },
-        "notifications":{
-            "title":"Bildirimlər"
+      "slidercards":{
+        "expiry":"Срок годности"
+      },
+      "recentoperations":{
+        "title":"Последние платежи",
+        "time":{
+          "yesterday":"Вчерашний день",
+          "today":"Сегодня",
+          "thismonth":"Этот месяц",
+          "thisyear":"В этом году",
+          "thisweek":"На этой неделе"
         }
+      },
+      "notifications":{
+        "title":"Уведомления"
+      }
     },
     "cards":{
-        "minimal":"Ən az 1 ədəd olmalıdır",
-        "cartadd":"Kart əlavə et"
+      "minimal":"Должно быть не менее 1 штуки",
+      "cartadd":"Добавить карту"
     },
     "maps":{
-        "tablist":{
-            "title":"Xəritə listi"
-        },
-        "tabview":{
-            "title":"Xəritə görünüşü"
-        }
+      "tablist":{
+        "title":"Список карт"
+      },
+      "tabview":{
+        "title":"Просмотр карты"
+      }
     },
     "history":{
-        "starttime":"Başlanğıc vaxtı",
-        "endtime":"Bitiş vaxtı",
-        "marketName":"Market adı"
+      "starttime":"Начальное время",
+      "endtime":"Время окончания",
+      "marketName":"Название рынка"
     },
     "settings":{
-        "addfinger":"Barmaq izi əlavə et",
-        "listitems":{
-            "general":"Ümumi",
-            "langs":"Dil seç",
-            "security":"Güvənlik",
-            "changeloginpass":"Giriş şifrəsini dəyiş",
-            "fingerprint":"Barmaq izi",
-            "aboutapplication":"PW haqda",
-            "termofuse":"İstifadə şərtləri",
-            "accounts":"Hesab parametrləri",
-            "programversion":"Versiya"
-        }
+      "addfinger":"Добавить отпечаток пальца",
+      "listitems":{
+        "general":"Общий",
+        "langs":"Выберите язык",
+        "security":"Безопасность",
+        "changeloginpass":"Измените пароль для входа",
+        "fingerprint":"Отпечаток пальца",
+        "aboutapplication":"О PW",
+        "termofuse":"Условия эксплуатации",
+        "accounts":"Настройки аккаунта",
+        "programversion":"Версия"
+      }
     },
     "bucket":{
-        "header":{
-            "tabtitle":"Səbət",
-            "search":"Axtar",
-            "wishList":{
-                "title":"Sevimlilər"
-            },
-            "cartlists":{
-                "title":"Səbətiniz"
-            }
+      "header":{
+        "tabtitle":"Корзина",
+        "search":"Поиск",
+        "wishList":{
+          "title":"Избранное"
+        },
+        "cartlists":{
+          "title":"Ваша корзина"
         }
+      }
     },
     "barcode":{
-        "starter":{
-            "selectmarket":"Marketi seçərək davam edin",
-            "orQr":"Qr kodunu oxudaraq davam edin"
-        },
-        "cardselect":{
-            "title":"Kart seçərək davam edin",
-            "selectCard":"Kart seç"
-        }
+      "starter":{
+        "selectmarket":"Продолжайте, выбирая рынок",
+        "orQr":"Продолжайте читать QR-код"
+      },
+      "cardselect":{
+        "title":"Продолжайте, выбрав карту",
+        "selectCard":"Выберите карту"
+      }
     },
     "form":{
-        "labels":{
-            "phonenumb":"Telefon nömrəsi",
-            "password":"Şifrə",
-            "email":"Elektron poçt",
-            "subject":"Mövzu",
-            "content":"Məzmun"
-        },
-        "buttons":{
-            "login":"Daxil ol",
-            "register":"Qeydiyyatdan keç",
-            "continue":"Davam et",
-            "backlogin":"Girişə qayıt"
-        },
-        "validation":{
-            "loginregister":{
-                "login":{
-                    "success":"Daxil oldunuz."
-                },
-                "register":{
-                    "success":"Qeydiyyatdan keçdiniz."
-                },
-                "forgetpass":{
-                    "success":"Yeniləmə şifrəsi göndərildi.",
-                    "error":"Alınmadı. Yenidən yoxlayın."
-                }
-            }
+      "labels":{
+        "phonenumb":"Номер телефона",
+        "password":"Пароль",
+        "email":"Электронная почта",
+        "subject":"Тема",
+        "content":"Содержание"
+      },
+      "buttons":{
+        "login":"Авторизоваться",
+        "register":"Pегистр",
+        "continue":"Продолжать",
+        "backlogin":"Вернуться к логину"
+      },
+      "validation":{
+        "loginregister":{
+          "login":{
+            "success":"Вы вошли в систему."
+          },
+          "register":{
+            "success":"Вы зарегистрированы."
+          },
+          "forgetpass":{
+            "success":"Обновить пароль отправлен.",
+            "error":"Не принято. Проверьте еще раз, пожалуйста."
+          }
         }
+      }
     },
     "program":{
-        "pw":"Pay and Win"
+      "pw":"Pay and Win"
     },
     "actions":{
-        "cancel":"Ləğv et",
-        "noResult":"Məlumat tapılmadı",
-        "wantdelete":"Silmək istədiyinizdən əminsiniz?",
-        "notrecovered":"Siləcəyiniz məlumat geri qaytarılmır.",
-        "delete":"Sil",
-        "deleted":"Silindi",
-        "readallnotifications":"Bütün bildirimləri oxundu işarələ.",
-        "submit":"Təsdiqlə",
-        "send":"Göndər"
+      "cancel":"Отмена",
+      "noResult":"Информация не найдена",
+      "wantdelete":"Вы уверены, что хотите его удалить?",
+      "notrecovered":"Вы уверены, что хотите его удалить?.",
+      "delete":"Удалить",
+      "deleted":"Удалено",
+      "readallnotifications":"Отметить все уведомления как прочитанные.",
+      "submit":"С одобрения",
+      "send":"Отправлять"
     },
     "tabs":{
-        "home":"Əsas səhifə",
-        "barcode":"Barkod",
-        "bucket":"Səbət",
-        "campaigns":"Kampaniyalar",
-        "info":"Məlumat"
+      "home":"Дом",
+      "barcode":"Штрих-код",
+      "bucket":"Корзина",
+      "campaigns":"Кампании",
+      "info":"Информация"
     },
     "drawer":{
-        "home":"Əsas səhifə",
-        "cards":"Kartlar",
-        "bonuses":"Bonus kartlar",
-        "map":"Xəritə",
-        "history":"Tarixçə",
-        "contactus":"Bizimlə əlaqə",
-        "settings":"Parametrlər",
-        "logout":"Çıxış et"
+      "home":"Дом",
+      "cards":"Открытки",
+      "bonuses":"Бонусные карты",
+      "map":"Карты",
+      "history":"История",
+      "contactus":"Связаться с нами",
+      "settings":"Настройки",
+      "logout":"выход"
     }
-}
+  }
+  

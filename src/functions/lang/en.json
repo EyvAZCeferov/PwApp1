@@ -1,154 +1,154 @@
 {
-  "loginregister":{
-    "login":{
-      "title":"Авторизоваться"
+  "loginregister": {
+    "login": {
+      "title": "Login"
     },
-    "forgetpass":{
-      "title":"Забыть пароль"
+    "forgetpass": {
+      "title": "Forget password"
     },
-    "programlock":{
-      "useFingerPrint":"Используйте свой отпечаток пальца для входа в систему",
-      "namesurname":"Имя Фамилия"
+    "programlock": {
+      "useFingerPrint": "Use your fingerprint to log in",
+      "namesurname": "Name Surname"
     },
-    "mobileverify":{
-      "title":"Введите пароль",
-      "desc":"Введите короткий код, который пришел на введенный вами номер телефона."
+    "mobileverify": {
+      "title": "Enter the password",
+      "desc": "Enter the short code that came to the phone number you entered."
     },
-    "setpass":{
-      "title":"Установить пароль",
-      "newpassword":"Введите пароль для входа",
-      "repeatpassword":"Введите пароль еще раз"
+    "setpass": {
+      "title": "Set a password",
+      "newpassword": "Enter the login password",
+      "repeatpassword": "Re-enter the password"
     }
   },
-  "home":{
-    "slidercards":{
-      "expiry":"Срок годности"
+  "home": {
+    "slidercards": {
+      "expiry": "Expiration date"
     },
-    "recentoperations":{
-      "title":"Последние платежи",
-      "time":{
-        "yesterday":"Вчерашний день",
-        "today":"Сегодня",
-        "thismonth":"Этот месяц",
-        "thisyear":"В этом году",
-        "thisweek":"На этой неделе"
+    "recentoperations": {
+      "title": "Latest payments",
+      "time": {
+        "yesterday": "Yesterday",
+        "today": "Today",
+        "thismonth": "This month",
+        "thisyear": "This year",
+        "thisweek": "This week"
       }
     },
-    "notifications":{
-      "title":"Уведомления"
+    "notifications": {
+      "title": "Notifications"
     }
   },
-  "cards":{
-    "minimal":"Должно быть не менее 1 штуки",
-    "cartadd":"Добавить карту"
+  "cards": {
+    "minimal": "Must be at least 1 piece",
+    "cartadd": "Kart əlavə et"
   },
-  "maps":{
-    "tablist":{
-      "title":"Список карт"
+  "maps": {
+    "tablist": {
+      "title": "Map list"
     },
-    "tabview":{
-      "title":"Просмотр карты"
+    "tabview": {
+      "title": "Map view"
     }
   },
-  "history":{
-    "starttime":"Начальное время",
-    "endtime":"Время окончания",
-    "marketName":"Название рынка"
+  "history": {
+    "starttime": "Start time",
+    "endtime": "End time",
+    "marketName": "Market name"
   },
-  "settings":{
-    "addfinger":"Добавить отпечаток пальца",
-    "listitems":{
-      "general":"Общий",
-      "langs":"Выберите язык",
-      "security":"Безопасность",
-      "changeloginpass":"Измените пароль для входа",
-      "fingerprint":"Отпечаток пальца",
-      "aboutapplication":"О PW",
-      "termofuse":"Условия эксплуатации",
-      "accounts":"Настройки аккаунта",
-      "programversion":"Версия"
+  "settings": {
+    "addfinger": "Add a fingerprint",
+    "listitems": {
+      "general": "General",
+      "langs": "Choose a lang",
+      "security": "Security",
+      "changeloginpass": "Change the login password",
+      "fingerprint": "Fingerprint",
+      "aboutapplication": "About PW",
+      "termofuse": "Terms of use",
+      "accounts": "Account settings",
+      "programversion": "Version"
     }
   },
-  "bucket":{
-    "header":{
-      "tabtitle":"Basket",
-      "search":"Поиск",
-      "wishList":{
-        "title":"Избранное"
+  "bucket": {
+    "header": {
+      "tabtitle": "Basket",
+      "search": "Search",
+      "wishList": {
+        "title": "Favorites"
       },
-      "cartlists":{
-        "title":"Your basket"
+      "cartlists": {
+        "title": "Your basket"
       }
     }
   },
-  "barcode":{
-    "starter":{
-      "selectmarket":"Продолжайте, выбирая рынок",
-      "orQr":"Продолжайте читать QR-код"
+  "barcode": {
+    "starter": {
+      "selectmarket": "Continue by choosing the market",
+      "orQr": "Continue reading the QR code"
     },
-    "cardselect":{
-      "title":"Продолжайте, выбрав карту",
-      "selectCard":"Выберите карту"
+    "cardselect": {
+      "title": "Continue by selecting the card",
+      "selectCard": "Choose a card"
     }
   },
-  "form":{
-    "labels":{
-      "phonenumb":"Номер телефона",
-      "password":"Пароль",
-      "email":"Электронная почта",
-      "subject":"Тема",
-      "content":"Содержание"
+  "form": {
+    "labels": {
+      "phonenumb": "Phone number",
+      "password": "Password",
+      "email": "E-mail",
+      "subject": "Subject",
+      "content": "Content"
     },
-    "buttons":{
-      "login":"Авторизоваться",
-      "register":"Pегистр",
-      "continue":"Продолжать",
-      "backlogin":"Вернуться к логину"
+    "buttons": {
+      "login": "Login",
+      "register": "Register",
+      "continue": "Continue",
+      "backlogin": "Return to login"
     },
-    "validation":{
-      "loginregister":{
-        "login":{
-          "success":"Вы вошли в систему."
+    "validation": {
+      "loginregister": {
+        "login": {
+          "success": "You are logged in."
         },
-        "register":{
-          "success":"Вы зарегистрированы."
+        "register": {
+          "success": "You are registered in."
         },
-        "forgetpass":{
-          "success":"Обновить пароль отправлен.",
-          "error":"Не принято. Проверьте еще раз, пожалуйста."
+        "forgetpass": {
+          "success": "Update password sent.",
+          "error": "Not taken. Please check again."
         }
       }
     }
   },
-  "program":{
-    "pw":"Pay and Win"
+  "program": {
+    "pw": "Pay and Win"
   },
-  "actions":{
-    "cancel":"Отмена",
-    "noResult":"Информация не найдена",
-    "wantdelete":"Вы уверены, что хотите его удалить?",
-    "notrecovered":"Вы уверены, что хотите его удалить?.",
-    "delete":"Удалить",
-    "deleted":"Удалено",
-    "readallnotifications":"Отметить все уведомления как прочитанные.",
-    "submit":"С одобрения",
-    "send":"Отправлять"
+  "actions": {
+    "cancel": "Cancel",
+    "noResult": "No information found",
+    "wantdelete": "You are sure you want to delete it?",
+    "notrecovered": "The information you delete is not returned.",
+    "delete": "Delete",
+    "deleted": "Deleted",
+    "readallnotifications": "Mark all read notifications.",
+    "submit": "Accept",
+    "send": "Send"
   },
-  "tabs":{
-    "home":"Дом",
-    "barcode":"Штрих-код",
-    "bucket":"Корзина",
-    "campaigns":"Кампании",
-    "info":"Информация"
+  "tabs": {
+    "home": "Home",
+    "barcode": "Barcode",
+    "bucket": "Bucket",
+    "campaigns": "Campaigns",
+    "info": "Info"
   },
-  "drawer":{
-    "home":"Дом",
-    "cards":"Открытки",
-    "bonuses":"Бонусные карты",
-    "map":"Карты",
-    "history":"История",
-    "contactus":"Связаться с нами",
-    "settings":"Настройки",
-    "logout":"выход"
+  "drawer": {
+    "home": "Home",
+    "cards": "Cards",
+    "bonuses": "Bonus cards",
+    "map": "Maps",
+    "history": "History",
+    "contactus": "Contact us",
+    "settings": "Settings",
+    "logout": "Log out"
   }
 }
