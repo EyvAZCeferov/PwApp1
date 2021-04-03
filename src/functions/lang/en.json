@@ -89,6 +89,11 @@
     "cardselect": {
       "title": "Continue by selecting the card",
       "selectCard": "Choose a card"
+    },
+    "thanksBuying": {
+      "title": "Thanks for shopping",
+      "scanCode": "Read the barcode",
+      "returnHome": "Return to home page"
     }
   },
   "form": {

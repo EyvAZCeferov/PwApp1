@@ -36,6 +36,7 @@
     "react-native-barcode-mask": "^1.2.4",
     "react-native-confirmation-code-field": "^6.5.1",
     "react-native-credit-card-input": "^0.4.1",
+    "react-native-custom-qr-codes-expo": "^2.2.0",
     "react-native-dropdownalert": "^4.3.0",
     "react-native-easy-grid": "^0.2.2",
     "react-native-gesture-handler": "^1.10.3",
@@ -46,6 +47,7 @@
     "react-native-numeric-input": "^1.8.3",
     "react-native-reanimated": "^2.0.1",
     "react-native-screens": "^2.18.1",
+    "react-native-svg": "^12.1.0",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.3",
     "redux": "^4.0.5"

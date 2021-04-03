@@ -1,155 +1,159 @@
 {
-    "loginregister":{
-      "login":{
-        "title":"Авторизоваться"
-      },
-      "forgetpass":{
-        "title":"Забыть пароль"
-      },
-      "programlock":{
-        "useFingerPrint":"Используйте свой отпечаток пальца для входа в систему",
-        "namesurname":"Имя Фамилия"
-      },
-      "mobileverify":{
-        "title":"Введите пароль",
-        "desc":"Введите короткий код, который пришел на введенный вами номер телефона."
-      },
-      "setpass":{
-        "title":"Установить пароль",
-        "newpassword":"Введите пароль для входа",
-        "repeatpassword":"Введите пароль еще раз"
-      }
+  "loginregister": {
+    "login": {
+      "title": "Авторизоваться"
     },
-    "home":{
-      "slidercards":{
-        "expiry":"Срок годности"
-      },
-      "recentoperations":{
-        "title":"Последние платежи",
-        "time":{
-          "yesterday":"Вчерашний день",
-          "today":"Сегодня",
-          "thismonth":"Этот месяц",
-          "thisyear":"В этом году",
-          "thisweek":"На этой неделе"
-        }
-      },
-      "notifications":{
-        "title":"Уведомления"
-      }
+    "forgetpass": {
+      "title": "Забыть пароль"
     },
-    "cards":{
-      "minimal":"Должно быть не менее 1 штуки",
-      "cartadd":"Добавить карту"
+    "programlock": {
+      "useFingerPrint": "Используйте свой отпечаток пальца для входа в систему",
+      "namesurname": "Имя Фамилия"
     },
-    "maps":{
-      "tablist":{
-        "title":"Список карт"
-      },
-      "tabview":{
-        "title":"Просмотр карты"
-      }
+    "mobileverify": {
+      "title": "Введите пароль",
+      "desc": "Введите короткий код, который пришел на введенный вами номер телефона."
     },
-    "history":{
-      "starttime":"Начальное время",
-      "endtime":"Время окончания",
-      "marketName":"Название рынка"
-    },
-    "settings":{
-      "addfinger":"Добавить отпечаток пальца",
-      "listitems":{
-        "general":"Общий",
-        "langs":"Выберите язык",
-        "security":"Безопасность",
-        "changeloginpass":"Измените пароль для входа",
-        "fingerprint":"Отпечаток пальца",
-        "aboutapplication":"О PW",
-        "termofuse":"Условия эксплуатации",
-        "accounts":"Настройки аккаунта",
-        "programversion":"Версия"
-      }
-    },
-    "bucket":{
-      "header":{
-        "tabtitle":"Корзина",
-        "search":"Поиск",
-        "wishList":{
-          "title":"Избранное"
-        },
-        "cartlists":{
-          "title":"Ваша корзина"
-        }
-      }
-    },
-    "barcode":{
-      "starter":{
-        "selectmarket":"Продолжайте, выбирая рынок",
-        "orQr":"Продолжайте читать QR-код"
-      },
-      "cardselect":{
-        "title":"Продолжайте, выбрав карту",
-        "selectCard":"Выберите карту"
-      }
-    },
-    "form":{
-      "labels":{
-        "phonenumb":"Номер телефона",
-        "password":"Пароль",
-        "email":"Электронная почта",
-        "subject":"Тема",
-        "content":"Содержание"
-      },
-      "buttons":{
-        "login":"Авторизоваться",
-        "register":"Pегистр",
-        "continue":"Продолжать",
-        "backlogin":"Вернуться к логину"
-      },
-      "validation":{
-        "loginregister":{
-          "login":{
-            "success":"Вы вошли в систему."
-          },
-          "register":{
-            "success":"Вы зарегистрированы."
-          },
-          "forgetpass":{
-            "success":"Обновить пароль отправлен.",
-            "error":"Не принято. Проверьте еще раз, пожалуйста."
-          }
-        }
-      }
-    },
-    "program":{
-      "pw":"Pay and Win"
-    },
-    "actions":{
-      "cancel":"Отмена",
-      "noResult":"Информация не найдена",
-      "wantdelete":"Вы уверены, что хотите его удалить?",
-      "notrecovered":"Вы уверены, что хотите его удалить?.",
-      "delete":"Удалить",
-      "deleted":"Удалено",
-      "readallnotifications":"Отметить все уведомления как прочитанные.",
-      "submit":"С одобрения",
-      "send":"Отправлять"
-    },
-    "tabs":{
-      "home":"Дом",
-      "barcode":"Штрих-код",
-      "bucket":"Корзина",
-      "campaigns":"Кампании",
-      "info":"Информация"
-    },
-    "drawer":{
-      "home":"Дом",
-      "cards":"Открытки",
-      "bonuses":"Бонусные карты",
-      "map":"Карты",
-      "history":"История",
-      "contactus":"Связаться с нами",
-      "settings":"Настройки",
-      "logout":"выход"
+    "setpass": {
+      "title": "Установить пароль",
+      "newpassword": "Введите пароль для входа",
+      "repeatpassword": "Введите пароль еще раз"
     }
+  },
+  "home": {
+    "slidercards": {
+      "expiry": "Срок годности"
+    },
+    "recentoperations": {
+      "title": "Последние платежи",
+      "time": {
+        "yesterday": "Вчерашний день",
+        "today": "Сегодня",
+        "thismonth": "Этот месяц",
+        "thisyear": "В этом году",
+        "thisweek": "На этой неделе"
+      }
+    },
+    "notifications": {
+      "title": "Уведомления"
+    }
+  },
+  "cards": {
+    "minimal": "Должно быть не менее 1 штуки",
+    "cartadd": "Добавить карту"
+  },
+  "maps": {
+    "tablist": {
+      "title": "Список карт"
+    },
+    "tabview": {
+      "title": "Просмотр карты"
+    }
+  },
+  "history": {
+    "starttime": "Начальное время",
+    "endtime": "Время окончания",
+    "marketName": "Название рынка"
+  },
+  "settings": {
+    "addfinger": "Добавить отпечаток пальца",
+    "listitems": {
+      "general": "Общий",
+      "langs": "Выберите язык",
+      "security": "Безопасность",
+      "changeloginpass": "Измените пароль для входа",
+      "fingerprint": "Отпечаток пальца",
+      "aboutapplication": "О PW",
+      "termofuse": "Условия эксплуатации",
+      "accounts": "Настройки аккаунта",
+      "programversion": "Версия"
+    }
+  },
+  "bucket": {
+    "header": {
+      "tabtitle": "Корзина",
+      "search": "Поиск",
+      "wishList": {
+        "title": "Избранное"
+      },
+      "cartlists": {
+        "title": "Ваша корзина"
+      }
+    }
+  },
+  "barcode": {
+    "starter": {
+      "selectmarket": "Продолжайте, выбирая рынок",
+      "orQr": "Продолжайте читать QR-код"
+    },
+    "cardselect": {
+      "title": "Продолжайте, выбрав карту",
+      "selectCard": "Выберите карту"
+    },
+    "thanksBuying": {
+      "title": "Thanks for shopping",
+      "scanCode": "Считайте штрих-код",
+      "returnHome": "Вернуться на главную страницу"
+    }
+  },
+  "form": {
+    "labels": {
+      "phonenumb": "Номер телефона",
+      "password": "Пароль",
+      "email": "Электронная почта",
+      "subject": "Тема",
+      "content": "Содержание"
+    },
+    "buttons": {
+      "login": "Авторизоваться",
+      "register": "Pегистр",
+      "continue": "Продолжать",
+      "backlogin": "Вернуться к логину"
+    },
+    "validation": {
+      "loginregister": {
+        "login": {
+          "success": "Вы вошли в систему."
+        },
+        "register": {
+          "success": "Вы зарегистрированы."
+        },
+        "forgetpass": {
+          "success": "Обновить пароль отправлен.",
+          "error": "Не принято. Проверьте еще раз, пожалуйста."
+        }
+      }
+    }
+  },
+  "program": {
+    "pw": "Pay and Win"
+  },
+  "actions": {
+    "cancel": "Отмена",
+    "noResult": "Информация не найдена",
+    "wantdelete": "Вы уверены, что хотите его удалить?",
+    "notrecovered": "Вы уверены, что хотите его удалить?.",
+    "delete": "Удалить",
+    "deleted": "Удалено",
+    "readallnotifications": "Отметить все уведомления как прочитанные.",
+    "submit": "С одобрения",
+    "send": "Отправлять"
+  },
+  "tabs": {
+    "home": "Дом",
+    "barcode": "Штрих-код",
+    "bucket": "Корзина",
+    "campaigns": "Кампании",
+    "info": "Информация"
+  },
+  "drawer": {
+    "home": "Дом",
+    "cards": "Открытки",
+    "bonuses": "Бонусные карты",
+    "map": "Карты",
+    "history": "История",
+    "contactus": "Связаться с нами",
+    "settings": "Настройки",
+    "logout": "выход"
   }
-  
+}

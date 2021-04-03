@@ -89,6 +89,11 @@
         "cardselect":{
             "title":"Kart seçərək davam edin",
             "selectCard":"Kart seç"
+        },
+        "thanksBuying":{
+            "title":"Alış veriş üçün təşəkkürlər",
+            "scanCode":"Kodu oxut",
+            "returnHome":"Ana səhifəyə qayıt"
         }
     },
     "form":{
