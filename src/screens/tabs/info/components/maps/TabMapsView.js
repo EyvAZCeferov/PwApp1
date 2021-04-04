@@ -1,9 +1,9 @@
 import React from "react";
-import { View, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import { View, StyleSheet, Dimensions, ActivityIndicator,Image } from "react-native";
+import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import * as Permissions from "expo-permissions";
 import firebase from "../../../../../functions/firebase/firebaseConfig";
-
+import Textpopins from "../../../../../functions/screenfunctions/text";
 import Constants from "expo-constants";
 
 export default class TabMapsView extends React.Component {
@@ -68,7 +68,11 @@ export default class TabMapsView extends React.Component {
           coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
           description={element.address}
           image={require("../../../../../../assets/images/Map/marker.png")}
-        />
+        >
+          <Callout>
+            <MyCustomCalloutView {...element} />
+          </Callout>
+        </Marker>
       );
     });
   }
@@ -83,21 +87,16 @@ export default class TabMapsView extends React.Component {
           zoomEnabled={true}
           zoomControlEnabled={true}
           zoomTapEnabled={true}
+          maxZoomLevel={150}
+          minZoomLevel={15}
           showsScale={true}
           userLocationAnnotationTitle={"Eyvaz"}
           showsUserLocation={true}
-          showsTraffic={false}
-          showsPointsOfInterest={false}
-          showsCompass={true}
           loadingEnabled={true}
           scrollEnabled={true}
-          paddingAdjustmentBehavior="automatic"
-          pitchEnabled={true}
-          showsBuildings={false}
-          showsIndoors={false}
+          paddingAdjustmentBehavior="always"
           rotateEnabled={true}
-          mapType="hybrid"
-          liteMode={false}
+          mapType="satellite"
           loadingIndicatorColor="#7c9d32"
           provider={PROVIDER_GOOGLE}
           showsMyLocationButton={true}
@@ -106,7 +105,7 @@ export default class TabMapsView extends React.Component {
             longitude: this.state.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
-          }}          
+          }}
         >
           {this.state.markerCount > 0 ? this.renderMarker() : null}
         </MapView>
@@ -147,3 +146,37 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight * 4,
   },
 });
+
+class MyCustomCalloutView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <Callout>
+        <View
+          style={{
+            width: 100,
+            height: 100,
+            backgroundColor: "blue",
+          }}
+        >
+          <Image
+            source={{
+              uri:
+                "https://cdn.pixabay.com/photo/2016/06/18/17/42/image-1465348_1280.jpg",
+            }}
+            style={{
+              width: 50,
+              height: 50,
+              backgroundColor: "red",
+              resizeMode: "cover",
+            }}
+          />
+          <Textpopins>hey</Textpopins>
+        </View>
+      </Callout>
+    );
+  }
+}
