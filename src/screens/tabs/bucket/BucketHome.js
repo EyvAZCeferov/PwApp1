@@ -23,9 +23,7 @@ class BucketHome extends React.Component {
             <BucketHeader title={t("bucket.header.tabtitle")} />
           </View>
           <View style={styles.contentArena}>
-            <View style={styles.contentBody}>
-              <RenderCategory />
-            </View>
+            <RenderCategory />
           </View>
         </View>
       </View>
@@ -36,7 +34,8 @@ class BucketHome extends React.Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     addtoCard: (product) => dispatch({ type: "ADD_TO_CART", payload: product }),
-    removewishlist: (product) => dispatch({ type: "REMOVE_FROM_WISHLIST", payload: product }),
+    removewishlist: (product) =>
+      dispatch({ type: "REMOVE_FROM_WISHLIST", payload: product }),
   };
 };
 export default connect(null, mapDispatchToProps)(BucketHome);
@@ -48,12 +47,12 @@ const styles = StyleSheet.create({
   },
   header: {
     width: width,
-    height: "20%",
-    marginTop: Constants.statusBarHeight,
+    height: "15%",
+    // marginTop: Constants.statusBarHeight,
   },
   contentArena: {
     width: width,
-    height: "80%",
+    height: "82%",
     flexDirection: "column",
   },
   center: {

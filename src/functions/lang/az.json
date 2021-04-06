@@ -108,7 +108,8 @@
             "login":"Daxil ol",
             "register":"Qeydiyyatdan keç",
             "continue":"Davam et",
-            "backlogin":"Girişə qayıt"
+            "backlogin":"Girişə qayıt",
+            "back":"Geri"
         },
         "validation":{
             "loginregister":{

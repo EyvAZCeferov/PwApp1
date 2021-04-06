@@ -20,7 +20,7 @@ import Constants from "expo-constants";
 import { makeid } from "../../../functions/standart/helper";
 const { width, height } = Dimensions.get("window");
 
-export default class BarcodeStarted extends React.Component {
+export default class BucketStarter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -86,7 +86,7 @@ export default class BarcodeStarted extends React.Component {
     if (this.state.selectedMarket != null) {
       if (this.state.checkid != null) {
         this.setShoppingData();
-        this.props.navigation.navigate("SelectCard", {
+        this.props.navigation.navigate("SelectCardBucket", {
           checkid: this.state.checkid,
         });
       }
@@ -416,9 +416,9 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     textAlign: "center",
   },
-  buttonArena:{
+  buttonArena: {
     width,
-    flexDirection:"row",
-    justifyContent:"space-around"
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });

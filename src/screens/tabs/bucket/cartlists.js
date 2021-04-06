@@ -53,7 +53,7 @@ function CartList(props) {
           <NumericInput
             value={Math.ceil(item.qyt)}
             onChange={(value) => props.updateVal(item, value)}
-            onLimitReached={(isMax, msg) => alert(isMax, msg)}
+            onLimitReached={(isMax, msg) => alert(t("cards.minimal"))}
             totalWidth={width / 3}
             totalHeight={50}
             iconSize={25}

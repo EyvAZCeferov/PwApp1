@@ -44,6 +44,8 @@ import SelectCard from "./src/screens/tabs/barcode/selectcard";
 import Buy from "./src/screens/tabs/barcode/buy";
 import PayThanks from "./src/screens/tabs/barcode/paythanks";
 
+import BucketStarter from "./src/screens/tabs/bucket/bucketstarter";
+import SelectCardBucket from "./src/screens/tabs/bucket/selectcard";
 import BucketHome from "./src/screens/tabs/bucket/BucketHome";
 import WishList from "./src/screens/tabs/bucket/wishlists";
 import CartList from "./src/screens/tabs/bucket/cartlists";
@@ -113,7 +115,7 @@ const TabsScreen = () => (
       }}
     />
     <Tabs.Screen
-      name="BucketHome"
+      name="Bucket"
       component={BucketStackScreen}
       options={{
         tabBarButton: (props) => (
@@ -207,7 +209,12 @@ const BucketStackScreen = ({ navigation, route }) => {
   }
   return (
     <Provider store={store}>
-      <BucketStack.Navigator headerMode="none" initialRouteName="BucketHome">
+      <BucketStack.Navigator headerMode="none" initialRouteName="BucketStarter">
+        <BarcodeStack.Screen name="BucketStarter" component={BucketStarter} />
+        <BarcodeStack.Screen
+          name="SelectCardBucket"
+          component={SelectCardBucket}
+        />
         <BucketStack.Screen name="BucketHome" component={BucketHome} />
         <BucketStack.Screen name="WishList" component={WishList} />
         <BucketStack.Screen name="CartList" component={CartList} />

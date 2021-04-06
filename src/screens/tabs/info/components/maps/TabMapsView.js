@@ -1,6 +1,19 @@
 import React from "react";
-import { View, StyleSheet, Dimensions, ActivityIndicator,Image } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+  Text,
+  Image,
+} from "react-native";
+import MapView, {
+  PROVIDER_GOOGLE,
+  Marker,
+  Callout,
+  CalloutSubview,
+} from "react-native-maps";
+import { Thumbnail } from "native-base";
 import * as Permissions from "expo-permissions";
 import firebase from "../../../../../functions/firebase/firebaseConfig";
 import Textpopins from "../../../../../functions/screenfunctions/text";
@@ -154,29 +167,25 @@ class MyCustomCalloutView extends React.Component {
 
   render() {
     return (
-      <Callout>
-        <View
-          style={{
-            width: 100,
-            height: 100,
-            backgroundColor: "blue",
-          }}
-        >
-          <Image
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "space-around",
+        }}
+      >
+        <Textpopins>hey</Textpopins>
+        <Text>
+          <Thumbnail
             source={{
-              uri:
-                "https://cdn.pixabay.com/photo/2016/06/18/17/42/image-1465348_1280.jpg",
+              uri: "https://picsum.photos/200/300",
             }}
             style={{
-              width: 50,
-              height: 50,
-              backgroundColor: "red",
-              resizeMode: "cover",
+              width: 150,
+              height: 150,
             }}
           />
-          <Textpopins>hey</Textpopins>
-        </View>
-      </Callout>
+        </Text>
+      </View>
     );
   }
 }

@@ -10,14 +10,12 @@ import {
 import { Picker } from "native-base";
 import { StatusBar } from "expo-status-bar";
 import firebase from "../../../functions/firebase/firebaseConfig";
-import { AntDesign } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
-import Constants from "expo-constants";
 import Textpopins from "../../../functions/screenfunctions/text";
 import { hideNumb } from "../../../functions/standart/helper";
 
 const { width, height } = Dimensions.get("window");
-export default class SelectCard extends React.Component {
+export default class SelectCardBucket extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -77,7 +75,7 @@ export default class SelectCard extends React.Component {
     if (this.state.selectedCard != null) {
       this.updateShoppingData();
       const params = this.props.route.params;
-      this.props.navigation.navigate("ShoppingList", {
+      this.props.navigation.navigate("BucketHome", {
         checkid: params.checkid,
         selectedCard: this.state.selectedCard,
       });

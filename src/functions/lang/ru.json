@@ -108,7 +108,8 @@
       "login": "Авторизоваться",
       "register": "Pегистр",
       "continue": "Продолжать",
-      "backlogin": "Вернуться к логину"
+      "backlogin": "Вернуться к логину",
+      "back":"назад"
     },
     "validation": {
       "loginregister": {

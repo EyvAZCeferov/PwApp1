@@ -21,7 +21,7 @@ const bucketitems = (state = [], action) => {
         case 'REMOVE_FROM_CART':
             return state.filter(item => item.id !== action.payload.id)
         case "UPDATE_CART":
-            return state.map(item => item.id == action.payload.id ? state[item.id].qyt = action.value : null)
+            return state;
         default:
             return state;
     }

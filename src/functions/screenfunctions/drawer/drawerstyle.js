@@ -1,5 +1,5 @@
 import React from "react";
-import { View, SafeAreaView, StyleSheet, Dimensions } from "react-native";
+import { View, SafeAreaView, StyleSheet, Dimensions,TouchableOpacity } from "react-native";
 import { Body, Left, ListItem, Right, Thumbnail } from "native-base";
 import Constants from "expo-constants";
 import { StatusBar } from "expo-status-bar";
@@ -41,7 +41,7 @@ export default function DrawerStyle(props) {
         </ListItem>
 
         <View style={styles.seperator} />
-        <ListItem
+        <TouchableOpacity
           style={styles.oneElement}
           onPress={() => props.navigation.navigate("Home")}
         >
@@ -67,9 +67,9 @@ export default function DrawerStyle(props) {
             </Textpopins>
           </Body>
           <Right />
-        </ListItem>
+        </TouchableOpacity>
         <View style={styles.seperator} />
-        <ListItem
+        <TouchableOpacity
           style={styles.oneElement}
           onPress={() => props.navigation.navigate("Cards")}
         >
@@ -95,9 +95,9 @@ export default function DrawerStyle(props) {
             </Textpopins>
           </Body>
           <Right />
-        </ListItem>
+        </TouchableOpacity>
         <View style={styles.seperator} />
-        <ListItem
+        <TouchableOpacity
           style={styles.oneElement}
           onPress={() => props.navigation.navigate("Bonuses")}
         >
@@ -123,9 +123,9 @@ export default function DrawerStyle(props) {
             </Textpopins>
           </Body>
           <Right />
-        </ListItem>
+        </TouchableOpacity>
         <View style={styles.seperator} />
-        <ListItem
+        <TouchableOpacity
           style={styles.oneElement}
           onPress={() => props.navigation.navigate("Maps")}
         >
@@ -151,9 +151,9 @@ export default function DrawerStyle(props) {
             </Textpopins>
           </Body>
           <Right />
-        </ListItem>
+        </TouchableOpacity>
         <View style={styles.seperator} />
-        <ListItem
+        <TouchableOpacity
           style={styles.oneElement}
           onPress={() => props.navigation.navigate("History")}
         >
@@ -179,9 +179,9 @@ export default function DrawerStyle(props) {
             </Textpopins>
           </Body>
           <Right />
-        </ListItem>
+        </TouchableOpacity>
         <View style={styles.seperator} />
-        <ListItem
+        <TouchableOpacity
           style={styles.oneElement}
           onPress={() => props.navigation.navigate("Contactus")}
         >
@@ -207,9 +207,9 @@ export default function DrawerStyle(props) {
             </Textpopins>
           </Body>
           <Right />
-        </ListItem>
+        </TouchableOpacity>
         <View style={styles.seperator} />
-        <ListItem
+        <TouchableOpacity
           style={styles.oneElement}
           onPress={() => props.navigation.navigate("Settings")}
         >
@@ -235,9 +235,9 @@ export default function DrawerStyle(props) {
             </Textpopins>
           </Body>
           <Right />
-        </ListItem>
+        </TouchableOpacity>
         <View style={styles.seperator} />
-        <ListItem style={styles.oneElement}>
+        <TouchableOpacity style={styles.oneElement}>
           <Left>
             <AntDesign
               name="logout"
@@ -260,7 +260,7 @@ export default function DrawerStyle(props) {
             </Textpopins>
           </Body>
           <Right />
-        </ListItem>
+        </TouchableOpacity>
         <View style={styles.seperator} />
       </SafeAreaView>
     </View>
@@ -277,15 +277,16 @@ const styles = StyleSheet.create({
   },
   oneElement: {
     width: "100%",
-    height: 28,
+    height: 40,
     flexDirection: "row",
     alignContent: "center",
     alignItems: "center",
     justifyContent: "space-around",
     textAlign: "left",
-    borderColor: "transparent",
-    borderWidth: 0,
-    backgroundColor:"transparent"
+    backgroundColor:"transparent",
+    borderColor:"transparent",
+    borderWidth:0,
+    paddingLeft:Constants.statusBarHeight,
   },
   seperator: {
     width: "100%",

@@ -7,7 +7,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Button } from "native-base";
-
+import { CommonActions } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
 import { QRCode as CustomQRCode } from "react-native-custom-qr-codes-expo";
@@ -44,6 +44,20 @@ export default class PayThanks extends React.Component {
       this.setState({ link: params.checkid, refresh: false });
       this.renderContent();
     }
+  }
+
+  navigationreset() {
+    return this.props.navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          { name: "Home" },
+          {
+            name: "Home",
+          },
+        ],
+      })
+    );
   }
 
   renderContent() {
@@ -86,7 +100,7 @@ export default class PayThanks extends React.Component {
                 iconLeft
                 light
                 style={styles.btn}
-                onPress={() => this.props.navigation.navigate("Home")}
+                onPress={() => this.navigationreset()}
               >
                 <AntDesign name="home" size={24} color="black" />
                 <Textpopins

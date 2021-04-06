@@ -40,7 +40,7 @@
   },
   "cards": {
     "minimal": "Must be at least 1 piece",
-    "cartadd": "Kart əlavə et"
+    "cartadd": "Add a card"
   },
   "maps": {
     "tablist": {
@@ -108,7 +108,8 @@
       "login": "Login",
       "register": "Register",
       "continue": "Continue",
-      "backlogin": "Return to login"
+      "backlogin": "Return to login",
+      "back": "Back"
     },
     "validation": {
       "loginregister": {
