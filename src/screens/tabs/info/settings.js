@@ -7,8 +7,9 @@ import {
   Alert,
   ActivityIndicator,
   SafeAreaView,
+  Picker,
 } from "react-native";
-import { Button, Left, Right, ListItem, List, Body, Picker } from "native-base";
+import { Button, Left, Right, ListItem, List, Body } from "native-base";
 import {
   Entypo,
   Feather,
@@ -16,7 +17,9 @@ import {
   Foundation,
   AntDesign,
 } from "@expo/vector-icons";
+import { CommonActions } from "@react-navigation/native";
 import { Restart } from "fiction-expo-restart";
+
 import HeaderDrawer from "./components/header";
 import * as Localization from "expo-localization";
 
@@ -37,13 +40,24 @@ export default class Settings extends React.Component {
   }
 
   onValueChange(sel) {
+    console.log(sel);
     setLang(sel);
     this.setState({ selected: sel });
+    this.props.navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          { name: "Home" },
+          {
+            name: "Settings",
+          },
+        ],
+      })
+    );
     Restart();
   }
 
   componentDidMount() {
-    this.setState({ selected: Localization.locale });
     this.getFingStat();
     this.hasHardware();
   }
@@ -178,16 +192,16 @@ export default class Settings extends React.Component {
               <ListItem style={styles.listitemDivider} itemDivider>
                 <Entypo name="language" size={24} color="#6d7587" />
                 <Picker
-                  mode="dialog"
+                  enabled
+                  mode="dropdown"
                   selectedValue={this.state.selected}
-                    onValueChange={(val) => this.onValueChange(val)}
-                    style={{ width: width / 2, zIndex: 9999 }}
-                  items={[
-                    { label: "Azərbaycan", value: "az" },
-                    { label: "Rus", value: "ru" },
-                    { label: "İngilis", value: "en" },
-                  ]}
-                />
+                  onValueChange={(val) => this.onValueChange(val)}
+                  style={{ width: width / 1.5, zIndex: 9999 }}
+                >
+                  <Picker.Item value="az" label="       Azərbaycan" />
+                  <Picker.Item value="ru" label="       Rus" />
+                  <Picker.Item value="en" label="       İngilis" />
+                </Picker>
               </ListItem>
               <ListItem style={styles.listitemDivider} itemDivider>
                 <Text

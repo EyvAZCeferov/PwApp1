@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "Pay And Win",
-    "slug": "pw",
+    "slug": "pay-and-win",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/adaptive-icon.png",
     "splash": {
       "image": "./assets/splash2.png",
       "resizeMode": "contain",
@@ -13,20 +13,31 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alov.payandwin",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "icon": "./assets/icon-ios.png",
+      "backgroundColor": "#fff",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.alov.payandwin"
+      "package": "com.alov.payandwin",
+      "versionCode": 1,
+      "backgroundColor": "#fff",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg" }
+      },
+      "softwareKeyboardLayoutMode": "resize",
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"

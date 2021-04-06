@@ -290,7 +290,6 @@ export default function (props) {
     getLang();
     getfirstOpen();
     getFirstOpened();
-    getLang();
   }, []);
 
   function SystemOpen(props) {
