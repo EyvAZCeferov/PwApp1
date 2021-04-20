@@ -105,7 +105,7 @@ export default class NoBarcode extends React.Component {
                       height: 80,
                     }}
                     autoCapitalize="none"
-                    placeholder={t("barcode.typeBarcode")}
+                    placeholder={t("barcode.starter.typeBarcode")}
                     placeholderTextColor="rgba(0,0,0,.5)"
                     keyboardType="numeric"
                     onChangeText={(text) => this.setState({ text })}
