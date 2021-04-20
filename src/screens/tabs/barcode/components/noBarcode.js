@@ -105,7 +105,7 @@ export default class NoBarcode extends React.Component {
                       height: 80,
                     }}
                     autoCapitalize="none"
-                    placeholder={t("barcodeScreen.typeBarcode")}
+                    placeholder={t("barcode.typeBarcode")}
                     placeholderTextColor="rgba(0,0,0,.5)"
                     keyboardType="numeric"
                     onChangeText={(text) => this.setState({ text })}
@@ -132,7 +132,7 @@ export default class NoBarcode extends React.Component {
                         paddingHorizontal: 0,
                         paddingVertical: 20,
                       }}
-                      children={t("addCard")}
+                      children={t("cards.cartadd")}
                     />
                   </TouchableOpacity>
                 </InputGroup>

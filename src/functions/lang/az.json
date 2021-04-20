@@ -84,7 +84,8 @@
     "barcode":{
         "starter":{
             "selectmarket":"Marketi seçərək davam edin",
-            "orQr":"Qr kodunu oxudaraq davam edin"
+            "orQr":"Qr kodunu oxudaraq davam edin",
+            "typeBarcode": "Barkodu əllə daxil edin"
         },
         "cardselect":{
             "title":"Kart seçərək davam edin",

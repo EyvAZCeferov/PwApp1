@@ -84,7 +84,8 @@
   "barcode": {
     "starter": {
       "selectmarket": "Continue by choosing the market",
-      "orQr": "Continue reading the QR code"
+      "orQr": "Continue reading the QR code",
+      "typeBarcode": "Enter the barcode manually"
     },
     "cardselect": {
       "title": "Continue by selecting the card",
