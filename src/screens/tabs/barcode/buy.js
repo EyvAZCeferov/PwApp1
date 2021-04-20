@@ -12,6 +12,7 @@ import Textpopins from '../../../functions/screenfunctions/text'
 import BarcodeMask from "react-native-barcode-mask";
 import firebase from "../../../functions/firebase/firebaseConfig";
 import NoBarcode from "./components/noBarcode";
+import {t} from "../../../functions/lang";
 
 const {width, height} = Dimensions.get("window");
 export default function Buy(props) {
@@ -195,7 +196,7 @@ export default function Buy(props) {
                             />
                             <Text
                                 style={{color: "#fff", fontSize: 14, fontWeight: "bold"}}
-                                children="No Barcode?"
+                                children={t("barcode.paying.noBarcode")}
                             />
                         </TouchableOpacity>
                     </View>

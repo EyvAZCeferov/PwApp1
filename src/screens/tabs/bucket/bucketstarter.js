@@ -167,7 +167,7 @@ export default class BucketStarter extends React.Component {
                 children={t("barcode.starter.selectmarket")}
               />
               <Picker
-                iosHeader="Market Seç"
+                iosHeader={t("barcode.starter.selectmar")}
                 mode="dialog"
                 enabled
                 selectedValue={this.state.selectedMarket}
@@ -176,7 +176,7 @@ export default class BucketStarter extends React.Component {
                 }
                 style={{ width: width / 2 }}
               >
-                <Picker.Item label="Market seç" color="#7c9d32" value="" />
+                <Picker.Item label={t("barcode.starter.selectmar")} color="#7c9d32" value="" />
                 {this.renderMarkets()}
               </Picker>
               <Textpopins

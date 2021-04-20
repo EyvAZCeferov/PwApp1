@@ -83,6 +83,7 @@
   },
   "barcode": {
     "starter": {
+      "selectmar": "Выбрать рынок",
       "selectmarket": "Продолжайте, выбирая рынок",
       "orQr": "Продолжайте читать QR-код",
       "typeBarcode": "Введите штрих-код вручную"
@@ -90,6 +91,15 @@
     "cardselect": {
       "title": "Продолжайте, выбрав карту",
       "selectCard": "Выберите карту"
+    },
+    "paying": {
+      "aboutCard": "О карте",
+      "balance": "баланс",
+      "cardNumb": "Номер карты",
+      "totalBalance": "Итоговая цена",
+      "remainingBalance": "Оставшееся количество",
+      "edv": "НДС",
+      "noBarcode": "Нет штрих-кода?"
     },
     "thanksBuying": {
       "title": "Thanks for shopping",

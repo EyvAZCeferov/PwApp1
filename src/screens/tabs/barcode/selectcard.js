@@ -10,9 +10,7 @@ import {
 import { Picker } from "native-base";
 import { StatusBar } from "expo-status-bar";
 import firebase from "../../../functions/firebase/firebaseConfig";
-import { AntDesign } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
-import Constants from "expo-constants";
 import Textpopins from "../../../functions/screenfunctions/text";
 import { hideNumb } from "../../../functions/standart/helper";
 
