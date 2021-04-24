@@ -59,7 +59,7 @@ export default class Bonuses extends React.Component {
     var datas = [];
     firebase
       .database()
-      .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/cards")
+      .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/bonuses")
       .on("value", (data) => {
         data.forEach((data) => {
           datas.push(data.val());
@@ -189,7 +189,7 @@ export default class Bonuses extends React.Component {
             style={styles.cardNumbText}
             children={hideNumb(item.cardInfo.number)}
           />
-          <Text children={item.cardInfo.cvc + " Azn"} />
+          <Text children={item.cardInfo.price + " Azn"} />
         </Body>
         <Right>
           <Button transparent onPress={() => deleteItem(item.cardId)}>
@@ -345,7 +345,7 @@ export default class Bonuses extends React.Component {
                   <Left>
                     <Textpopins
                       style={styles.modalTitle}
-                      children={t("cards.cartadd")}
+                      children={t("bonuses.cartadd")}
                     />
                   </Left>
                   <Right>
@@ -447,10 +447,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: "100%",
     lineHeight: 40,
-    borderColor: "#fff",
-    backgroundColor: "#fff",
-    borderWidth: 3,
-    paddingLeft: 10,
+    backgroundColor: "#fff", paddingLeft: 10,
     color: "#6d7587",
     fontWeight: "bold",
     fontSize: 16,

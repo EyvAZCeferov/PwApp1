@@ -42,6 +42,9 @@
     "minimal": "Must be at least 1 piece",
     "cartadd": "Add a card"
   },
+  "bonuses": {
+    "cartadd": "Add a bonus card"
+  },
   "maps": {
     "tablist": {
       "title": "Map list"

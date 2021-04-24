@@ -42,6 +42,9 @@
     "minimal": "Ən az 1 ədəd olmalıdır",
     "cartadd": "Kart əlavə et"
   },
+  "bonuses": {
+    "cartadd": "Bonus kart əlavə et"
+  },
   "maps": {
     "tablist": {
       "title": "Xəritə listi"

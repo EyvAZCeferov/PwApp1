@@ -27,6 +27,7 @@ const {width, height} = Dimensions.get("window");
 import {setLang, t} from "../../../functions/lang";
 import AsyncStorage from "@react-native-community/async-storage";
 import * as LocalAuthentication from "expo-local-authentication";
+import I18n from "ex-react-native-i18n";
 
 export default class Settings extends React.Component {
     constructor(props) {
@@ -195,11 +196,11 @@ export default class Settings extends React.Component {
                                     mode="dropdown"
                                     selectedValue={this.state.selected}
                                     onValueChange={(val) => this.onValueChange(val)}
-                                    style={{width: width / 1.5, zIndex: 9999}}
+                                    style={{width: width / 1.5, zIndex: 9999, backgroundColor: "red"}}
                                 >
+                                    <Picker.Item value="en" label="       English"/>
                                     <Picker.Item value="az" label="       Azərbaycan"/>
                                     <Picker.Item value="ru" label="       Pусский"/>
-                                    <Picker.Item value="en" label="       English"/>
                                 </Picker>
                             </ListItem>
                             <ListItem style={styles.listitemDivider} itemDivider>
