@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, Image} from 'react-native';
+import {View, StyleSheet, Dimensions, Image, SafeAreaView} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {AntDesign} from '@expo/vector-icons';
 import {StatusBar} from "expo-status-bar";
 import Textpopins from '../../functions/screenfunctions/text';
+import AsyncStorage from "@react-native-community/async-storage";
 
 const {width, height} = Dimensions.get('window');
 export default class AppSlider extends React.Component {
@@ -61,7 +62,8 @@ export default class AppSlider extends React.Component {
     }
 
     async _onDone() {
-        this.props.callfunc();
+        await AsyncStorage.setItem("slider", "Ok")
+        this.props.getnewCall();
     }
 
     _renderNextButton() {
@@ -95,8 +97,8 @@ export default class AppSlider extends React.Component {
             <View style={styles.slide} key={index}>
                 <Image source={item.image} resizeMode="cover" style={styles.image}/>
                 <View style={styles.slideContent}>
-                    <MyText style={styles.title} children={item.title}/>
-                    <MyText style={styles.desc} children={item.desc}/>
+                    <Textpopins style={styles.title} children={item.title}/>
+                    <Textpopins style={styles.desc} children={item.desc}/>
                 </View>
             </View>
         );
@@ -104,15 +106,15 @@ export default class AppSlider extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <StatusBar style="dark" backgroundColor="#fff"/>
                 <AppIntroSlider
                     renderItem={this._renderItem}
                     data={this.state.slides}
                     onDone={() => this._onDone()}
                     bottomButton={true}
-                    dotStyle={{backgroundColor: "transparent"}}
-                    activeDotStyle={{backgroundColor: "transparent"}}
+                    dotStyle={{backgroundColor: "rgba(0,0,0,.9)", width: 10, height: 10}}
+                    activeDotStyle={{backgroundColor: "#7c9d32", width: 20, height: 10}}
                     dotClickEnabled={false}
                     showNextButton={true}
                     showPrevButton={false}
@@ -120,7 +122,7 @@ export default class AppSlider extends React.Component {
                     renderDoneButton={this._renderDoneButton}
                     renderNextButton={this._renderNextButton}
                 />
-            </View>
+            </SafeAreaView>
         );
     }
 }

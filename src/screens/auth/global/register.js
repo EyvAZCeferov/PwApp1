@@ -10,6 +10,7 @@ import {
 import {LiteCreditCardInput} from 'react-native-credit-card-input';
 import {t} from '../../../functions/lang';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+
 const succesImage = require('../../../../assets/images/Alert/tick.png');
 
 var {width} = Dimensions.get('window');
@@ -26,23 +27,24 @@ export default class Register extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            phoneNumb: null,
+            phone: null,
             pincode: null,
             cardInfos: [],
             data: [],
         };
     }
-    signUp () {
+
+    async signUp() {
         Keyboard.dismiss();
         let cardId = makeid()
-        if (this.state.phoneNumb !== null) {
+        if (this.state.phone !== null) {
             const cardDatas = {
                 cardId: cardId,
                 cardPass: this.state.pincode,
                 cardInfo: this.state.cardInfos,
             }
-            // await AsyncStorage.setItem('haveFinger', '');
-            // await AsyncStorage.setItem('localAuthPass', '');
+            await AsyncStorage.setItem('haveFinger', '');
+            await AsyncStorage.setItem('localAuthPass', '');
         }
         this.dropDownAlertRef.alertWithType('success', t('form.validation.loginregister.register.success'));
         this.props.navigation.navigate('MobileVerify');
@@ -59,22 +61,22 @@ export default class Register extends React.Component {
             <KeyboardAwareScrollView style={styles.container}>
                 <StatusBar backgroundColor="#fff" style="dark"/>
                 <DropdownAlert
-                        ref={ref => this.dropDownAlertRef = ref}
-                        useNativeDriver={true}
-                        closeInterval={1000}
-                        updateStatusBar={true}
-                        tapToCloseEnabled={true}
-                        showCancel={true}
-                        elevation={5}
-                        isInteraction={false}
-                        successImageSrc={succesImage}
-                    />
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={5}
+                    isInteraction={false}
+                    successImageSrc={succesImage}
+                />
                 <View style={[customStyle.centerItems, styles.mt]}>
 
                     <View style={styles.mt}>
                         <View style={customStyle.centerItems}>
-                            <Thumbnail source={icon} />
-                            <Textpopins style={styles.title} >{t('program.pw')}</Textpopins>
+                            <Thumbnail source={icon}/>
+                            <Textpopins style={styles.title}>{t('program.pw')}</Textpopins>
                         </View>
                     </View>
 
@@ -85,7 +87,7 @@ export default class Register extends React.Component {
                                 style={styles.form}
                                 onPress={Keyboard.dismiss}>
 
-                                <View style={[customStyle.centerItems,styles.itemStyle]}>
+                                <View style={[customStyle.centerItems, styles.itemStyle]}>
                                     <Input
                                         style={styles.inputstyle}
                                         placeholder={t('form.labels.phonenumb')}
@@ -106,7 +108,7 @@ export default class Register extends React.Component {
                                     </View>
                                 </Item> */}
 
-                                <View style={[customStyle.centerItems,styles.itemStyle]}>
+                                <View style={[customStyle.centerItems, styles.itemStyle]}>
 
                                     <Input
                                         autoCorrect={false}
@@ -127,7 +129,7 @@ export default class Register extends React.Component {
                                         full
                                     >
                                         <Textpopins style={styles.continueButtonText}
-                                                >{t('form.buttons.continue')}</Textpopins>
+                                        >{t('form.buttons.continue')}</Textpopins>
                                     </Button>
                                 </View>
 
@@ -150,7 +152,7 @@ export default class Register extends React.Component {
                         </View>
 
                     </View>
-                
+
                 </View>
 
             </KeyboardAwareScrollView>
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
         height: 130,
     },
     mt: {
-        marginTop:Constants.statusBarHeight,
+        marginTop: Constants.statusBarHeight,
     },
     title: {
         fontSize: 21,
@@ -181,10 +183,10 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
     },
-    itemStyle:{
-        width:width-50,
-        height:60,
-        marginVertical:10,
+    itemStyle: {
+        width: width - 50,
+        height: 60,
+        marginVertical: 10,
     },
     inputstyle: {
         height: 50,
@@ -215,9 +217,9 @@ const styles = StyleSheet.create({
         color: '#7c9d32',
         fontSize: 17,
     },
-    buttonstyle:{
-        marginHorizontal:30,
-        height:"100%",
+    buttonstyle: {
+        marginHorizontal: 30,
+        height: "100%",
     },
     continueButtonText: {
         fontWeight: 'bold',
@@ -226,6 +228,6 @@ const styles = StyleSheet.create({
     },
     container: {
         backgroundColor: '#fff',
-        flex:1,
+        flex: 1,
     }
 });
