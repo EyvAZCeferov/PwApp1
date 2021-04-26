@@ -1,318 +1,281 @@
 import React from "react";
 import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  Linking,
-  Text,
-  Share,
+    View,
+    StyleSheet,
+    Dimensions,
+    ActivityIndicator,
+    ImageBackground,
+    SafeAreaView,
+    TouchableOpacity,
+    ScrollView,
+    Share
 } from "react-native";
-import {
-  Content,
-  Card,
-  CardItem,
-  Thumbnail,
-  Left,
-  Body,
-  Button,
-} from "native-base";
-import { SliderBox } from "react-native-image-slider-box";
-import { AntDesign } from "@expo/vector-icons";
-import * as Localization from "expo-localization";
-import { StatusBar } from "expo-status-bar";
+import {StatusBar} from "expo-status-bar";
+import {t} from "../../../functions/lang";
+import {AntDesign, FontAwesome, MaterialIcons} from "@expo/vector-icons";
+import Textpopins from "../../../functions/screenfunctions/text";
+import Header from "./components/Header";
+
+const {width, height} = Dimensions.get("window");
 import Constants from "expo-constants";
 
-const { width, height } = Dimensions.get("window");
-import firebase from "../../../functions/firebase/firebaseConfig";
-import HTMLView from "react-native-htmlview";
-import TextPopins from "../../../functions/screenfunctions/text";
 
-export default class Campaign extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: false,
-      oneCampaign: null,
-      newImages: null,
-    };
-  }
-
-  getInfo() {
-    firebase
-      .database()
-      .ref("campaigns/" + this.props.route.params.uid)
-      .on("value", (data) => {
-        this.setState({
-          oneCampaign: data.toJSON(),
-        });
-      });
-    firebase
-      .database()
-      .ref("campaigns/" + this.props.route.params.uid + "/images")
-      .on("value", (data) => {
-        var datas = [];
-        var newDatas = data.toJSON();
-        for (var i = 0; i < data.numChildren(); i++) {
-          datas.push(newDatas[i]["src"]);
-        }
-        this.setState({ newImages: datas });
-      });
-  }
-
-  componentDidMount() {
-    this.getInfo();
-  }
-
-  async share(tit, desc, url) {
-    let des = unescape(desc.replace(/(<([^>]+)>)/gi, ""));
-    try {
-      const result = await Share.share(
-        {
-          title: tit,
-          message: des,
-          url: url != null ? url : "https://payandwin.az",
-        },
-        {
-          dialogTitle: tit + " Paylaşmaq üçün hazırdır.",
-          subject: tit,
-          tintColor: "7c9d32",
-        }
-      );
-
-      if (result.action === Share.sharedAction) {
-        this.dropDownAlertRef.alertWithType(
-          "success",
-          "Paylaşmaq üçün hazırdır."
-        );
-      } else if (result.action === Share.dismissedAction) {
-        this.dropDownAlertRef.alertWithType(
-          "error",
-          "Post paylaşıla bilmədi.",
-          "Təkrar yoxlayın."
-        );
-      }
-    } catch (error) {
-      this.dropDownAlertRef.alertWithType("error", "Xəta", error.message);
+class Campaign extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            refresh: true,
+            datas: [
+                {
+                    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+                    title: 'Səba',
+                    image: 'https://www.arazmarket.az/site/assets/files/2475/2700037.png',
+                    description: "frozen chicken 1kg",
+                    price: 4.59,
+                },
+                {
+                    id: '3ac6sddadc-c605-48d3-a4f8-fbd91aa95f63',
+                    title: 'Bizim süfrə',
+                    image: 'https://www.arazmarket.az/site/assets/files/2476/004072.png',
+                    description: "mayonez 460qr",
+                    price: 1.59,
+                },
+                {
+                    id: 'bdqedqwldmqwdma-c1b1-46c2-aed5-3ad53abb28ba',
+                    title: 'Final',
+                    image: 'https://www.arazmarket.az/site/assets/files/2477/028232.png',
+                    description: "ultra earl grey çay",
+                    price: 2.19,
+                },
+                {
+                    id: '3ac68dsaasdsaf-a4f8-fbd91aa95f63',
+                    title: 'Posidelkino',
+                    image: 'https://www.arazmarket.az/site/assets/files/2478/002857.png',
+                    description: "peçenye 310qr",
+                    price: 2.02,
+                },
+                {
+                    id: '3ac68dssdasdqdqdqdf-a4f8-fbd91aa95f63',
+                    title: 'Pantene',
+                    image: 'https://www.arazmarket.az/site/assets/files/2479/004938.png',
+                    description: "şampun 400ml",
+                    price: 4.40,
+                },
+                {
+                    id: '3ac68dssdqdqjdqüdnqüodnqüodnqündqdf-a4f8-fbd91aa95f63',
+                    title: 'Çayka',
+                    image: 'https://www.arazmarket.az/site/assets/files/2487/25.png',
+                    description: "şokolad 1kq",
+                    price: 4.99,
+                },
+            ],
+            product: null,
+        };
     }
-  }
 
-  name(item) {
-    if (Localization.locale == "en" || Localization.locale === "en") {
-      // return item.en_title;
-      return "Title";
-    } else if (Localization.locale == "ru" || Localization.locale === "ru") {
-      // return item.ru_title;
-      return "Title";
-    } else if (Localization.locale == "az" || Localization.locale === "az") {
-      // return item.az_title;
-      return "Title";
-    }
-  }
-
-  desc(item) {
-    if (Localization.locale == "en" || Localization.locale === "en") {
-      // return item.en_description;
-      return "Desc"
-    } else if (Localization.locale == "ru" || Localization.locale === "ru") {
-      // return item.ru_description;
-      return "Desc"
-    } else if (Localization.locale == "az" || Localization.locale === "az") {
-      // return item.az_description;
-      return "Desc"
-    }
-  }
-
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor="#fff" style="dark" />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            backgroundColor: "#fff",
-            alignItems: "center",
-            alignContent: "center",
-            textAlign: "center",
-            marginTop: Constants.statusBarHeight,
-            borderBottomColor: "#7c9d32",
-            borderBottomWidth: 2,
-            paddingBottom: 1,
-            paddingHorizontal:3
-          }}
-        >
-          <Button transparent onPress={() => this.props.navigation.goBack()}>
-            <AntDesign name="left" size={24} color="#7c9d32" />
-          </Button>
-          <Text
-            style={styles.headerTitle}
-            children={
-              this.state.oneCampaign != null
-                ? this.name(this.state.oneCampaign)
-                : null
+    onShare = async () => {
+        try {
+            const result = await Share.share({
+                message: this.state.product.description,
+                title: this.state.product.title,
+                url: "https://localhost:8080/" + this.state.product.price
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
             }
-          />
-          <View />
-        </View>
-        <View style={styles.f1}>
-          <Content>
-            <ScrollView style={styles.f1}>
-              <Card style={styles.card}>
-                <CardItem>
-                  <Left>
-                    {this.state.oneCampaign != null ? (
-                      <Thumbnail
-                        source={{
-                          uri: this.state.oneCampaign.marketIcon,
-                        }}
-                      />
-                    ) : null}
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 
-                    <Body>
-                      <TextPopins
-                        style={styles.titleColor}
-                        children={
-                          this.state.oneCampaign != null
-                            ? this.state.oneCampaign.marketName
-                            : null
-                        }
-                      />
-                      <TextPopins
-                        textColor="rgba(0,0,0,.5)"
-                        children={
-                          this.state.oneCampaign != null
-                            ? this.state.oneCampaign.created_at
-                            : null
-                        }
-                      />
-                    </Body>
-                  </Left>
-                </CardItem>
-                <CardItem cardBody>
-                  {this.state.newImages != null ? (
-                    <SliderBox
-                      images={this.state.newImages}
-                      dotColor="#7c9d32"
-                      inactiveDotColor="#6d7587"
-                      circleLoop={true}
-                      imageLoadingColor="#7c9d32"
-                      sliderBoxHeight={300}
-                    />
-                  ) : null}
-                </CardItem>
-                <CardItem>
-                  <View style={styles.fabArena}>
-                    <Text
-                      style={styles.title}
-                      children={
-                        this.state.oneCampaign != null
-                          ? this.name(this.state.oneCampaign)
-                          : null
-                      }
-                    />
-                    <Button
-                      style={styles.shareButton}
-                      onPress={() =>
-                        this.share(
-                          this.name(this.state.oneCampaign),
-                          this.desc(this.state.oneCampaign),
-                          this.state.oneCampaign.slug
-                        )
-                      }
-                    >
-                      <AntDesign name="sharealt" size={27} color="#fff" />
-                    </Button>
-                  </View>
-                </CardItem>
-                <CardItem>
-                  <Body >
-                    {this.state.oneCampaign != null ? (
-                      <HTMLView
-                        value={this.desc(this.state.oneCampaign)}
-                        onLinkPress={() =>
-                          Linking.openURL(this.state.oneCampaign.slug)
-                        }
-                        stylesheet={styles.textColor}
-                      />
-                    ) : null}
-                  </Body>
-                </CardItem>
-              </Card>
+    getInfo() {
+        const params = this.props.route.params;
+        const {uid} = params;
+        var product = this.state.datas.find((data) => data.id == uid);
+        this.setState({product: product});
+        this.setState({refresh: false});
+    }
+
+    componentDidMount() {
+        this.getInfo();
+    }
+
+    content() {
+        const header = (image) => {
+            return (
+                <ImageBackground
+                    resizeMode="contain"
+                    source={{uri: image}}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                    }}
+                >
+                    <View style={{
+                        width,
+                        flexDirection: "row",
+                        height: 25,
+                        position: "absolute",
+                        bottom: Constants.statusBarHeight / 2,
+                        left: 0,
+                        right: 0,
+                        alignContent: "center",
+                        justifyContent: "center"
+                    }}>
+
+                        <TouchableOpacity
+                            style={styles.addToCart}
+                        >
+                            <Textpopins>{this.state.product.price} ₼</Textpopins>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.addToCart}
+                            onPress={this.onShare}
+                        >
+                            <AntDesign name="sharealt" size={24} color="black"/>
+                        </TouchableOpacity>
+                    </View>
+                </ImageBackground>
+            );
+        };
+
+        const contentArena = (product) => (
+            <ScrollView style={{flexDirection: "column"}}>
+
+                <Textpopins
+                    style={{margin: Constants.statusBarHeight, fontSize: 30, fontWeight: "bold", color: "#fff"}}>
+                    {product.title}
+                </Textpopins>
+                <Textpopins style={{
+                    fontSize: 15,
+                    color: "rgba(255,255,255,.6)",
+                    marginHorizontal: Constants.statusBarHeight / 2,
+                    marginBottom: Constants.statusBarHeight
+                }}>
+                    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                    dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
+                    sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
+                    est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius
+                    modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
+                    veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+                    commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
+                    molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                    dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
+                    sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
+                    est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius
+                    modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
+                    veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+                    commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
+                    molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                </Textpopins>
             </ScrollView>
-          </Content>
-        </View>
-      </View>
-    );
-  }
+        );
+
+        if (this.state.refresh) {
+            return (
+                <View style={[styles.container, styles.center]}>
+                    <ActivityIndicator size="large" color="#7c9d32"/>
+                </View>
+            );
+        } else {
+            if (this.state.product || this.state.product != null) {
+                return (
+                    <View style={styles.container}>
+                        <View style={styles.header}>
+                            <Header button={true}
+                                    title={this.state.product.title}/>
+                        </View>
+                        <View style={styles.content}>
+                            <View style={styles.top}>{header(this.state.product.image)}</View>
+                            <View style={styles.footer}>
+                                {contentArena(this.state.product)}
+                            </View>
+                        </View>
+                    </View>
+                );
+            } else {
+                return (
+                    <View style={styles.container}>
+                        <View style={styles.header}>
+                            <Header button={true}
+                                    title={t("actions.noResult")}/>
+                        </View>
+                        <View style={styles.content}>
+                            <Textpopins
+                                children={t("actions.noResult")}
+                                style={styles.noResult}
+                            />
+                        </View>
+                    </View>
+                );
+            }
+        }
+    }
+
+    render() {
+        return (
+            <SafeAreaView style={styles.container}>
+                <StatusBar backgroundColor="#fff" style="dark"/>
+                {this.content()}
+            </SafeAreaView>
+        );
+    }
 }
 
+export default Campaign;
+
 const styles = StyleSheet.create({
-  f1: {
-    flex: 1,
-  },
-  header: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    paddingHorizontal: 10,
-    textAlign: "center",
-    alignItems: "center",
-    alignContent: "center",
-    width: width,
-    marginTop: Constants.statusBarHeight,
-    backgroundColor: "#fff",
-  },
-  headerBody: {
-    textAlign: "center",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-  },
-  headerTitle: {
-    color: "#7c9d32",
-    fontSize: 19,
-    fontWeight: "bold",
-  },
-  card: {
-    marginBottom: 40,
-    width: width,
-    marginTop: 0,
-  },
-  titleColor: {
-    color: "#7c9d32",
-    fontSize: 17,
-    fontWeight: "bold",
-  },
-  title: {
-    color: "#010101",
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  fabArena: {
-    width: width,
-    minHeight: 50,
-    maxHeight: 150,
-    flexDirection: "row",
-    backgroundColor: "transparent",
-    justifyContent: "space-around",
-    alignItems: "center",
-    alignContent: "center",
-    textAlign: "center",
-  },
-  shareButton: {
-    textAlign: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    alignContent: "center",
-    width: 50,
-    height: "100%",
-    backgroundColor: "#7c9d32",
-    borderRadius: 10,
-  },
-  textColor: {
-    color: "#6d7587",
-    fontSize: 17,
-    fontFamily: "Poppins_400Regular",
-    padding: 5,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    header: {
+        flex: 1,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignContent: "center"
+    },
+    content: {
+        flex: 8,
+        backgroundColor: '#7c9d32',
+        borderTopLeftRadius: Constants.statusBarHeight,
+        borderTopRightRadius: Constants.statusBarHeight,
+    },
+    top: {
+        flex: 1,
+    },
+    footer: {
+        flex: 4,
+        marginTop: 5,
+        flexDirection: 'column',
+    },
+    center: {
+        textAlign: "center",
+        justifyContent: "center",
+        alignContent: "center",
+        alignItems: "center",
+    },
+    noResult: {
+        color: "#D50000",
+        textAlign: "center",
+        fontSize: 20,
+        fontWeight: "700",
+    },
+    addToCart: {
+        paddingHorizontal: Constants.statusBarHeight,
+        paddingTop: 6,
+        paddingBottom: 30,
+        backgroundColor: '#fff',
+        borderRadius: Constants.statusBarHeight,
+        marginRight: 3
+    },
 });

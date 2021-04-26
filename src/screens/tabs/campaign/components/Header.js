@@ -4,10 +4,9 @@ import Constants from 'expo-constants';
 import {StatusBar} from 'expo-status-bar';
 import {Ionicons, AntDesign} from '@expo/vector-icons';
 import {useNavigation} from "@react-navigation/native";
-import {connect} from "react-redux";
 import Textpopins from "../../../../functions/screenfunctions/text";
 
-function BucketHeader(props) {
+function Header(props) {
     const navigation = useNavigation();
 
     return (
@@ -31,13 +30,9 @@ function BucketHeader(props) {
                 )}
                 <Textpopins style={styles.text}>{props.title}</Textpopins>
                 <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CartList")}>
-                        <AntDesign name="shoppingcart" size={24} color="black"/>
-                        <Textpopins style={styles.badge}>{props.bucketitems.length}</Textpopins>
+                    <TouchableOpacity style={[styles.button, {borderColor: "#fff", width: 50}]}>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("WishList")}>
-                        <AntDesign name="hearto" size={24} color="black"/>
-                        <Textpopins style={styles.badge}>{props.wishitems.length}</Textpopins>
+                    <TouchableOpacity style={[styles.button, {borderColor: "#fff", width: 50}]}>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -45,14 +40,8 @@ function BucketHeader(props) {
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        bucketitems: state.bucketitems,
-        wishitems: state.wishitems,
-    };
-};
 
-export default connect(mapStateToProps)(BucketHeader);
+export default Header;
 
 
 const styles = StyleSheet.create({

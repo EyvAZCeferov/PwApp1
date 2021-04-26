@@ -56,8 +56,7 @@ import Customer from "./src/screens/tabs/campaign/customer";
 import ProductInfo from "./src/screens/tabs/bucket/productinfo";
 
 import {ProgramLockContext} from "./src/functions/Hooks/Authentication/Lock/ProgramLockContext";
-import i18n from "ex-react-native-i18n";
-import * as Localization from "expo-localization";
+import axios from "axios";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -204,18 +203,26 @@ const BucketStack = createStackNavigator();
 const BucketStackScreen = ({navigation, route}) => {
     if (route.state && route.state.index > 0) {
         navigation.setOptions({tabBarVisible: false});
+        //    false
     } else {
         navigation.setOptions({tabBarVisible: true});
     }
     return (
         <Provider store={store}>
-            <BucketStack.Navigator headerMode="none" initialRouteName="BucketStarter">
-                <BarcodeStack.Screen name="BucketStarter" component={BucketStarter}/>
+            <BucketStack.Navigator
+                initialRouteName="BucketStarter"
+                headerMode="none"
+            >
+                <BarcodeStack.Screen
+                    name="BucketStarter" component={BucketStarter}/>
                 <BarcodeStack.Screen
                     name="SelectCardBucket"
                     component={SelectCardBucket}
                 />
-                <BucketStack.Screen name="BucketHome" component={BucketHome}/>
+                <BucketStack.Screen
+                    name="BucketHome"
+                    component={BucketHome}
+                />
                 <BucketStack.Screen name="WishList" component={WishList}/>
                 <BucketStack.Screen name="CartList" component={CartList}/>
                 <BucketStack.Screen name="InCustomer" component={InCustomer}/>
@@ -227,37 +234,38 @@ const BucketStackScreen = ({navigation, route}) => {
 };
 
 const BarcodeStack = createStackNavigator();
-const BarcodeStackScreen = ({navigation, route}) => {
-    if (route.state && route.state.index > 0) {
-        navigation.setOptions({tabBarVisible: false});
-    } else {
-        navigation.setOptions({tabBarVisible: true});
+const BarcodeStackScreen = ({
+                                navigation, route
+                            }
+    ) => {
+        if (route.state && route.state.index > 0) {
+            navigation.setOptions({tabBarVisible: false});
+        } else {
+            navigation.setOptions({tabBarVisible: true});
+        }
+        return (
+            <BarcodeStack.Navigator headerMode="none" initialRouteName="BarcodeStarted">
+                <BarcodeStack.Screen name="BarcodeStarted" component={BarcodeStarted}/>
+                <BarcodeStack.Screen name="SelectCard" component={SelectCard}/>
+                <BarcodeStack.Screen name="ShoppingList" component={ShoppingList}/>
+                <BarcodeStack.Screen name="Buy" component={Buy}/>
+                <BarcodeStack.Screen name="PayThanks" component={PayThanks}/>
+            </BarcodeStack.Navigator>
+        );
     }
-    return (
-        <BarcodeStack.Navigator headerMode="none" initialRouteName="BarcodeStarted">
-            <BarcodeStack.Screen name="BarcodeStarted" component={BarcodeStarted}/>
-            <BarcodeStack.Screen name="SelectCard" component={SelectCard}/>
-            <BarcodeStack.Screen name="ShoppingList" component={ShoppingList}/>
-            <BarcodeStack.Screen name="Buy" component={Buy}/>
-            <BarcodeStack.Screen name="PayThanks" component={PayThanks}/>
-        </BarcodeStack.Navigator>
-    );
-};
+;
 
 export default function (props) {
     const [firstOpenSlider, setfirstOpenSlider] = React.useState(null);
     const [userToken, setUserToken] = React.useState(null);
 
-    function FirstOpen(props) {
-        async function getfirstOpen() {
-            await AsyncStorage.getItem("slider").then((a) => {
-                setfirstOpenSlider(a);
-            });
-        }
+    async function getfirstOpen() {
+        await AsyncStorage.getItem("slider").then((a) => {
+            setfirstOpenSlider(a);
+        });
+    }
 
-        React.useEffect(() => {
-            getfirstOpen()
-        }, [])
+    function FirstOpen(props) {
 
         return firstOpenSlider == null ? (
             <AppSlider getnewCall={() => getfirstOpen()} {...props} />
@@ -279,6 +287,7 @@ export default function (props) {
         async function getToken() {
             if (await AsyncStorage.getItem("token")) {
                 await AsyncStorage.getItem("token").then(token => {
+                    axios.defaults.headers.common["Authorization"] = "Bearer" + token;
                     setUserToken(token)
                 })
             }
@@ -290,7 +299,7 @@ export default function (props) {
             }, 3000)
         }, [])
 
-        return userToken ? (
+        return !userToken ? (
             <SwitchProgram {...props} />
         ) : (
             <AuthStackScreen {...props} />
@@ -298,7 +307,9 @@ export default function (props) {
     }
 
     React.useEffect(() => {
+        axios.defaults.baseURL = "http://localhost:8000/api/";
         getLang();
+        getfirstOpen()
     }, []);
 
     function SystemOpen(props) {

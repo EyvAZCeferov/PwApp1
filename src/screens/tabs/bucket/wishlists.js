@@ -1,7 +1,7 @@
 import React from "react";
-import {View, Text, StyleSheet, Dimensions, FlatList} from "react-native";
+import {View, Text, StyleSheet, Dimensions, FlatList, SafeAreaView} from "react-native";
 import {StatusBar} from "expo-status-bar";
-import BucketHeader from "./components/BucketHeader";
+import Header from "./components/BucketHeader";
 import {t} from "../../../functions/lang";
 import {List, ListItem, Left, Right, Body, Button, Thumbnail} from "native-base";
 import {connect} from "react-redux";
@@ -24,7 +24,8 @@ function WishList(props) {
                     <Thumbnail source={{uri: item.image}} style={{maxWidth: "100%"}}/>
                 </Left>
                 <Body>
-                    <Textpopins children={item.name}/>
+                    <Textpopins children={item.title}/>
+                    <Textpopins children={item.price}/>
                 </Body>
                 <Right style={{flexDirection: "row"}}>
 
@@ -41,38 +42,43 @@ function WishList(props) {
     }
 
     return (
-        <View style={[styles.container, styles.center]}>
-            <StatusBar backgroundColor="#fff" style="dark"/>
-            <View>
-                <View style={styles.header}>
-                    <BucketHeader
-                        button={true}
-                        title={t("bucket.header.wishList.title")}
-                    />
-                </View>
-                <View style={[styles.center, styles.contentArena]}>
-                    {props.wishitems && props.wishitems.length > 0 ? (
-                        <List
-                            style={{
-                                width: width,
-                                height: "100%",
-                            }}
-                        >
-                            <FlatList
-                                data={props.wishitems}
-                                renderItem={renderBucket}
-                                keyExtractor={(item, index) => index.toString()}
-                            />
-                        </List>
-                    ) : (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+                <Header button={true}
+                        title={t("bucket.header.wishList.title")}/>
+            </View>
+
+            <View style={styles.content}>
+                {props.wishitems && props.wishitems.length > 0 ? (
+                    <List
+                        style={{
+                            width: width,
+                            height: "100%",
+                        }}
+                    >
+                        <FlatList
+                            data={props.wishitems}
+                            renderItem={renderBucket}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    </List>
+                ) : (
+                    <List
+                        style={{
+                            width: width,
+                            height: "100%",
+                            marginTop: Constants.statusBarHeight,
+                            padding: 0,
+                        }}
+                    >
                         <Textpopins
                             children={t("actions.noResult")}
                             style={styles.noResult}
                         />
-                    )}
-                </View>
+                    </List>
+                )}
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -100,14 +106,16 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     header: {
-        width: width,
-        height: "20%",
-        marginTop: Constants.statusBarHeight,
+        flex: 1,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignContent: "center"
     },
-    contentArena: {
-        width: width,
-        height: "80%",
-        flexDirection: "column",
+    content: {
+        flex: 8,
+        backgroundColor: 'rgba(124, 157, 50,.7)',
+        borderTopLeftRadius: Constants.statusBarHeight,
+        borderTopRightRadius: Constants.statusBarHeight,
     },
     center: {
         textAlign: "center",

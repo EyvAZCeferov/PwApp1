@@ -123,7 +123,8 @@
       "register": "Pегистр",
       "continue": "Продолжать",
       "backlogin": "Вернуться к логину",
-      "back":"назад"
+      "back":"назад",
+      "submit": "подавать"
     },
     "validation": {
       "loginregister": {

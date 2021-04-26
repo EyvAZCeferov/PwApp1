@@ -4,181 +4,204 @@ import {
     Dimensions,
     View,
     Keyboard,
-    StatusBar,
+    TouchableOpacity,
+    SafeAreaView,
 } from 'react-native';
-import {
-    Button,
-    Form,
-    Input,
-    Thumbnail,
-} from 'native-base';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import {Form, Input, Item} from 'native-base';
 
-import {t} from '../../../functions/lang';
-import Textpopins from '../../../functions/screenfunctions/text';
-import customStyle from '../../../../assets/Theme';
+import * as Animatable from 'react-native-animatable';
 import Constants from 'expo-constants';
 
-const {width,height} = Dimensions.get('window');
-const icon = require('../../../../assets/icon-ios.png');
-import DropdownAlert from "react-native-dropdownalert";
+const {width, height} = Dimensions.get('screen');
+import {StatusBar} from 'expo-status-bar';
+import {LinearGradient} from 'expo-linear-gradient';
+import {t} from '../../../functions/lang';
 
-export default class ForgotPassword extends React.Component {
+const icon = require('../../../../assets/icon-ios.png');
+import AsyncStorage from "@react-native-community/async-storage";
+import Textpopins from '../../../functions/screenfunctions/text';
+import DropdownAlert from "react-native-dropdownalert";
+import auth from "../../../functions/actions/auth";
+import {CommonActions} from "@react-navigation/native";
+import {AntDesign, Feather, Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
+
+const succesImage = require('../../../../assets/images/Alert/tick.png');
+
+export default class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            phoneNumb: '',
+            phone: null,
+            password: null,
         };
     }
 
-    sendLink = () => {
-        Keyboard.dismiss();
-        this.dropDownAlertRef.alertWithType('info', t('form.validation.loginregister.forgetpass.success'));
+    forget = async () => {
+        await AsyncStorage.setItem('haveFinger', '');
+        await AsyncStorage.setItem('localAuthPass', '');
+        if (this.state.phone !== null && this.state.password !== null) {
+            var cred = {"phone": this.state.phone, "password": this.state.password};
+            auth.actions.signin(cred).then((e) => {
+                this.dropDownAlertRef.alertWithType('info', t('form.validation.loginregister.login.success'));
+                this.navigationreset()
+            }).catch(e => {
+                this.dropDownAlertRef.alertWithType('error', e);
+            });
+        } else {
+            this.dropDownAlertRef.alertWithType('error', t('actions.noResult'));
+        }
     };
+
+    navigationreset() {
+        return this.props.navigation.dispatch(
+            CommonActions.reset({
+                index: 1,
+                routes: [
+                    {name: "Home"},
+                    {
+                        name: "Home",
+                    },
+                ],
+            })
+        );
+    }
 
     render() {
         return (
-            <KeyboardAwareScrollView style={styles.container}>
-                <StatusBar backgroundColor="#fff" style="dark"/>
+            <SafeAreaView style={styles.container}>
                 <DropdownAlert
-                        ref={ref => this.dropDownAlertRef = ref}
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={5}
+                    isInteraction={false}
+                    successImageSrc={succesImage}
+                />
+                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <View style={styles.header}>
+                    <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.pop()}>
+                        <Ionicons name="arrow-back" size={24} color="#fff"/>
+                    </TouchableOpacity>
+                    <Animatable.Image
+                        animation="fadeIn"
+                        duration={1000}
+                        source={icon}
                         useNativeDriver={true}
-                        closeInterval={1000}
-                        updateStatusBar={true}
-                        tapToCloseEnabled={true}
-                        showCancel={true}
-                        elevation={5}
-                        isInteraction={false}
+                        resizeMode="stretch"
+                        style={styles.logo}
                     />
-                <View style={[styles.content,customStyle.centerItems,styles.mt]}>
-                    <View style={[styles.loginheader,customStyle.centerItems]}>
-                        <Thumbnail source={icon}/>
-                    </View>
-                    <View style={customStyle.centerItems}>
-                        <View>
-                            <Textpopins style={styles.title} >
-                                {t('loginregister.forgetpass.title')}
-                            </Textpopins>
-                        </View>
-                        <View>
-                            <Form style={styles.form}>
-                                <View style={styles.itemStyle}>
-                                    <Input
-                                        style={styles.inputstyle}
-                                        onChangeText={(text) =>
-                                            this.setState({phoneNumb: text})
-                                        }
-                                        onSubmitEditing={() => Keyboard.dismiss}
-                                        placeholder={t('form.labels.phonenumb')}
-                                    />
-                                </View>
-                            </Form>
-                        </View>
-
-                        <View style={styles.itemStyle}>
-                            <Button
-                                rounded
-                                onPress={this.sendLink}
-                                full
-                                success
-                                style={styles.buttonStyle}
-                                large>
-                                <Textpopins style={[styles.buttonText, {color: '#fff'}]}
-                                >
-                                    {t('form.buttons.continue').toUpperCase()}
-                                </Textpopins>
-                            </Button>
-                        </View>
-
-                        <View style={styles.itemStyle}>
-                            <Button
-                                rounded
-                                onPress={() => this.props.navigation.goBack()}
-                                full
-                                success
-                                style={styles.buttonStyle}
-                                large
-                                bordered>
-                                <Textpopins style={[styles.buttonText, {color: '#7c9d32'}]}
-                                >
-                                    {t('form.buttons.backlogin').toUpperCase()}
-                                </Textpopins>
-                            </Button>
-                        </View>
-
-                    </View>
+                    <View/>
                 </View>
-            </KeyboardAwareScrollView>
+
+                <Animatable.View
+                    style={styles.content}
+                    useNativeDriver={true}
+                    animation="slideInUp"
+                    duration={1000}>
+                    <Textpopins
+                        style={[styles.title, {marginVertical: Constants.statusBarHeight}]}>{t('loginregister.forgetpass.title')}</Textpopins>
+                    <Form>
+                        <Item style={styles.item} success>
+                            <Feather name="phone" size={24} color="black" style={{paddingRight: 5}}/>
+                            <Input
+                                onChangeText={(text) =>
+                                    this.setState({phone: text})
+                                }
+                                style={styles.input}
+                                onSubmitEditing={() => Keyboard.dismiss}
+                                placeholder={t('form.labels.phonenumb')}/>
+                        </Item>
+
+                        <Item
+                            style={[
+                                styles.item,
+                                {
+                                    marginTop: Constants.statusBarHeight,
+                                    alignContent: 'flex-end',
+                                    alignItems: 'flex-end',
+                                    justifyContent: 'flex-end',
+                                },
+                            ]}>
+                            <TouchableOpacity
+                                onPress={this.login}
+                            >
+                                <LinearGradient
+                                    start={{x: 0, y: 0}}
+                                    end={{x: 1, y: 0}}
+                                    colors={['#7c9d32', '#b7d477']}
+                                    style={styles.login}
+                                >
+                                    <Textpopins
+                                        style={[styles.title, {color: '#fff'}]}>{t('form.buttons.submit')} !</Textpopins>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </Item>
+                    </Form>
+                </Animatable.View>
+            </SafeAreaView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:"#fff",
-        borderColor:"#fff",
-        borderBottomColor:"#fff",
-        borderBottomWidth:0,
+    container: {
+        flex: 1,
+        backgroundColor: '#7c9d32',
     },
-    content:{
-        flex:1,
-    },
-    mt:{
-        marginTop:Constants.statusBarHeight,
-    },
-    title: {
-        fontSize: 21,
-        color: '#7c9d32',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: 10,
-        marginBottom: 20,
-    },
-    header:{
-        backgroundColor:"#fff",
-        borderColor:"#fff",
-        borderBottomColor:"#fff",
-        borderBottomWidth:0,
-        width,
-        marginTop:Constants.statusBarHeight,
-        zIndex:10,
-    },
-    form: {
-        padding: 0,
-        margin: 0,
-        width: width,
+    header: {
+        flex: 1.5,
         justifyContent: 'center',
-        alignContent: 'center',
         alignItems: 'center',
     },
-    itemStyle:{
-        width:width-50,
-        height:50,
-        marginVertical:10,
-    },
-    inputstyle: {
-        height: 50,
-        width: "100%",
-        lineHeight: 40,
-        borderColor: '#fff',
+    content: {
+        flex: 1.5,
+        borderTopLeftRadius: Constants.statusBarHeight,
+        borderTopRightRadius: Constants.statusBarHeight,
         backgroundColor: '#fff',
-        borderWidth: 3,
-        paddingLeft: 10,
-        color: '#6d7587',
+        paddingVertical: Constants.statusBarHeight,
+        paddingHorizontal: Constants.statusBarHeight,
+    },
+    logo: {
+        width: width / 4,
+        height: width / 4,
+        backgroundColor: "transparent"
+    },
+    title: {
+        color: '#7c9d32',
         fontWeight: 'bold',
-        fontSize: 16,
-        borderRadius: 6,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 9,
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 12.35,
-        elevation: 19,
+        fontSize: 20,
     },
-    buttonStyle:{
-        paddingHorizontal: 10,
+    item: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: 'transparent',
     },
+    forget: {
+        paddingTop: Constants.statusBarHeight,
+        borderColor: 'transparent',
+    },
+    input: {
+        borderBottomColor: "#7c9d32",
+        borderBottomWidth: 2,
+    },
+    login: {
+        paddingHorizontal: Constants.statusBarHeight,
+        borderColor: '#7c9d30',
+        paddingVertical: 5,
+        marginVertical: 5,
+        borderWidth: 2,
+        borderRadius: Constants.statusBarHeight * 2
+    },
+    back: {
+        paddingHorizontal: Constants.statusBarHeight / 2,
+        backgroundColor: "transparent",
+        paddingVertical: Constants.statusBarHeight / 3,
+        borderRadius: Constants.statusBarHeight,
+        position: "absolute",
+        top: Constants.statusBarHeight,
+        left: 0
+    }
 });

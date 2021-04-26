@@ -1,6 +1,12 @@
+import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 
 export default {
+    namespaced: true,
+    state: {
+        token: null,
+        user: null
+    },
     getters: {
         authenticated(state) {
             return state.token && state.user;
@@ -14,81 +20,51 @@ export default {
             AsyncStorage.setItem("token", token);
         },
         SET_USER(state, user) {
-            AsyncStorage.setItem("user", user);
+            state.user = user;
         }
     },
     actions: {
-        async signin({dispatch}, cred) {
-            fetch("/auth/login", {
-                method: "POST",
+        signin(cred) {
+            return fetch('http://localhost:8000/api/auth/login', {
+                method: 'POST',
                 headers: {
-                    Accept: 'application/json',
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: cred
-            }).then((response) => {
-                return dispatch("attempt", response.data.access_token);
-            }).catch((error) => {
-                console.error(error);
+                body: JSON.stringify(cred)
+            }).then(response => response.json()).then(async (res) => {
+                console.log(res)
+                console.log(response)
+                // await AsyncStorage.setItem("token", res.data.access_token)
+            }).catch(error => {
+                console.log(error)
             });
         },
         async register({dispatch}, cred) {
-            fetch("/auth/register", {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-type": "application/json",
-                },
-                body: cred
-            }).then(response => {
-                return dispatch("attempt", response.data.access_token)
-            }).catch(error => {
-                console.log(error)
-            });
+            let response = await axios.post("/auth/register", cred);
+            return dispatch("attempt", response.data.access_token);
         },
         async refresh({dispatch}) {
-            fetch("auth/refresh", {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    Authorization: "Bearer " + await AsyncStorage.getItem("token"),
-                    "Content-type": "application/json",
-                },
-            }).then(response => {
-                return dispatch("attempt", response.data.access_token);
-            }).catch(error => {
-                console.log(error)
-            });
+            let response = axios.post("auth/refresh");
+            return dispatch("attempt", response.data.access_token);
         },
         async attempt({commit, state}, token) {
             if (token) {
                 commit("SET_TOKEN", token);
-                fetch("/auth/me", {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: "Bearer " + token,
-                        "Content-type": "application/json",
-                    },
-                }).then(e => {
-                    commit("SET_USER", e.data);
-                }).catch(error => {
-                    console.log(error)
-                });
             }
-            if (!token) {
+            if (!state.token) {
                 return;
+            }
+            try {
+                let response = await axios.post("/auth/me");
+                commit("SET_USER", response.data);
+            } catch (error) {
+                commit("SET_TOKEN", null);
+                commit("SET_USER", null);
             }
         },
         async signOut({commit}) {
-            fetch("/auth/logout", {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    Authorization: "Bearer " + await AsyncStorage.getItem("token"),
-                    "Content-type": "application/json",
-                },
-            }).then(() => {
+            return await axios.post("/auth/logout").then(() => {
                 commit("SET_TOKEN", null);
                 commit("SET_USER", null);
             });

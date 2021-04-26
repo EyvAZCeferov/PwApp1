@@ -1,65 +1,76 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, Keyboard, View} from 'react-native';
 import {
-    Button,
-    Item,
-    Form,
-    Input,
-    Thumbnail
-} from 'native-base';
-import {LiteCreditCardInput} from 'react-native-credit-card-input';
+    StyleSheet,
+    Dimensions,
+    View,
+    Keyboard,
+    TouchableOpacity,
+    SafeAreaView,
+    Text,
+} from 'react-native';
+import {Form, Input, Item} from 'native-base';
+
+import * as Animatable from 'react-native-animatable';
+import Constants from 'expo-constants';
+
+const {width, height} = Dimensions.get('screen');
+import {StatusBar} from 'expo-status-bar';
+import {LinearGradient} from 'expo-linear-gradient';
 import {t} from '../../../functions/lang';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+
+const icon = require('../../../../assets/icon-ios.png');
+import AsyncStorage from "@react-native-community/async-storage";
+import Textpopins from '../../../functions/screenfunctions/text';
+import DropdownAlert from "react-native-dropdownalert";
+import auth from "../../../functions/actions/auth";
+import {CommonActions} from "@react-navigation/native";
+import {AntDesign, Feather, Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
+import {LiteCreditCardInput} from "react-native-credit-card-input";
 
 const succesImage = require('../../../../assets/images/Alert/tick.png');
 
-var {width} = Dimensions.get('window');
-const icon = require('../../../../assets/icon-ios.png');
-import {StatusBar} from "expo-status-bar";
-import DropdownAlert from "react-native-dropdownalert";
-import AsyncStorage from "@react-native-community/async-storage";
-import Textpopins from '../../../functions/screenfunctions/text';
-import customStyle from '../../../../assets/Theme';
-import Constants from 'expo-constants';
-import {makeid} from '../../../functions/standart/helper';
-
-export default class Register extends React.Component {
+export default class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             phone: null,
-            pincode: null,
-            cardInfos: [],
-            data: [],
+            password: null,
         };
     }
 
-    async signUp() {
-        Keyboard.dismiss();
-        let cardId = makeid()
-        if (this.state.phone !== null) {
-            const cardDatas = {
-                cardId: cardId,
-                cardPass: this.state.pincode,
-                cardInfo: this.state.cardInfos,
-            }
-            await AsyncStorage.setItem('haveFinger', '');
-            await AsyncStorage.setItem('localAuthPass', '');
+    register = async () => {
+        await AsyncStorage.setItem('haveFinger', '');
+        await AsyncStorage.setItem('localAuthPass', '');
+        if (this.state.phone !== null && this.state.password !== null) {
+            var cred = {"phone": this.state.phone, "password": this.state.password};
+            auth.actions.register(cred).then((e) => {
+                this.dropDownAlertRef.alertWithType('info', t('form.validation.loginregister.login.success'));
+                this.navigationreset()
+            }).catch(e => {
+                this.dropDownAlertRef.alertWithType('error', e);
+            });
+        } else {
+            this.dropDownAlertRef.alertWithType('error', t('actions.noResult'));
         }
-        this.dropDownAlertRef.alertWithType('success', t('form.validation.loginregister.register.success'));
-        this.props.navigation.navigate('MobileVerify');
-        // this.dropDownAlertRef.alertWithType('error', t('form.validation.loginregister.forgetpass.error'));
     };
 
-    _onChange = (data) => {
-        this.setState({cardInfos: data.values});
-    };
-
+    navigationreset() {
+        return this.props.navigation.dispatch(
+            CommonActions.reset({
+                index: 1,
+                routes: [
+                    {name: "Home"},
+                    {
+                        name: "Home",
+                    },
+                ],
+            })
+        );
+    }
 
     render() {
         return (
-            <KeyboardAwareScrollView style={styles.container}>
-                <StatusBar backgroundColor="#fff" style="dark"/>
+            <SafeAreaView style={styles.container}>
                 <DropdownAlert
                     ref={ref => this.dropDownAlertRef = ref}
                     useNativeDriver={true}
@@ -71,163 +82,153 @@ export default class Register extends React.Component {
                     isInteraction={false}
                     successImageSrc={succesImage}
                 />
-                <View style={[customStyle.centerItems, styles.mt]}>
-
-                    <View style={styles.mt}>
-                        <View style={customStyle.centerItems}>
-                            <Thumbnail source={icon}/>
-                            <Textpopins style={styles.title}>{t('program.pw')}</Textpopins>
-                        </View>
-                    </View>
-
-                    <View>
-
-                        <View>
-                            <Form
-                                style={styles.form}
-                                onPress={Keyboard.dismiss}>
-
-                                <View style={[customStyle.centerItems, styles.itemStyle]}>
-                                    <Input
-                                        style={styles.inputstyle}
-                                        placeholder={t('form.labels.phonenumb')}
-                                        autoCorrect={false}
-                                        maxLength={15}
-                                        selectionColor="#7c9d32"
-                                        onChangeText={(text) => this.setState({phoneNumb: text})}
-                                    />
-                                </View>
-
-                                {/* <Item style={styles.itemStyle}>
-                                    <View style={[styles.inputstyle, styles.cardInput]}>
-                                        <LiteCreditCardInput
-                                            keyboardShouldPersistTaps="handled"
-                                            keyboardType="number-pad"
-                                            onChange={this._onChange}
-                                        />
-                                    </View>
-                                </Item> */}
-
-                                <View style={[customStyle.centerItems, styles.itemStyle]}>
-
-                                    <Input
-                                        autoCorrect={false}
-                                        style={styles.inputstyle}
-                                        placeholder={t('form.labels.password')}
-                                        minLength={8}
-                                        secureTextEntry={true}
-                                        onChangeText={(text) => this.setState({pincode: text})}
-                                    />
-
-                                </View>
-
-                                <View style={styles.itemStyle}>
-                                    <Button
-                                        style={styles.buttonStyle}
-                                        onPress={() => this.signUp()}
-                                        success
-                                        full
-                                    >
-                                        <Textpopins style={styles.continueButtonText}
-                                        >{t('form.buttons.continue')}</Textpopins>
-                                    </Button>
-                                </View>
-
-                                <View style={styles.itemStyle}>
-                                    <Button
-                                        style={styles.buttonStyle}
-                                        success
-                                        full
-                                        bordered
-                                        onPress={() => this.props.navigation.navigate('Login')}
-                                    >
-                                        <Textpopins
-                                            style={styles.buttonText}>
-                                            {t('form.buttons.backlogin')}
-                                        </Textpopins>
-                                    </Button>
-                                </View>
-
-                            </Form>
-                        </View>
-
-                    </View>
-
+                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <View style={styles.header}>
+                    <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.pop()}>
+                        <Ionicons name="arrow-back" size={24} color="#fff"/>
+                    </TouchableOpacity>
+                    <Animatable.Image
+                        animation="fadeIn"
+                        duration={1000}
+                        source={icon}
+                        useNativeDriver={true}
+                        resizeMode="stretch"
+                        style={styles.logo}
+                    />
+                    <View/>
                 </View>
 
-            </KeyboardAwareScrollView>
+                <Animatable.View
+                    style={styles.content}
+                    useNativeDriver={true}
+                    animation="slideInUp"
+                    duration={1000}>
+                    <Textpopins
+                        style={[styles.title, {marginVertical: Constants.statusBarHeight}]}>{t('form.buttons.register')}</Textpopins>
+                    <Form>
+                        <Item style={styles.item} success>
+                            <Feather name="phone" size={24} color="black" style={{paddingRight: 5}}/>
+                            <Input
+                                onChangeText={(text) =>
+                                    this.setState({phone: text})
+                                }
+                                style={styles.input}
+                                onSubmitEditing={() => Keyboard.dismiss}
+                                placeholder={t('form.labels.phonenumb')}/>
+                        </Item>
+
+                        <Item style={styles.item} success>
+                            <AntDesign name="creditcard" size={24} color="black"
+                                       style={{paddingRight: 5, marginLeft: 25}}/>
+                            <LiteCreditCardInput
+                                keyboardShouldPersistTaps="handled"
+                                keyboardType="number-pad"
+                                onChange={this._onChange}
+                                style={styles.input}
+                            />
+                        </Item>
+
+                        <Item style={styles.item} success>
+                            <MaterialCommunityIcons style={{paddingRight: 5}} name="form-textbox-password" size={24}
+                                                    color="black"/>
+                            <Input
+                                placeholder={t('form.labels.password')}
+                                onChangeText={(text) =>
+                                    this.setState({password: text})
+                                }
+                                style={styles.input}
+                                onSubmitEditing={() => Keyboard.dismiss}
+                                secureTextEntry={true}/>
+                        </Item>
+
+                        <Item
+                            style={[
+                                styles.item,
+                                {
+                                    alignContent: 'flex-end',
+                                    alignItems: 'flex-end',
+                                    justifyContent: 'flex-end',
+                                },
+                            ]}>
+                            <TouchableOpacity
+                                onPress={this.register}
+                            >
+                                <LinearGradient
+                                    start={{x: 0, y: 0}}
+                                    end={{x: 1, y: 0}}
+                                    colors={['#7c9d32', '#b7d477']}
+                                    style={styles.login}
+                                >
+                                    <Textpopins
+                                        style={[styles.title, {color: '#fff'}]}>{t('form.buttons.register')} !</Textpopins>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </Item>
+
+                    </Form>
+                </Animatable.View>
+            </SafeAreaView>
         );
     }
 }
+
 const styles = StyleSheet.create({
-    logo: {
-        width: 110,
-        height: 130,
+    container: {
+        flex: 1,
+        backgroundColor: '#7c9d32',
     },
-    mt: {
-        marginTop: Constants.statusBarHeight,
-    },
-    title: {
-        fontSize: 21,
-        color: '#7c9d32',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        marginTop: 10,
-        marginBottom: 20,
-    },
-    form: {
-        padding: 0,
-        margin: 0,
-        width: width,
+    header: {
+        flex: 1,
         justifyContent: 'center',
-        alignContent: 'center',
         alignItems: 'center',
     },
-    itemStyle: {
-        width: width - 50,
-        height: 60,
-        marginVertical: 10,
-    },
-    inputstyle: {
-        height: 50,
-        width: "100%",
-        lineHeight: 40,
-        borderColor: '#fff',
+    content: {
+        flex: 3,
+        borderTopLeftRadius: Constants.statusBarHeight,
+        borderTopRightRadius: Constants.statusBarHeight,
         backgroundColor: '#fff',
-        borderWidth: 3,
-        paddingLeft: 10,
-        color: '#6d7587',
-        fontWeight: 'bold',
-        fontSize: 16,
-        borderRadius: 6,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 9,
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 12.35,
-        elevation: 19,
+        paddingVertical: Constants.statusBarHeight,
+        paddingHorizontal: Constants.statusBarHeight,
     },
-    cardInput: {
-        width: '100%',
-        paddingLeft: 0,
+    logo: {
+        width: width / 4,
+        height: width / 4,
+        backgroundColor: "transparent"
     },
-    buttonText: {
+    title: {
         color: '#7c9d32',
-        fontSize: 17,
-    },
-    buttonstyle: {
-        marginHorizontal: 30,
-        height: "100%",
-    },
-    continueButtonText: {
         fontWeight: 'bold',
-        fontSize: 17,
-        color: '#fff',
+        fontSize: 20,
     },
-    container: {
-        backgroundColor: '#fff',
-        flex: 1,
+    item: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: 'transparent',
+        marginVertical: Constants.statusBarHeight / 2
+    },
+    forget: {
+        paddingTop: Constants.statusBarHeight,
+        borderColor: 'transparent',
+    },
+    input: {
+        borderBottomColor: "#7c9d32",
+        borderBottomWidth: 2,
+    },
+    login: {
+        paddingHorizontal: Constants.statusBarHeight,
+        borderColor: '#7c9d30',
+        paddingVertical: 5,
+        marginVertical: 5,
+        borderWidth: 2,
+        borderRadius: Constants.statusBarHeight * 2
+    },
+    back: {
+        paddingHorizontal: Constants.statusBarHeight / 2,
+        backgroundColor: "transparent",
+        paddingVertical: Constants.statusBarHeight / 3,
+        borderRadius: Constants.statusBarHeight,
+        position: "absolute",
+        top: Constants.statusBarHeight,
+        left: 0
     }
 });

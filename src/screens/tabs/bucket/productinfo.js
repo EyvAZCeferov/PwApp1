@@ -5,66 +5,69 @@ import {
     Dimensions,
     ActivityIndicator,
     ImageBackground,
-    Text,
+    Text, SafeAreaView, TouchableOpacity, ScrollView,
 } from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {connect} from "react-redux";
 import {t} from "../../../functions/lang";
-import {Header, Left, Body, Right, Button} from "native-base";
-import {AntDesign, MaterialIcons} from "@expo/vector-icons";
+import {Left, Body, Right, Button} from "native-base";
+import {AntDesign, FontAwesome, MaterialIcons} from "@expo/vector-icons";
 import Textpopins from "../../../functions/screenfunctions/text";
+import Header from "./components/BucketHeader";
 
 const {width, height} = Dimensions.get("window");
 import Constants from "expo-constants";
 
-const products = [
-    {
-        id: 1,
-        image: "https://picsum.photos/130",
-        name: "Product1",
-        category: 1,
-        qyt: 1,
-        price: 20,
-    },
-    {
-        id: 2,
-        image: "https://picsum.photos/120",
-        name: "Product2",
-        category: 1,
-        qyt: 0.351,
-        price: 30,
-    },
-    {
-        id: 3,
-        image: "https://picsum.photos/110",
-        name: "Product3",
-        category: 3,
-        qyt: 0.321,
-        price: 1.2,
-    },
-    {
-        id: 4,
-        image: "https://picsum.photos/100",
-        name: "Product4",
-        category: 4,
-        qyt: 0.331,
-        price: 1.5,
-    },
-    {
-        id: 5,
-        image: "https://picsum.photos/150",
-        name: "Product5",
-        category: 5,
-        qyt: 0.5,
-        price: 3,
-    },
-];
 
 class ProductInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             refresh: true,
+            datas: [
+                {
+                    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+                    title: 'Səba',
+                    image: 'https://www.arazmarket.az/site/assets/files/2475/2700037.png',
+                    description: "frozen chicken 1kg",
+                    price: 4.59,
+                },
+                {
+                    id: '3ac6sddadc-c605-48d3-a4f8-fbd91aa95f63',
+                    title: 'Bizim süfrə',
+                    image: 'https://www.arazmarket.az/site/assets/files/2476/004072.png',
+                    description: "mayonez 460qr",
+                    price: 1.59,
+                },
+                {
+                    id: 'bdqedqwldmqwdma-c1b1-46c2-aed5-3ad53abb28ba',
+                    title: 'Final',
+                    image: 'https://www.arazmarket.az/site/assets/files/2477/028232.png',
+                    description: "ultra earl grey çay",
+                    price: 2.19,
+                },
+                {
+                    id: '3ac68dsaasdsaf-a4f8-fbd91aa95f63',
+                    title: 'Posidelkino',
+                    image: 'https://www.arazmarket.az/site/assets/files/2478/002857.png',
+                    description: "peçenye 310qr",
+                    price: 2.02,
+                },
+                {
+                    id: '3ac68dssdasdqdqdqdf-a4f8-fbd91aa95f63',
+                    title: 'Pantene',
+                    image: 'https://www.arazmarket.az/site/assets/files/2479/004938.png',
+                    description: "şampun 400ml",
+                    price: 4.40,
+                },
+                {
+                    id: '3ac68dssdqdqjdqüdnqüodnqüodnqündqdf-a4f8-fbd91aa95f63',
+                    title: 'Çayka',
+                    image: 'https://www.arazmarket.az/site/assets/files/2487/25.png',
+                    description: "şokolad 1kq",
+                    price: 4.99,
+                },
+            ],
             product: null,
         };
     }
@@ -72,8 +75,8 @@ class ProductInfo extends React.Component {
     getInfo() {
         const params = this.props.route.params;
         const {uid} = params;
-        var product = products.findIndex((products) => products.id == uid);
-        this.setState({product: products[product]});
+        var product = this.state.datas.find((data) => data.id == uid);
+        this.setState({product: product});
         this.setState({refresh: false});
     }
 
@@ -81,161 +84,86 @@ class ProductInfo extends React.Component {
         this.getInfo();
     }
 
-
     content() {
-        const that = this;
-
         const header = (image) => {
             return (
-                <View>
-                    <ImageBackground
-                        resizeMode="cover"
-                        resizeMethod="resize"
-                        source={{uri: image}}
-                        style={{
-                            width: width,
-                            borderRadius: 0,
-                            height: height / 3,
-                            backgroundColor: "red",
-                        }}
-                    >
-                        <Header
-                            backgroundColor="transparent"
-                            androidStatusBarColor="transparent"
-                            style={{
-                                backgroundColor: "transparent",
-                                shadowColor: "transparent",
-                                elevation: 0,
-                                shadowOpacity: 0,
-                                shadowRadius: 0,
-                            }}
+                <ImageBackground
+                    resizeMode="contain"
+                    source={{uri: image}}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                    }}
+                >
+                    <View style={{
+                        width,
+                        flexDirection: "row",
+                        height: 25,
+                        position: "absolute",
+                        bottom: Constants.statusBarHeight / 2,
+                        left: 0,
+                        right: 0,
+                        alignContent: "center",
+                        justifyContent: "center"
+                    }}>
+                        <TouchableOpacity
+                            onPress={() => this.props.addtoCard(this.state.product)}
+                            style={styles.addToCart}>
+                            <AntDesign name="shoppingcart" size={24} color="black"/>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.addToCart}
+                            onPress={() => this.props.addWishList(this.state.product)}
                         >
-                            <StatusBar hidden/>
-                            <Left style={styles.center}>
-                                <Button
-                                    onPress={() => that.props.navigation.goBack()}
-                                    style={{
-                                        backgroundColor: "#fff",
-                                        borderLeftRadius: 5,
-                                    }}
-                                    transparent
-                                >
-                                    <AntDesign name="left" size={24} color="#7c9d32"/>
-                                </Button>
-                            </Left>
-                            <Body></Body>
-                            <Right style={[styles.headerRight, styles.center]}>
-                                <Button
-                                    style={{
-                                        backgroundColor: "#fff",
-                                        borderRadius: 0,
-                                        borderTopLeftRadius: 5,
-                                        borderBottomLeftRadius: 5,
-                                    }}
-                                    transparent
-                                    onPress={() => that.props.navigation.navigate("CartList")}
-                                >
-                                    <AntDesign name="shoppingcart" size={24} color="#000"/>
-                                    <Text
-                                        style={[
-                                            styles.center,
-                                            {
-                                                color: "#7c9d32",
-                                                fontSize: 13,
-                                                fontWeight: "bold",
-                                                position: "absolute",
-                                                bottom: 6,
-                                                right: 8,
-                                            },
-                                        ]}
-                                        children={that.props.bucketitems.length}
-                                    />
-                                </Button>
-                                <Button
-                                    style={{
-                                        backgroundColor: "#fff",
-                                        borderRadius: 0,
-                                        borderTopRightRadius: 5,
-                                        borderBottomRightRadius: 5,
-                                    }}
-                                    transparent
-                                    onPress={() => that.props.navigation.navigate("WishList")}
-                                >
-                                    <AntDesign name="hearto" size={24} color="black"/>
-                                    <Text
-                                        style={[
-                                            styles.center,
-                                            {
-                                                color: "#7c9d32",
-                                                fontSize: 15,
-                                                fontWeight: "bold",
-                                                position: "absolute",
-                                                bottom: 6,
-                                                right: 8,
-                                            },
-                                        ]}
-                                        children={that.props.wishitems.length}
-                                    />
-                                </Button>
-                            </Right>
-                        </Header>
-                    </ImageBackground>
-                </View>
+                            {this.props.wishitems.find(element => element.id == this.state.product.id) ? (
+                                <AntDesign name="heart" size={24} color="black"/>
+                            ) : (
+                                <AntDesign name="hearto" size={24} color="black"/>
+                            )}
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.addToCart}
+                        >
+                            <Textpopins>{this.state.product.price} ₼</Textpopins>
+                        </TouchableOpacity>
+                    </View>
+                </ImageBackground>
             );
         };
 
         const contentArena = (product) => (
-            <View>
-                <Textpopins
-                    style={{margin: Constants.statusBarHeight, fontWeight: "bold"}}
-                >
-                    {product.name}
-                </Textpopins>
-                <View
-                    style={{flexDirection: "column", justifyContent: "space-around"}}
-                >
-                    <View
-                        style={{flexDirection: "row", justifyContent: "space-around"}}
-                    >
-                        <Button
-                            bordered
-                            success
-                            style={{
-                                width: width / 2.3,
-                                textAlign: "center",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                alignContent: "center",
-                            }}
-                            onPress={() => this.props.addWishList(product)}
-                        >
-                            <AntDesign name="hearto" size={20} color="#7c9d32"/>
-                        </Button>
+            <ScrollView style={{flexDirection: "column"}}>
 
-                        <Button
-                            bordered
-                            success
-                            style={{
-                                width: width / 2.3,
-                                textAlign: "center",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                alignContent: "center",
-                            }}
-                            onPress={() => this.props.addtoCard(product)}
-                        >
-                            <MaterialIcons
-                                name="add-shopping-cart"
-                                size={20}
-                                color="#7c9d32"
-                            />
-                        </Button>
-                    </View>
-                    <Textpopins style={{margin: Constants.statusBarHeight}}>
-                        {product.name}
-                    </Textpopins>
-                </View>
-            </View>
+                <Textpopins
+                    style={{margin: Constants.statusBarHeight, fontSize: 30, fontWeight: "bold", color: "#fff"}}>
+                    {product.title}
+                </Textpopins>
+                <Textpopins style={{
+                    fontSize: 15,
+                    color: "rgba(255,255,255,.6)",
+                    marginHorizontal: Constants.statusBarHeight / 2,
+                    marginBottom: Constants.statusBarHeight
+                }}>
+                    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                    dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
+                    sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
+                    est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius
+                    modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
+                    veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+                    commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
+                    molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                    dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
+                    sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
+                    est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius
+                    modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
+                    veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+                    commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
+                    molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                </Textpopins>
+            </ScrollView>
         );
 
         if (this.state.refresh) {
@@ -248,17 +176,31 @@ class ProductInfo extends React.Component {
             if (this.state.product || this.state.product != null) {
                 return (
                     <View style={styles.container}>
-                        {header(this.state.product.image, this.state.product.name)}
-                        {contentArena(this.state.product)}
+                        <View style={styles.header}>
+                            <Header button={true}
+                                    title={this.state.product.title}/>
+                        </View>
+                        <View style={styles.content}>
+                            <View style={styles.top}>{header(this.state.product.image)}</View>
+                            <View style={styles.footer}>
+                                {contentArena(this.state.product)}
+                            </View>
+                        </View>
                     </View>
                 );
             } else {
                 return (
-                    <View style={[styles.center, styles.container]}>
-                        <Textpopins
-                            children={t("actions.noResult")}
-                            style={styles.noResult}
-                        />
+                    <View style={styles.container}>
+                        <View style={styles.header}>
+                            <Header button={true}
+                                    title={t("actions.noResult")}/>
+                        </View>
+                        <View style={styles.content}>
+                            <Textpopins
+                                children={t("actions.noResult")}
+                                style={styles.noResult}
+                            />
+                        </View>
                     </View>
                 );
             }
@@ -267,10 +209,10 @@ class ProductInfo extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <StatusBar hidden hideTransitionAnimation translucent/>
+            <SafeAreaView style={styles.container}>
+                <StatusBar backgroundColor="#fff" style="dark"/>
                 {this.content()}
-            </View>
+            </SafeAreaView>
         );
     }
 }
@@ -298,7 +240,27 @@ export default connect(mapStateToProps, mapDispatchToProps)(ProductInfo);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
+    },
+    header: {
+        flex: 1,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignContent: "center"
+    },
+    content: {
+        flex: 8,
+        backgroundColor: '#7c9d32',
+        borderTopLeftRadius: Constants.statusBarHeight,
+        borderTopRightRadius: Constants.statusBarHeight,
+    },
+    top: {
+        flex: 1,
+    },
+    footer: {
+        flex: 4,
+        marginTop: 5,
+        flexDirection: 'column',
     },
     center: {
         textAlign: "center",
@@ -312,16 +274,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "700",
     },
-    headerTitle: {
-        color: "#7c9d32",
-        fontSize: 14,
-        fontWeight: "bold",
-        backgroundColor: "#fff",
-        padding: 10,
-        borderRadius: 5,
-    },
-    headerRight: {
-        flexDirection: "row",
-        justifyContent: "space-around",
+    addToCart: {
+        paddingHorizontal: Constants.statusBarHeight,
+        paddingTop: 6,
+        paddingBottom: 30,
+        backgroundColor: '#fff',
+        borderRadius: Constants.statusBarHeight,
+        marginRight: 3
     },
 });

@@ -2,18 +2,9 @@ const wishitems = (state = [], action) => {
     switch (action.type) {
         case 'ADD_TO_WISHLIST':
             try {
-                if (state.length > 0) {
-                    return state.map(element => {
-                        if (element.id == action.payload.id) {
-                            return [...state, action.payload]
-                        } else {
-                            return [...state, action.payload]
-                        }
-                    });
-                } else {
-                    return [...state, action.payload];
-                }
-                ;
+
+                return [...state, action.payload]
+
             } catch (e) {
                 alert(e);
             }

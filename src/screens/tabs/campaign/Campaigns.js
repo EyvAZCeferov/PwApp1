@@ -1,359 +1,219 @@
-import React from "react";
+import React from 'react';
 import {
-    View,
-    ScrollView,
-    StyleSheet,
-    Dimensions,
-    FlatList,
-    ImageBackground,
     Text,
-    ActivityIndicator,
+    View,
+    SafeAreaView,
+    StyleSheet,
+    FlatList,
     TouchableOpacity,
-} from "react-native";
-import {
-    Left,
-    Right,
-    Thumbnail,
-    Body,
-    Button,
-    Card,
-    CardItem,
-} from "native-base";
-import HTMLView from "react-native-htmlview";
+    Dimensions,
+    Image,
+    ScrollView,
+} from 'react-native';
+import Constants from 'expo-constants';
+import Header from './components/Header';
 
-import {FontAwesome, FontAwesome5, Ionicons} from "@expo/vector-icons";
-import * as Localization from "expo-localization";
-import Constants from "expo-constants";
-import {StatusBar} from "expo-status-bar";
-import firebase from "../../../functions/firebase/firebaseConfig";
+const {width} = Dimensions.get('screen');
+import {t} from "../../../functions/lang";
 import Textpopins from "../../../functions/screenfunctions/text";
 
-const {width, height} = Dimensions.get("window");
-import {t} from "../../../functions/lang";
 
-export default class Campaigns extends React.Component {
+class Campaigns extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            customersData: null,
-            newsData: null,
-            refresh: true,
-        };
-    }
-
-    getInfo() {
-        this.setState({refresh: true});
-        var datas = [];
-        var services = [];
-        firebase
-            .database()
-            .ref("campaigns")
-            .on("value", (data) => {
-                data.forEach((data) => {
-                    datas.push(data.val());
-                });
-                this.setState({
-                    newsData: datas,
-                });
-            });
-
-        this.setState({
-            customersData: [
+            datas: [
                 {
-                    id: 1,
-                    az_title: "TitleAz",
-                    ru_title: "TitleRu",
-                    en_title: "TitleEn",
+                    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+                    title: 'Səba',
+                    image: 'https://www.arazmarket.az/site/assets/files/2475/2700037.png',
+                    description: "frozen chicken 1kg",
+                    price: 4.59,
                 },
                 {
-                    id: 2,
-                    az_title: "TitleAzAZ",
-                    ru_title: "TitleRuRU",
-                    en_title: "TitleEnEN",
+                    id: '3ac6sddadc-c605-48d3-a4f8-fbd91aa95f63',
+                    title: 'Bizim süfrə',
+                    image: 'https://www.arazmarket.az/site/assets/files/2476/004072.png',
+                    description: "mayonez 460qr",
+                    price: 1.59,
                 },
                 {
-                    id: 2,
-                    az_title: "TitleAzAZ",
-                    ru_title: "TitleRuRU",
-                    en_title: "TitleEnEN",
+                    id: 'bdqedqwldmqwdma-c1b1-46c2-aed5-3ad53abb28ba',
+                    title: 'Final',
+                    image: 'https://www.arazmarket.az/site/assets/files/2477/028232.png',
+                    description: "ultra earl grey çay",
+                    price: 2.19,
                 },
                 {
-                    id: 2,
-                    az_title: "TitleAzAZ",
-                    ru_title: "TitleRuRU",
-                    en_title: "TitleEnEN",
+                    id: '3ac68dsaasdsaf-a4f8-fbd91aa95f63',
+                    title: 'Posidelkino',
+                    image: 'https://www.arazmarket.az/site/assets/files/2478/002857.png',
+                    description: "peçenye 310qr",
+                    price: 2.02,
                 },
                 {
-                    id: 2,
-                    az_title: "TitleAzAZ",
-                    ru_title: "TitleRuRU",
-                    en_title: "TitleEnEN",
+                    id: '3ac68dssdasdqdqdqdf-a4f8-fbd91aa95f63',
+                    title: 'Pantene',
+                    image: 'https://www.arazmarket.az/site/assets/files/2479/004938.png',
+                    description: "şampun 400ml",
+                    price: 4.40,
                 },
                 {
-                    id: 2,
-                    az_title: "TitleAzAZ",
-                    ru_title: "TitleRuRU",
-                    en_title: "TitleEnEN",
-                },
-                {
-                    id: 2,
-                    az_title: "TitleAzAZ",
-                    ru_title: "TitleRuRU",
-                    en_title: "TitleEnEN",
-                },
-                {
-                    id: 2,
-                    az_title: "TitleAzAZ",
-                    ru_title: "TitleRuRU",
-                    en_title: "TitleEnEN",
+                    id: '3ac68dssdqdqjdqüdnqüodnqüodnqündqdf-a4f8-fbd91aa95f63',
+                    title: 'Çayka',
+                    image: 'https://www.arazmarket.az/site/assets/files/2487/25.png',
+                    description: "şokolad 1kq",
+                    price: 4.99,
                 },
             ],
-        });
-        firebase
-            .database()
-            .ref("services")
-            .on("value", (data) => {
-                data.forEach((data) => {
-                    services.push(data.val());
-                });
-                this.setState({
-                    customersData: services,
-                });
-            });
-
-        this.setState({refresh: false});
-        this.renderContent();
+        }
     }
 
-    renderContent() {
-        const that = this;
-
-        function renderService({item, index}) {
-
-            function serviceName(item) {
-                if (Localization.locale == "en" || Localization.locale === "en") {
-                    return item.en_title;
-                } else if (Localization.locale == "ru" || Localization.locale === "ru") {
-                    return item.ru_title;
-                } else if (Localization.locale == "az" || Localization.locale === "az") {
-                    return item.az_title;
-                }
-            }
-
+    renderHorizontalList() {
+        return this.state.datas.map((element) => {
             return (
                 <TouchableOpacity
-                    style={{
-                        width: width / 3,
-                        height: "100%",
-                        marginRight: 4,
-                        alignContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                    }}
-                    onPress={() =>
-                        that.props.navigation.navigate("Customer", {
-                            uid: item.id,
-                        })
-                    }
-                >
-                    <ImageBackground
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            position: "relative",
-                        }}
-                        source={{uri: "https://picsum.photos/200/300.jpg"}}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 18,
-                                fontWeight: "bold",
-                                color: "#fff",
-                                textAlign: "center",
-                                position: "absolute",
-                                bottom: 0,
-                                width: "100%",
-                                backgroundColor: "rgba(0,0,0,.5)",
-                            }}
-                            children={serviceName(item)}
-                        />
-                    </ImageBackground>
+                    style={styles.topListsProduct}
+                    onPress={() => this.props.navigation.navigate("Customer", {
+                        catid: element.id,
+                    })}>
+                    {element.icon}
+                    <Textpopins style={styles.productTitle}>{element.title}</Textpopins>
                 </TouchableOpacity>
             );
-        }
+        });
+    }
 
-        function renderCards() {
-            function name(item) {
-                if (Localization.locale == "en" || Localization.locale === "en") {
-                    return item.en_title;
-                } else if (Localization.locale == "ru" || Localization.locale === "ru") {
-                    return item.ru_title;
-                } else if (Localization.locale == "az" || Localization.locale === "az") {
-                    return item.az_title;
+    renderFlatList({item, index}) {
+        return (
+            <TouchableOpacity
+                style={styles.product}
+                key={index}
+                onPress={() =>
+                    this.props.navigation.navigate("Campaign", {
+                        uid: item.id,
+                    })
                 }
-            }
-
-            function descr(item) {
-                if (Localization.locale == "en" || Localization.locale === "en") {
-                    return item.en_description;
-                } else if (Localization.locale == "ru" || Localization.locale === "ru") {
-                    return item.ru_description;
-                } else if (Localization.locale == "az" || Localization.locale === "az") {
-                    return item.az_description;
-                }
-            }
-
-            if (that.state.newsData != null) {
-                return that.state.newsData.map((item) => {
-                    return (
-                        <Card style={{width: width, maxHeight: 700}}>
-                            <CardItem style={{width: "100%", height: "30%"}} header>
-                                <Left>
-                                    <Thumbnail
-                                        source={{
-                                            uri: item.marketIcon,
-                                        }}
-                                        style={{
-                                            maxWidth: 100,
-                                            maxHeight: 100,
-                                            padding: 2,
-                                            margin: 0,
-                                        }}
-                                    />
-                                </Left>
-                                <Body>
-                                    <Textpopins style={styles.titleColor} children={name(item)}/>
-
-                                    <TouchableOpacity
-                                        style={{
-                                            flexDirection: "row",
-                                            justifyContent: "space-around",
-                                        }}
-                                    >
-                                        <Ionicons name="time" color="#6d7587" size={20}/>
-                                        <Text children={item.created_at}/>
-                                    </TouchableOpacity>
-                                </Body>
-                                <Right>
-                                    <Button
-                                        transparent
-                                        onPress={() =>
-                                            that.props.navigation.navigate("Campaign", {
-                                                uid: item.id,
-                                            })
-                                        }
-                                    >
-                                        <FontAwesome name="eye" size={24} color="#6d7587"/>
-                                    </Button>
-                                </Right>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Thumbnail
-                                    source={{
-                                        uri: item.images[0]["src"],
-                                    }}
-                                    square
-                                    style={{
-                                        width: width / 2,
-                                        height: width / 2,
-                                    }}
-                                />
-                                <Text>
-                                    <HTMLView value={descr(item)} addLineBreaks={true}/>
-                                </Text>
-                            </CardItem>
-                        </Card>
-                    );
-                });
-            }
-        }
-
-        if (this.state.refresh) {
-            return (
-                <View
-                    style={[
-                        styles.f1,
-                        {
-                            justifyContent: "center",
-                            alignContent: "center",
-                            alignItems: "center",
-                        },
-                    ]}
-                >
-                    <ActivityIndicator color="#7c9d32" size="large"/>
+            >
+                <Image
+                    source={{
+                        uri: item.image,
+                    }}
+                    resizemode="contain"
+                    style={{
+                        width: width / 2,
+                        height: width / 2,
+                        borderRadius: width / 2,
+                        marginRight: Constants.statusBarHeight
+                    }}
+                />
+                <View>
+                    <Textpopins style={[styles.productTitle, {color: '#fff'}]}>
+                        {item.title}
+                    </Textpopins>
+                    <Textpopins style={styles.productDescription}>{item.description}</Textpopins>
+                    <Textpopins style={styles.productPrice}>{item.price} ₼</Textpopins>
                 </View>
-            );
-        } else {
-            return (
-                <ScrollView style={[styles.f1, {backgroundColor: "#fff"}]}>
-                    <View style={styles.services}>
-                        <FlatList
-                            data={this.state.customersData}
-                            renderItem={renderService.bind(this)}
-                            keyExtractor={(item, index) => index.toString()}
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={true}
-                        />
-                    </View>
-                    <View style={styles.cardArena}>
-                        {renderCards()}
-                    </View>
-                </ScrollView>
-            );
-        }
-    }
 
-    componentDidMount() {
-        this.getInfo();
+            </TouchableOpacity>
+        );
     }
-
 
     render() {
         return (
-            <View style={styles.f1}>
-                <StatusBar backgroundColor="#fff" style="dark"/>
-                {this.renderContent()}
-            </View>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.header}>
+                </View>
+                <View style={styles.content}>
+                    <View style={styles.top}>
+                        <ScrollView
+                            style={styles.topLists}
+                            alwaysBounceVertical={true}
+                            horizontal={true}>
+                            {this.renderHorizontalList()}
+                        </ScrollView>
+                    </View>
+                    <View style={styles.footer}>
+                        <ScrollView style={styles.productLists} vertical={true}>
+                            <FlatList
+                                data={this.state.datas}
+                                numColumns={1}
+                                renderItem={this.renderFlatList.bind(this)}
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                        </ScrollView>
+                    </View>
+                </View>
+            </SafeAreaView>
         );
     }
 }
 
+export default Campaigns;
+
 const styles = StyleSheet.create({
-    f1: {
+    container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
     },
-    services: {
+    header: {
+        flex: 0.5,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignContent: "center"
+    },
+    content: {
+        flex: 8,
+        backgroundColor: '#7c9d32',
+        borderTopLeftRadius: Constants.statusBarHeight,
+        borderTopRightRadius: Constants.statusBarHeight,
+    },
+    top: {
+        flex: 0.4,
+    },
+    footer: {
+        flex: 4.5,
+        marginTop: 5,
+        flexDirection: 'column',
+    },
+    topLists: {
+        flexDirection: 'row',
+        marginTop: 5,
+    },
+    topListsProduct: {
+        backgroundColor: '#fff',
+        borderRadius: Constants.statusBarHeight * 2,
+        alignContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        paddingHorizontal: Constants.statusBarHeight + 10,
+        marginRight: Constants.statusBarHeight / 3,
+        flexDirection: 'row',
+    },
+    productLists: {
+        flexDirection: 'row',
+        marginTop: 5,
+    },
+    product: {
         width: width,
-        flexDirection: "row",
-        justifyContent: "flex-start",
+        alignContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
         marginTop: Constants.statusBarHeight,
-        height: "15%",
-        alignItems: "center",
-        alignContent: "center",
-        paddingHorizontal: 4,
+        flexDirection: "row"
     },
-    titleColor: {
-        color: "#7c9d32",
-        fontSize: 18,
-        fontWeight: "bold",
-        textAlign: "left",
-    },
-    subTitle: {
-        color: "rgba(0,0,0,.5)",
-        fontWeight: "bold",
-        fontSize: 15,
-    },
-    cardArena: {
-        margin: 0,
-        height: "85%",
-        marginBottom: Constants.statusBarHeight,
-    },
-    noResult: {
-        color: "#D50000",
-        textAlign: "center",
+    productTitle: {
         fontSize: 20,
-        fontWeight: "700",
+        color: 'rgba(0,0,0,.8)',
+        fontWeight: 'bold',
     },
+    productDescription: {
+        fontSize: 14,
+        color: 'rgba(0,0,0,.6)',
+    },
+    productPrice: {
+        color: "#fff",
+        fontSize: 16
+    },
+
 });

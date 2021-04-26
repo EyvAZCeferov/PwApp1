@@ -123,7 +123,8 @@
       "register": "Qeydiyyatdan keç",
       "continue": "Davam et",
       "backlogin": "Girişə qayıt",
-      "back": "Geri"
+      "back": "Geri",
+      "submit": "Təsdiqlə"
     },
     "validation": {
       "loginregister": {
