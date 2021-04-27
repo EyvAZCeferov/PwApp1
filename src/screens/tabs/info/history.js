@@ -78,7 +78,7 @@ export default class History extends React.Component {
         } else if (marketName == null && firstDate != null && lastDate != null) {
             firebase
                 .database()
-                .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/checks")
+                .ref("users/K3YfovctoSaJiS6xeQxvXKYIQMi1/checks")
                 .orderByChild("date")
                 .startAt(firstDate)
                 .endAt(lastDate)
@@ -101,7 +101,7 @@ export default class History extends React.Component {
         } else if (marketName == null && firstDate != null && lastDate == null) {
             firebase
                 .database()
-                .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/checks")
+                .ref("users/K3YfovctoSaJiS6xeQxvXKYIQMi1/checks")
                 .orderByChild("date")
                 .startAt(firstDate)
                 .limitToFirst(50)
@@ -123,7 +123,7 @@ export default class History extends React.Component {
         } else {
             firebase
                 .database()
-                .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/checks")
+                .ref("users/K3YfovctoSaJiS6xeQxvXKYIQMi1/checks")
                 .on("value", (data) => {
                     data.forEach((data) => {
                         checks.push(data.val());
@@ -257,21 +257,21 @@ export default class History extends React.Component {
         }
 
         function priceCollector(id) {
-            var user = firebase.auth().currentUser;
-            if (user) {
-                var datas = [];
-                firebase
-                    .database()
-                    .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/checks/" + id + "/products")
-                    .on("value", (data) => {
-                        if (data.numChildren() > 0 && data != null) {
-                            data.forEach((data) => {
-                                datas.push(data.val());
-                            });
-                        }
-                    });
-                return datas;
-            }
+            // var user = firebase.auth().currentUser;
+            // if (user) {
+            var datas = [];
+            firebase
+                .database()
+                .ref("users/K3YfovctoSaJiS6xeQxvXKYIQMi1/checks/" + id + "/products")
+                .on("value", (data) => {
+                    if (data.numChildren() > 0 && data != null) {
+                        data.forEach((data) => {
+                            datas.push(data.val());
+                        });
+                    }
+                });
+            return datas;
+            // }
         }
 
         function sumPrice(checkId) {
@@ -282,12 +282,11 @@ export default class History extends React.Component {
                     allPrice = allPrice + parseFloat(element.price);
                 });
             }
-            return parseFloat(allPrice);
+            return Math.ceil(parseFloat(allPrice));
         }
 
         if (this.state.checks !== null) {
             return this.state.checks.map((element, index) => {
-                console.log("Bizim date " + element.date);
                 return (
                     <ListItem style={styles.firstList} thumbnail key={index}>
                         <Left>{marketTypeFunc(element)}</Left>

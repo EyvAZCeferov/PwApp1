@@ -46,17 +46,40 @@
     "cartadd": "Добавьте бонусную карту"
   },
   "maps": {
-    "tablist": {
-      "title": "Список карт"
-    },
-    "tabview": {
-      "title": "Просмотр карты"
-    }
+    "currentLoc": "Текущее местоположение"
   },
   "history": {
     "starttime": "Начальное время",
     "endtime": "Время окончания",
     "marketName": "Название рынка"
+  },
+  "check": {
+    "tsAd": "Название объекта",
+    "tsAddress": "Адрес",
+    "voad": "Имя налогоплательщика",
+    "voen": "ИНН",
+    "objectCode": "Код объекта",
+    "selCheck": "Чек продажи № ",
+    "kassir": "Кассир",
+    "tarix": "Дата",
+    "saat": "Время",
+    "productName": "Продукт",
+    "productQyt": "Количество",
+    "productPrice": "Цена",
+    "productSum": "Итого",
+    "edv18": "НДС: 18%",
+    "sumVergi": "Всего налог ",
+    "nagdsiz": "Безналичный",
+    "bonus": "Бонус",
+    "gunerzindevurulmuscekler": "Количество чеков пробитых за день ",
+    "kassaninmodeli": "Модель кассы",
+    "kassaAparatınınZavodNomresi": "Заводской номер кассы ",
+    "ficsalId": "Фискальный ИД ",
+    "nmqQeydNomresi": "Регистрационный номер СМК ",
+    "edvTitle": "Возврат НДС",
+    "edvStatNot": "По чеку не был осуществлен возврат НДС.",
+    "edvStatPending": "Возврат НДС ожидается по документу.",
+    "edvStatSuccess": "Возврат НДС полностью по документу."
   },
   "settings": {
     "addfinger": "Добавить отпечаток пальца",
@@ -120,7 +143,7 @@
       "register": "Pегистр",
       "continue": "Продолжать",
       "backlogin": "Вернуться к логину",
-      "back":"назад",
+      "back": "назад",
       "submit": "подавать"
     },
     "validation": {

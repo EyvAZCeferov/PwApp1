@@ -55,6 +55,7 @@ import ProductInfo from "./src/screens/tabs/bucket/productinfo";
 
 import {ProgramLockContext} from "./src/functions/Hooks/Authentication/Lock/ProgramLockContext";
 import axios from "axios";
+import OneCheck from "./src/screens/tabs/home/Components/OneCheck";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -152,6 +153,7 @@ const HomeStackScreen = ({navigation, route}) => {
             <HomeStack.Screen name="Termofuse" component={Termofuse}/>
             <HomeStack.Screen name="SetFinger" component={SetFinger}/>
             <HomeStack.Screen name="SetPass" component={SetPass}/>
+            <HomeStack.Screen name="OneCheck" component={OneCheck}/>
         </HomeStack.Navigator>
     );
 };

@@ -46,17 +46,40 @@
     "cartadd": "Add a bonus card"
   },
   "maps": {
-    "tablist": {
-      "title": "Map list"
-    },
-    "tabview": {
-      "title": "Map view"
-    }
+    "currentLoc": "Current location"
   },
   "history": {
     "starttime": "Start time",
     "endtime": "End time",
     "marketName": "Market name"
+  },
+  "check": {
+    "tsAd": "Store Name",
+    "tsAddress": "Address",
+    "voad": "Taxpayer name",
+    "voen": "TIN",
+    "objectCode": "Obj code",
+    "selCheck": "Sale document № ",
+    "kassir": "Сashier",
+    "tarix": "Date",
+    "saat": "Time",
+    "productName": "Product",
+    "productQyt": "Number",
+    "productPrice": "Price",
+    "productSum": "Total",
+    "edv18": "VAT: 18%",
+    "sumVergi": "Total tax ",
+    "nagdsiz": "Сashless",
+    "bonus": "Bonus",
+    "gunerzindevurulmuscekler": "Number of documents per day ",
+    "kassaninmodeli": "Cashbox model",
+    "kassaAparatınınZavodNomresi": "Cashbox manufacturer's No ",
+    "ficsalId": "Fiscal ID ",
+    "nmqQeydNomresi": "Registration number of DCM ",
+    "edvTitle": "VAT refund",
+    "edvStatNot": "No VAT refund on document.",
+    "edvStatPending": "VAT refund pending on document.",
+    "edvStatSuccess": "VAT refund completely on document."
   },
   "settings": {
     "addfinger": "Add a fingerprint",

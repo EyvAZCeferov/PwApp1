@@ -46,17 +46,40 @@
     "cartadd": "Bonus kart əlavə et"
   },
   "maps": {
-    "tablist": {
-      "title": "Xəritə listi"
-    },
-    "tabview": {
-      "title": "Xəritə görünüşü"
-    }
+    "currentLoc": "Hal-hazırki məkan"
   },
   "history": {
     "starttime": "Başlanğıc vaxtı",
     "endtime": "Bitiş vaxtı",
     "marketName": "Market adı"
+  },
+  "check": {
+    "tsAd": "TS adı",
+    "tsAddress": "TS ünvanı",
+    "voad": "VÖ ADI",
+    "voen": "VÖEN",
+    "objectCode": "Obyektin kodu",
+    "selCheck": "Satış çeki № ",
+    "kassir": "Kassir",
+    "tarix": "Tarix",
+    "saat": "Saat",
+    "productName": "Məhsulun adı",
+    "productQyt": "Say",
+    "productPrice": "Qiymət",
+    "productSum": "Cəmi",
+    "edv18": "ƏDV: 18%",
+    "sumVergi": "Toplam vergi ",
+    "nagdsiz": "Nağdsız",
+    "bonus": "Bonus",
+    "gunerzindevurulmuscekler": "Gün ərzində vurulmuş çek sayı ",
+    "kassaninmodeli": "Kassanın modeli",
+    "kassaAparatınınZavodNomresi": "Kassa aparatının zavod nömrəsi ",
+    "ficsalId": "Fiskal İD ",
+    "nmqQeydNomresi": "NMQ-nun qeydiyyat nömrəsi",
+    "edvTitle": "ƏDV-nın geri qaytarılması",
+    "edvStatNot": "Çek üzrə ƏDV geri qaytarılması həyata kecirilməvib.",
+    "edvStatPending": "Çek üzrə ƏDV geri qaytarılması gözlənilir.",
+    "edvStatSuccess": "Çek üzrə ƏDV geri qaytarıldı."
   },
   "settings": {
     "addfinger": "Barmaq izi əlavə et",
