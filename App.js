@@ -40,12 +40,10 @@ import Settings from "./src/screens/tabs/info/settings";
 import Termofuse from "./src/screens/tabs/info/termofuse";
 
 import BarcodeStarted from "./src/screens/tabs/barcode/barcodestarter";
-import SelectCard from "./src/screens/tabs/barcode/selectcard";
 import Buy from "./src/screens/tabs/barcode/buy";
 import PayThanks from "./src/screens/tabs/barcode/paythanks";
 
 import BucketStarter from "./src/screens/tabs/bucket/bucketstarter";
-import SelectCardBucket from "./src/screens/tabs/bucket/selectcard";
 import BucketHome from "./src/screens/tabs/bucket/BucketHome";
 import WishList from "./src/screens/tabs/bucket/wishlists";
 import CartList from "./src/screens/tabs/bucket/cartlists";
@@ -215,10 +213,6 @@ const BucketStackScreen = ({navigation, route}) => {
             >
                 <BarcodeStack.Screen
                     name="BucketStarter" component={BucketStarter}/>
-                <BarcodeStack.Screen
-                    name="SelectCardBucket"
-                    component={SelectCardBucket}
-                />
                 <BucketStack.Screen
                     name="BucketHome"
                     component={BucketHome}
@@ -246,7 +240,6 @@ const BarcodeStackScreen = ({
         return (
             <BarcodeStack.Navigator headerMode="none" initialRouteName="BarcodeStarted">
                 <BarcodeStack.Screen name="BarcodeStarted" component={BarcodeStarted}/>
-                <BarcodeStack.Screen name="SelectCard" component={SelectCard}/>
                 <BarcodeStack.Screen name="ShoppingList" component={ShoppingList}/>
                 <BarcodeStack.Screen name="Buy" component={Buy}/>
                 <BarcodeStack.Screen name="PayThanks" component={PayThanks}/>

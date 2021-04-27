@@ -87,13 +87,10 @@
   "barcode": {
     "starter": {
       "selectmar": "Select market",
-      "selectmarket": "Continue by choosing the market",
+      "selectmarketandcard": "Select the market and the card",
       "orQr": "Continue reading the QR code",
-      "typeBarcode": "Enter the barcode manually"
-    },
-    "cardselect": {
-      "title": "Continue by selecting the card",
-      "selectCard": "Choose a card"
+      "typeBarcode": "Enter the barcode manually",
+      "selectRetry": "Please select again"
     },
     "paying": {
       "aboutCard": "About the card",

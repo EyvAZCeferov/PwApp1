@@ -87,13 +87,10 @@
   "barcode": {
     "starter": {
       "selectmar": "Выбрать рынок",
-      "selectmarket": "Продолжайте, выбирая рынок",
+      "selectmarketandcard": "Выберите рынок и карту",
       "orQr": "Продолжайте читать QR-код",
-      "typeBarcode": "Введите штрих-код вручную"
-    },
-    "cardselect": {
-      "title": "Продолжайте, выбрав карту",
-      "selectCard": "Выберите карту"
+      "typeBarcode": "Введите штрих-код вручную",
+      "selectRetry": "Пожалуйста, выберите еще раз"
     },
     "paying": {
       "aboutCard": "О карте",

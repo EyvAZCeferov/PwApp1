@@ -135,12 +135,12 @@ class ProductInfo extends React.Component {
             <ScrollView style={{flexDirection: "column"}}>
 
                 <Textpopins
-                    style={{margin: Constants.statusBarHeight, fontSize: 30, fontWeight: "bold", color: "#fff"}}>
+                    style={{margin: Constants.statusBarHeight, fontSize: 30, fontWeight: "bold", color: "#7c9d32"}}>
                     {product.title}
                 </Textpopins>
                 <Textpopins style={{
                     fontSize: 15,
-                    color: "rgba(255,255,255,.6)",
+                    color: "rgba(0,0,0,.6)",
                     marginHorizontal: Constants.statusBarHeight / 2,
                     marginBottom: Constants.statusBarHeight
                 }}>
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 8,
-        backgroundColor: '#7c9d32',
+        backgroundColor: '#ebecf0',
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
     },

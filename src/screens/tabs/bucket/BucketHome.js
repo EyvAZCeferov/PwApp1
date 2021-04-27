@@ -106,7 +106,7 @@ class BucketHome extends React.Component {
                         borderRadius: width / 2.3,
                     }}
                 />
-                <Text style={[styles.productTitle, {color: '#fff'}]}>
+                <Text style={[styles.productTitle, {color: '#7c9d32'}]}>
                     {item.title}
                 </Text>
                 <Text style={styles.productDescription}>{item.description}</Text>
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 8,
-        backgroundColor: '#7c9d32',
+        backgroundColor: '#ebecf0',
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
     },

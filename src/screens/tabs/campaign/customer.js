@@ -103,7 +103,7 @@ class Customer extends React.Component {
                     }}
                 />
                 <View>
-                    <Textpopins style={[styles.productTitle, {color: '#fff'}]}>
+                    <Textpopins style={[styles.productTitle, {color: '#7c9d32'}]}>
                         {item.title}
                     </Textpopins>
                     <Textpopins style={styles.productDescription}>{item.description}</Textpopins>
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 8,
-        backgroundColor: '#7c9d32',
+        backgroundColor: '#ebecf0',
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
     },
@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
     },
     productLists: {
         flexDirection: 'row',
-        // justifyContent: 'space-between',
         marginTop: 5,
     },
     product: {
@@ -218,7 +217,7 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,.6)',
     },
     productPrice: {
-        color: "#fff",
+        color: "#7c9d32",
         fontSize: 16
     },
 

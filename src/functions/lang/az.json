@@ -87,13 +87,10 @@
   "barcode": {
     "starter": {
       "selectmar": "Market seç",
-      "selectmarket": "Marketi seçərək davam edin",
+      "selectmarketandcard": "Marketi və kartı seçin",
       "orQr": "Qr kodunu oxudaraq davam edin",
-      "typeBarcode": "Barkodu əllə daxil edin"
-    },
-    "cardselect": {
-      "title": "Kart seçərək davam edin",
-      "selectCard": "Kart seç"
+      "typeBarcode": "Barkodu əllə daxil edin",
+      "selectRetry": "Yenidən seçin"
     },
     "paying": {
       "aboutCard": "Kart haqqında",

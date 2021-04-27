@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 8,
-        backgroundColor: 'rgba(124, 157, 50,.7)',
+        backgroundColor: '#ebecf0',
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
     },

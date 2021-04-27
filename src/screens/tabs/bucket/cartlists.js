@@ -63,7 +63,7 @@ function CartList(props) {
                         maxValue={100}
                         valueType="integer"
                         rounded
-                        textColor="#fff"
+                        textColor="#7c9d32"
                         iconStyle={{color: "white"}}
                         rightButtonBackgroundColor="#7c9d32"
                         leftButtonBackgroundColor="#E56B70"
@@ -111,7 +111,7 @@ function CartList(props) {
                                 })
                             }
                         >
-                            <AntDesign name="check" size={24} color="#fff"/>
+                            <AntDesign name="check" size={24} color="#7c9d32"/>
                         </Fab>
 
                         <FlatList
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 8,
-        backgroundColor: 'rgba(124, 157, 50,.7)',
+        backgroundColor: '#ebecf0',
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
     },
