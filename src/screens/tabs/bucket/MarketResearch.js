@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {connect} from "react-redux";
-import {AntDesign} from "@expo/vector-icons";
+import {AntDesign, FontAwesome} from "@expo/vector-icons";
 import Textpopins from "../../../functions/screenfunctions/text";
 
 const {width, height} = Dimensions.get("window");
@@ -108,7 +108,11 @@ class InCustomer extends React.Component {
                     <TouchableOpacity
                         onPress={() => this.props.addtoCard(item)}
                         style={styles.addToCart}>
-                        <AntDesign name="shoppingcart" size={24} color="black"/>
+                        {this.props.bucketitems.find(element => element.id == item.id) ? (
+                            <FontAwesome name="cart-arrow-down" size={24} color="black"/>
+                        ) : (
+                            <AntDesign name="shoppingcart" size={24} color="black"/>
+                        )}
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.addToCart}

@@ -114,7 +114,11 @@ class BucketHome extends React.Component {
                     <TouchableOpacity
                         onPress={() => this.props.addtoCard(item)}
                         style={styles.addToCart}>
-                        <AntDesign name="shoppingcart" size={24} color="black"/>
+                        {this.props.bucketitems.find(element => element.id == item.id) ? (
+                            <FontAwesome name="cart-arrow-down" size={24} color="black"/>
+                        ) : (
+                            <AntDesign name="shoppingcart" size={24} color="black"/>
+                        )}
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.addToCart}
