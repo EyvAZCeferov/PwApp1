@@ -8,6 +8,7 @@
     },
     "programlock": {
       "useFingerPrint": "Giriş üçün barmaq izinizdən istifadə edin",
+      "useFace": "Giriş üçün üz tanımadan istifadə edin",
       "namesurname": "Ad Soyad"
     },
     "mobileverify": {
@@ -83,6 +84,7 @@
   },
   "settings": {
     "addfinger": "Barmaq izi əlavə et",
+    "addface": "Üz tanıma əlavə et",
     "listitems": {
       "general": "Ümumi",
       "langs": "Dil seç",
@@ -92,7 +94,8 @@
       "aboutapplication": "PW haqda",
       "termofuse": "İstifadə şərtləri",
       "accounts": "Hesab parametrləri",
-      "programversion": "Versiya"
+      "programversion": "Versiya",
+      "facerecognition": "Üz tanıma"
     }
   },
   "bucket": {
@@ -103,7 +106,8 @@
         "title": "Sevimlilər"
       },
       "cartlists": {
-        "title": "Səbətiniz"
+        "title": "Səbətiniz",
+        "finishpayment": "Ödənişə keç"
       }
     }
   },
@@ -191,5 +195,8 @@
     "contactus": "Bizimlə əlaqə",
     "settings": "Parametrlər",
     "logout": "Çıxış et"
+  },
+  "filter": {
+    "brand": "Brend"
   }
 }

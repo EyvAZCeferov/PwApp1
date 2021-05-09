@@ -103,7 +103,8 @@
         "title": "Favorites"
       },
       "cartlists": {
-        "title": "Your basket"
+        "title": "Your basket",
+        "finishpayment": "Switch to payment"
       }
     }
   },
@@ -191,5 +192,8 @@
     "contactus": "Contact us",
     "settings": "Settings",
     "logout": "Log out"
+  },
+  "filter": {
+    "brand": "Brand"
   }
 }

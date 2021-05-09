@@ -4,10 +4,8 @@ import {
     StyleSheet,
     Dimensions,
     FlatList,
-    SafeAreaView,
+    SafeAreaView, Text,
 } from "react-native";
-import {StatusBar} from "expo-status-bar";
-import BucketHeader from "./components/BucketHeader";
 import {t} from "../../../functions/lang";
 import {
     List,
@@ -25,10 +23,22 @@ import Textpopins from "../../../functions/screenfunctions/text";
 import {EvilIcons, AntDesign} from "@expo/vector-icons";
 import NumericInput from "react-native-numeric-input";
 import Header from "./components/BucketHeader";
+import firebase from "../../../functions/firebase/firebaseConfig";
 
 const {width, height} = Dimensions.get("window");
 
 function CartList(props) {
+
+    const [routeParams, setrouteParams] = React.useState(null)
+    const [totalBalance, settotalBalance] = React.useState(0)
+    const [card, setCard] = React.useState(null)
+
+    React.useEffect(effect => {
+        setrouteParams(props.route.params.routeParams)
+        totalBalanceFunction()
+        cardbalance(props.route.params.routeParams.selectedCard)
+    }, [])
+
     function renderBucket({item, index}) {
         return (
             <ListItem
@@ -48,11 +58,13 @@ function CartList(props) {
                 </Left>
                 <Body style={{maxWidth: width / 3 + 30}}>
                     <Textpopins children={item.title}/>
-                    <Textpopins children={item.price}/>
+                    <Textpopins>
+                        {item.qyt * item.price} ₼
+                    </Textpopins>
                 </Body>
                 <Right style={{flexDirection: "row"}}>
                     <NumericInput
-                        value={1}
+                        value={item.qyt}
                         onChange={(value) => props.updateVal(item, value)}
                         onLimitReached={(isMax, msg) => alert(t("cards.minimal"))}
                         totalWidth={width / 3}
@@ -81,6 +93,42 @@ function CartList(props) {
         );
     }
 
+
+    function totalBalanceFunction() {
+        let balance = 0;
+        props.bucketitems.map(element => {
+            balance = balance + element.qyt * element.price;
+        })
+        settotalBalance(balance)
+    }
+
+    function cardbalance(card) {
+        if (card) {
+            firebase.database().goOnline();
+
+            var dataW = null;
+            firebase
+                .database()
+                .ref(
+                    "users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/cards/" + card
+                ).on("value", (data) => {
+                dataW = data.val();
+            });
+            if (dataW == null) {
+                firebase
+                    .database()
+                    .ref(
+                        "users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/bonuses/" +
+                        card
+                    )
+                    .on("value", (data) => {
+                        dataW = data.val();
+                    });
+            }
+            setCard(dataW)
+        }
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -98,21 +146,33 @@ function CartList(props) {
                             padding: 0,
                         }}
                     >
-                        <Fab
-                            direction="right"
-                            position="bottomRight"
-                            style={{
+                        <Button
+                            style={[styles.center, {
                                 backgroundColor: "#7c9d32",
                                 zIndex: 150,
-                            }}
+                                paddingHorizontal: Constants.statusBarHeight,
+                                position: "absolute",
+                                flexDirection: "row",
+                                bottom: "6%",
+                                right: 0,
+                                borderTopLeftRadius: Constants.statusBarHeight,
+                                borderTopRightRadius: Constants.statusBarHeight,
+                                borderBottomRightRadius: Constants.statusBarHeight,
+                                borderBottomLeftRadius: Constants.statusBarHeight,
+                                justifyContent: "space-around"
+                            }]}
                             onPress={() =>
                                 props.navigation.navigate("PayThanks", {
                                     checkid: 2,
                                 })
                             }
                         >
-                            <AntDesign name="check" size={24} color="#7c9d32"/>
-                        </Fab>
+                            <Textpopins style={{
+                                color: "#fff",
+                                textAlign: "center"
+                            }}>{t("bucket.header.cartlists.finishpayment")}</Textpopins>
+                            <AntDesign style={{marginLeft: 10}} name="check" size={24} color="#fff"/>
+                        </Button>
 
                         <FlatList
                             data={props.bucketitems}
@@ -135,6 +195,75 @@ function CartList(props) {
                         />
                     </List>
                 )}
+            </View>
+
+            <View style={styles.footer}>
+
+                <View style={{
+                    flexDirection: "row",
+                    justifyContent: 'space-between',
+                }}>
+                    <Textpopins
+                        style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 22,
+                        }}
+                    >
+                        {t("barcode.paying.totalBalance")}
+                    </Textpopins>
+                    <Textpopins
+                        style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 22,
+                        }}
+                    >
+                        {totalBalance} ₼
+                    </Textpopins>
+                </View>
+                <View style={{
+                    flexDirection: "row",
+                    justifyContent: 'space-between',
+                }}>
+                    <Textpopins
+                        style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 20,
+                        }}
+                    >
+                        {t("barcode.paying.edv") + " 18%"}
+                    </Textpopins>
+                    <Textpopins
+                        style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 20,
+                        }}
+                    >
+                        {Math.max(totalBalance * 18 / 100)} ₼
+                    </Textpopins>
+                </View>
+
+                <View style={{
+                    flexDirection: "row",
+                    justifyContent: 'space-between',
+                }}>
+                    <Textpopins
+                        style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 20,
+                        }}
+                    >
+                        {t("barcode.paying.balance")}
+                    </Textpopins>
+                    <Textpopins
+                        style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 20,
+                        }}
+                    >
+                        {card ? card.cardInfo.cvc : 0} ₼ </Textpopins>
+                </View>
+
+
             </View>
         </SafeAreaView>
     );
@@ -163,16 +292,25 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     header: {
-        flex: 1,
+        flex: 0.1,
         backgroundColor: '#fff',
         justifyContent: 'center',
         alignContent: "center"
     },
     content: {
-        flex: 8,
+        flex: 0.8,
         backgroundColor: '#ebecf0',
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
+    },
+    footer: {
+        flex: 0.15,
+        backgroundColor: "#7c9d32",
+        borderTopLeftRadius: Constants.statusBarHeight,
+        borderTopRightRadius: Constants.statusBarHeight,
+        paddingHorizontal: Constants.statusBarHeight,
+        flexDirection: "column",
+        justifyContent: "space-between"
     },
     center: {
         textAlign: "center",

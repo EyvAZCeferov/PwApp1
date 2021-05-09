@@ -31,7 +31,11 @@ function BucketHeader(props) {
                 )}
                 <Textpopins style={styles.text}>{props.title}</Textpopins>
                 <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CartList")}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CartList", {
+                        routeParams: props.routeParams,
+                    })}
+
+                    >
                         <AntDesign name="shoppingcart" size={24} color="black"/>
                         <Textpopins style={styles.badge}>{props.bucketitems.length}</Textpopins>
                     </TouchableOpacity>

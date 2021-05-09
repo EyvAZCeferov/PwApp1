@@ -35,6 +35,7 @@ export default class Settings extends React.Component {
         this.state = {
             selected: Localization.locale,
             haveFinger: null,
+            facerecognition: null,
             refresh: true,
             hasFingerPrintHardware: false,
         };
@@ -67,16 +68,25 @@ export default class Settings extends React.Component {
         if (permission) {
             let type = await LocalAuthentication.supportedAuthenticationTypesAsync();
             let isFinger = type.includes(1);
+            let faceRecognitize = type.includes(2);
             if (isFinger) {
                 this.setState({
                     hasFingerPrintHardware: isFinger,
                 });
+            }
+            if (faceRecognitize) {
+                this.setState({
+                    faceRecognitize: faceRecognitize
+                })
             }
         }
     }
 
     async getFingStat() {
         await AsyncStorage.getItem("haveFinger").then((a) => {
+            this.setState({haveFinger: a, refresh: false});
+        });
+        await AsyncStorage.getItem("facerecognitize").then((a) => {
             this.setState({haveFinger: a, refresh: false});
         });
         this.renderContent();
@@ -134,6 +144,58 @@ export default class Settings extends React.Component {
         );
     }
 
+    deleteFace() {
+        var that = this;
+        Alert.alert(
+            t("actions.wantdelete"),
+            t("actions.notrecovered"),
+            [
+                {
+                    text: t("actions.cancel"),
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                },
+                {
+                    text: t("actions.delete"),
+                    onPress: () => doAnything(),
+                    style: "destructive",
+                },
+            ],
+            {cancelable: true}
+        );
+
+        async function doAnything() {
+            await AsyncStorage.removeItem("facerecognitize");
+            await AsyncStorage.getItem("facerecognitize").then((a) => {
+                that.getFingStat();
+            });
+        }
+    }
+
+    addFace() {
+        var that = this;
+        Alert.alert(
+            t("settings.addface"),
+            t("loginregister.programlock.useFace"),
+            [
+                {
+                    text: t("actions.cancel"),
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                },
+                {
+                    text: t("settings.addface"),
+                    onPress: () =>
+                        that.props.navigation.navigate("SetFace", {
+                            prevPage: "Settings",
+                        }),
+                    style: "destructive",
+                },
+            ],
+            {cancelable: true}
+        );
+    }
+
     renderFingerStat() {
         if (this.state.haveFinger != null) {
             return (
@@ -154,6 +216,34 @@ export default class Settings extends React.Component {
                         success
                         style={[styles.center, {width: width / 8}]}
                         onPress={() => this.addFinger()}
+                    >
+                        <AntDesign name="plus" color="#fff" size={22}/>
+                    </Button>
+                </Right>
+            );
+        }
+    }
+
+    renderFaceRecognition() {
+        if (this.state.faceRecognitize != null) {
+            return (
+                <Right>
+                    <Button
+                        danger
+                        style={[styles.center, {width: width / 8}]}
+                        onPress={() => this.deleteFace()}
+                    >
+                        <Feather name="trash" color="#fff" size={22}/>
+                    </Button>
+                </Right>
+            );
+        } else {
+            return (
+                <Right>
+                    <Button
+                        success
+                        style={[styles.center, {width: width / 8}]}
+                        onPress={() => this.addFace()}
                     >
                         <AntDesign name="plus" color="#fff" size={22}/>
                     </Button>
@@ -240,6 +330,20 @@ export default class Settings extends React.Component {
                                         />
                                     </Body>
                                     {this.renderFingerStat()}
+                                </ListItem>
+                            ) : null}
+                            {this.state.facerecognition ? (
+                                <ListItem style={styles.listitem} icon>
+                                    <Left style={styles.left}>
+                                        <MaterialCommunityIcons name="face-recognition" size={24} color="#6d7587"/>
+                                    </Left>
+                                    <Body style={styles.body}>
+                                        <Text
+                                            style={styles.text}
+                                            children={t("settings.listitems.facerecognition")}
+                                        />
+                                    </Body>
+                                    {this.renderFaceRecognition()}
                                 </ListItem>
                             ) : null}
                             <ListItem style={styles.listitemDivider} itemDivider last>

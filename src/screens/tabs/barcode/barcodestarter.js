@@ -31,11 +31,11 @@ export default class Barcodestarter extends React.Component {
             allMarkets: [
                 {label: t("barcode.starter.selectmar"), value: null},
                 {
-                    label: "Araz",
+                    label: "Bol mart",
                     value: 1
                 },
-                {label: "Bazar Store", value: 2},
-                {label: "Bravo", value: 3},
+                {label: "Grand mart", value: 2},
+                {label: "Caremood", value: 3},
             ],
             cards: [
                 {

@@ -10,12 +10,14 @@ import {
 } from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {connect} from "react-redux";
-import {AntDesign, FontAwesome} from "@expo/vector-icons";
+import {AntDesign, Feather, FontAwesome} from "@expo/vector-icons";
 import Textpopins from "../../../functions/screenfunctions/text";
 
 const {width, height} = Dimensions.get("window");
 import Constants from "expo-constants";
 import Header from "./components/BucketHeader";
+import Filter from "./components/filter";
+import {Button} from "native-base";
 
 class InCustomer extends React.Component {
     constructor(props) {
@@ -29,6 +31,7 @@ class InCustomer extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2475/2700037.png',
                     description: "frozen chicken 1kg",
                     price: 4.59,
+                    qyt: 1,
                 },
                 {
                     id: '3ac6sddadc-c605-48d3-a4f8-fbd91aa95f63',
@@ -36,6 +39,7 @@ class InCustomer extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2476/004072.png',
                     description: "mayonez 460qr",
                     price: 1.59,
+                    qyt: 1,
                 },
                 {
                     id: 'bdqedqwldmqwdma-c1b1-46c2-aed5-3ad53abb28ba',
@@ -43,6 +47,7 @@ class InCustomer extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2477/028232.png',
                     description: "ultra earl grey çay",
                     price: 2.19,
+                    qyt: 1,
                 },
                 {
                     id: '3ac68dsaasdsaf-a4f8-fbd91aa95f63',
@@ -50,6 +55,7 @@ class InCustomer extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2478/002857.png',
                     description: "peçenye 310qr",
                     price: 2.02,
+                    qyt: 1,
                 },
                 {
                     id: '3ac68dssdasdqdqdqdf-a4f8-fbd91aa95f63',
@@ -57,6 +63,7 @@ class InCustomer extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2479/004938.png',
                     description: "şampun 400ml",
                     price: 4.40,
+                    qyt: 1,
                 },
                 {
                     id: '3ac68dssdqdqjdqüdnqüodnqüodnqündqdf-a4f8-fbd91aa95f63',
@@ -64,7 +71,14 @@ class InCustomer extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2487/25.png',
                     description: "şokolad 1kq",
                     price: 4.99,
+                    qyt: 1,
                 },
+            ],
+            activeFilter: false,
+            brands: [
+                {id: 1, label: "Caremood"},
+                {id: 2, label: "Grand Mart"},
+                {id: 3, label: "Bol Mart"}
             ],
         };
     }
@@ -148,9 +162,8 @@ class InCustomer extends React.Component {
                                 title={"Cat name"}/>
                     </View>
 
-                    <View style={styles.content}>
-                        <View style={styles.top}/>
-                        <View style={styles.footer}>
+                    <View style={[styles.content, {flex: 0.9}]}>
+                        <View style={[styles.footer, {flex: 1}]}>
                             <ScrollView style={styles.productLists} vertical={true}>
                                 <FlatList
                                     data={this.state.datas}
@@ -161,6 +174,7 @@ class InCustomer extends React.Component {
                             </ScrollView>
                         </View>
                     </View>
+
                 </View>
             );
         }
@@ -171,6 +185,19 @@ class InCustomer extends React.Component {
             <SafeAreaView style={styles.container}>
                 <StatusBar backgroundColor="#fff" style="dark"/>
                 {this.renderContent()}
+                <Button large style={[styles.filterButton, {
+                    right: this.state.activeFilter ? 0 : -Constants.statusBarHeight / 2
+                }]}
+                        onPress={() => this.setState({activeFilter: !this.state.activeFilter})}
+                >
+                    <Feather name="filter" size={24} color="#fff"/>
+                </Button>
+                {this.state.activeFilter ? (
+                    <Filter active={this.state.activeFilter}
+                            closeModal={() => this.setState({activeFilter: !this.state.activeFilter})}
+                            searchFilter={() => this.setState({activeFilter: !this.state.activeFilter})}
+                            brands={this.state.brands}/>
+                ) : null}
             </SafeAreaView>
         );
     }
@@ -200,22 +227,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     header: {
-        flex: 1,
+        flex: 0.1,
         backgroundColor: '#fff',
         justifyContent: 'center',
         alignContent: "center"
     },
     content: {
-        flex: 8,
+        flex: 0.8,
         backgroundColor: '#ebecf0',
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
     },
     top: {
-        flex: 0.2,
+        flex: 0.1,
     },
     footer: {
-        flex: 8,
+        flex: 0.9,
         marginTop: 5,
         flexDirection: 'column',
     },
@@ -270,5 +297,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignContent: "center",
         alignItems: "center"
+    },
+    filterButton: {
+        position: "absolute",
+        right: -Constants.statusBarHeight / 2,
+        top: "50%",
+        backgroundColor: "#7C9D32",
+        padding: Constants.statusBarHeight / 2,
+        paddingVertical: Constants.statusBarHeight / 3,
+        zIndex: 9999999,
     },
 });

@@ -31,6 +31,7 @@ class ProductInfo extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2475/2700037.png',
                     description: "frozen chicken 1kg",
                     price: 4.59,
+                    qyt: 1,
                 },
                 {
                     id: '3ac6sddadc-c605-48d3-a4f8-fbd91aa95f63',
@@ -38,6 +39,7 @@ class ProductInfo extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2476/004072.png',
                     description: "mayonez 460qr",
                     price: 1.59,
+                    qyt: 1,
                 },
                 {
                     id: 'bdqedqwldmqwdma-c1b1-46c2-aed5-3ad53abb28ba',
@@ -45,6 +47,7 @@ class ProductInfo extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2477/028232.png',
                     description: "ultra earl grey çay",
                     price: 2.19,
+                    qyt: 1,
                 },
                 {
                     id: '3ac68dsaasdsaf-a4f8-fbd91aa95f63',
@@ -52,6 +55,7 @@ class ProductInfo extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2478/002857.png',
                     description: "peçenye 310qr",
                     price: 2.02,
+                    qyt: 1,
                 },
                 {
                     id: '3ac68dssdasdqdqdqdf-a4f8-fbd91aa95f63',
@@ -59,6 +63,7 @@ class ProductInfo extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2479/004938.png',
                     description: "şampun 400ml",
                     price: 4.40,
+                    qyt: 1,
                 },
                 {
                     id: '3ac68dssdqdqjdqüdnqüodnqüodnqündqdf-a4f8-fbd91aa95f63',
@@ -66,6 +71,7 @@ class ProductInfo extends React.Component {
                     image: 'https://www.arazmarket.az/site/assets/files/2487/25.png',
                     description: "şokolad 1kq",
                     price: 4.99,
+                    qyt: 1,
                 },
             ],
             product: null,

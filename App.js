@@ -15,7 +15,7 @@ import ShoppingList from "./src/screens/tabs/barcode/shoppingList";
 
 enableScreens();
 console.disableYellowBox = true;
-import AppSlider from "./src/screens/appintro/appslider";
+import AppSlider from "./src/screens/appintro/appslider";   
 import Splash from "./src/screens/Splash/Splash";
 
 import LoginScreen from "./src/screens/auth/global/loginscreen";
@@ -56,6 +56,7 @@ import ProductInfo from "./src/screens/tabs/bucket/productinfo";
 import {ProgramLockContext} from "./src/functions/Hooks/Authentication/Lock/ProgramLockContext";
 import axios from "axios";
 import OneCheck from "./src/screens/tabs/home/Components/OneCheck";
+import SetFace from "./src/screens/auth/verify/SetFace";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -152,6 +153,7 @@ const HomeStackScreen = ({navigation, route}) => {
             <HomeStack.Screen name="Pininfo" component={Pininfo}/>
             <HomeStack.Screen name="Termofuse" component={Termofuse}/>
             <HomeStack.Screen name="SetFinger" component={SetFinger}/>
+            <HomeStack.Screen name="SetFace" component={SetFace}/>
             <HomeStack.Screen name="SetPass" component={SetPass}/>
             <HomeStack.Screen name="OneCheck" component={OneCheck}/>
         </HomeStack.Navigator>
