@@ -205,15 +205,15 @@ export default class OneCheck extends React.Component {
                         <View style={styles.tableFooterElements}>
                             <Textpopins children={t('check.productSum')}
                                         style={{fontSize: 16, fontWeight: "bold"}}/>
-                            <Textpopins children={this.state.priceAll} style={{fontSize: 16, fontWeight: "bold"}}/>
+                            <Textpopins children={Math.fround(this.state.priceAll).toString().substring(0,4)} style={{fontSize: 16, fontWeight: "bold"}}/>
                         </View>
                         <View style={styles.tableFooterElements}>
                             <Textpopins children={t('check.edv18')}/>
-                            <Textpopins children={this.state.edv}/>
+                            <Textpopins children={Math.fround(this.state.edv).toString().substring(0,4)} />
                         </View>
                         <View style={styles.tableFooterElements}>
                             <Textpopins children={t('check.sumVergi')}/>
-                            <Textpopins children={this.state.edv}/>
+                            <Textpopins children={Math.fround(this.state.edv).toString().substring(0,4)}/>
                         </View>
                         <View style={{marginVertical: 5}}/>
                         <Seperator/>
@@ -222,7 +222,7 @@ export default class OneCheck extends React.Component {
                     <View style={styles.tableFooter}>
                         <View style={styles.tableFooterElements}>
                             <Textpopins children={t('check.nagdsiz')}/>
-                            <Textpopins children={this.state.priceAll}/>
+                            <Textpopins children={Math.fround(this.state.priceAll).toString().substring(0,4)}/>
                         </View>
                         <View style={styles.tableFooterElements}>
                             <Textpopins children={t('check.bonus')}/>

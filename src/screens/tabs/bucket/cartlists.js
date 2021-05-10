@@ -217,7 +217,7 @@ function CartList(props) {
                             fontSize: 22,
                         }}
                     >
-                        {totalBalance} ₼
+                        {Math.fround(totalBalance).toString().substring(0,5)} ₼
                     </Textpopins>
                 </View>
                 <View style={{
@@ -238,7 +238,7 @@ function CartList(props) {
                             fontSize: 20,
                         }}
                     >
-                        {Math.max(totalBalance * 18 / 100)} ₼
+                        {Math.fround(totalBalance * 18 / 100).toString().substring(0,4)} ₼
                     </Textpopins>
                 </View>
 
