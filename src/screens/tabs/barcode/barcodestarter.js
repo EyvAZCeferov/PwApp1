@@ -37,6 +37,15 @@ export default class Barcodestarter extends React.Component {
                 {label: "Grand mart", value: 2},
                 {label: "Caremood", value: 3},
             ],
+            filials: [
+                {
+                    label: t("barcode.starter.selectfilial"),
+                    value: null,
+                },
+                {
+                    label: "Teze bazar", value: 1,
+                }
+            ],
             cards: [
                 {
                     label: "4169 7414 0464 9764",
@@ -176,6 +185,40 @@ export default class Barcodestarter extends React.Component {
                         />
                     </View>
                     <View style={styles.footer}>
+                        {this.state.selectedMarket ? (
+                            <View style={[styles.center, {flexDirection: "column"}]}>
+                                <Textpopins>{t("barcode.starter.selectfilial")}</Textpopins>
+                                <DropDownPicker
+                                    arrowSize={24}
+                                    items={this.state.filials}
+                                    label={t("barcode.starter.selectfilial")}
+                                    placeholder={t("barcode.starter.selectfilial")}
+                                    containerStyle={{height: 80, width: width - 50}}
+                                    dropDownMaxHeight={500}
+                                    searchable={true}
+                                    searchableStyle={styles.searchable}
+                                    style={{
+                                        backgroundColor: "#fff",
+                                        margin: 10,
+                                        height: 50,
+                                        borderColor: "#7c9d32",
+                                        flexDirection: "row",
+                                        justifyContent: "space-around",
+                                        zIndex: 99999999999999999
+                                    }}
+                                    itemStyle={{flexDirection: "row", justifyContent: "space-around"}}
+                                    onChangeItem={(text) =>
+                                        this.setState({selectedMarket: text})}
+                                    activeLabelStyle={{color: "#7c9d32"}}
+                                    selectedLabelStyle={{color: "#7c9d32"}}
+                                    activeItemStyle={{color: "#7c9d32"}}
+                                    arrowColor="#7c9d32"
+                                    autoScrollToDefaultValue={Constants.statusBarHeight}
+                                    min={15}
+                                    max={100}
+                                />
+                            </View>
+                        ) : null}
                         <RadioButtonRN
                             data={this.state.cards}
                             selectedBtn={(e) => this.setState({selectedCard: e.id})}
@@ -384,6 +427,12 @@ const styles = StyleSheet.create({
         flex: 4,
         marginTop: 5,
         flexDirection: 'column',
+    },
+    center: {
+        textAlign: "center",
+        justifyContent: "center",
+        alignContent: "center",
+        alignItems: "center",
     },
     addToCart: {
         paddingHorizontal: Constants.statusBarHeight / 2.5,

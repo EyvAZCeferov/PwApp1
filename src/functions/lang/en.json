@@ -111,6 +111,7 @@
   "barcode": {
     "starter": {
       "selectmar": "Select market",
+      "selectfilial": "Select a branch",
       "selectmarketandcard": "Select the market and the card",
       "orQr": "Continue reading the QR code",
       "typeBarcode": "Enter the barcode manually",

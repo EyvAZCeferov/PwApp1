@@ -114,6 +114,7 @@
   "barcode": {
     "starter": {
       "selectmar": "Market seç",
+      "selectfilial": "Filial seç",
       "selectmarketandcard": "Marketi və kartı seçin",
       "orQr": "Qr kodunu oxudaraq davam edin",
       "typeBarcode": "Barkodu əllə daxil edin",

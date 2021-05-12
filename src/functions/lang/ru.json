@@ -111,6 +111,7 @@
   "barcode": {
     "starter": {
       "selectmar": "Выбрать рынок",
+      "selectfilial": "Филиал seç",
       "selectmarketandcard": "Выберите рынок и карту",
       "orQr": "Продолжайте читать QR-код",
       "typeBarcode": "Введите штрих-код вручную",

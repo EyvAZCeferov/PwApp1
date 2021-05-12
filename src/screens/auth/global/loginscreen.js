@@ -95,7 +95,7 @@ export default class LoginScreen extends React.Component {
                     isInteraction={false}
                     successImageSrc={succesImage}
                 />
-                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <StatusBar backgroundColor="#4066ed" style="light"/>
                 <View style={styles.header}>
                     <Animatable.Image
                         animation="fadeIn"
@@ -168,7 +168,7 @@ export default class LoginScreen extends React.Component {
                                 <LinearGradient
                                     start={{x: 0, y: 0}}
                                     end={{x: 1, y: 0}}
-                                    colors={['#7c9d32', '#b7d477']}
+                                    colors={['#4066ed', '#5e80f7']}
                                     style={styles.login}
                                 >
                                     <Textpopins
@@ -188,7 +188,7 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#7c9d32',
+        backgroundColor: '#4066ed',
     },
     header: {
         flex: 1.6,
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
         backgroundColor: "transparent"
     },
     title: {
-        color: '#7c9d32',
+        color: '#4066ed',
         fontWeight: 'bold',
         fontSize: 20,
     },
@@ -223,12 +223,12 @@ const styles = StyleSheet.create({
         borderColor: 'transparent',
     },
     input: {
-        borderBottomColor: "#7c9d32",
+        borderBottomColor: "#4066ed",
         borderBottomWidth: 2,
     },
     login: {
         paddingHorizontal: Constants.statusBarHeight,
-        borderColor: '#7c9d30',
+        borderColor: '#4066ed',
         paddingVertical: 5,
         marginVertical: 5,
         borderWidth: 2,
