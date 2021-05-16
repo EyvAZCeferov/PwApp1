@@ -99,6 +99,7 @@
     "header": {
       "tabtitle": "Корзина",
       "search": "Поиск",
+      "beforeorder": "Предзаказ",
       "wishList": {
         "title": "Избранное"
       },

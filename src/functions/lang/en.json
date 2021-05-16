@@ -99,6 +99,7 @@
     "header": {
       "tabtitle": "Basket",
       "search": "Search",
+      "beforeorder": "Pre order",
       "wishList": {
         "title": "Favorites"
       },

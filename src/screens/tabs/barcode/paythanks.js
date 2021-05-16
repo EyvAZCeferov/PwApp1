@@ -116,7 +116,7 @@ export default class PayThanks extends React.Component {
                                 layout={'default'}
                                 ref={(ref) => (this.carousel = ref)}
                                 data={this.state.barcodes}
-                                sliderWidth={width / 1.33}
+                                sliderWidth={Dimensions.get("screen")}
                                 itemWidth={width / 1.33}
                                 renderItem={this.renderItem}
                                 onSnapToItem={(index) => this.setState({activeIndex: index})}

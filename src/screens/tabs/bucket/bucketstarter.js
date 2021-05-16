@@ -18,9 +18,9 @@ import BarcodeMask from "react-native-barcode-mask";
 import {Camera} from "expo-camera";
 import {StatusBar} from "expo-status-bar";
 import RadioButtonRN from 'radio-buttons-react-native';
-import firebase from '../../../functions/firebase/firebaseConfig';
 import {makeid} from "../../../functions/standart/helper";
 import DropdownAlert from "react-native-dropdownalert";
+import axios from "axios";
 
 const succesImage = require('../../../../assets/images/Alert/tick.png');
 
@@ -74,6 +74,12 @@ export default class Bucketstarter extends React.Component {
     componentDidMount() {
         this.setId()
         this.startCam()
+        this.getDat()
+    }
+
+    async getDat() {
+        let allMarkets = await axios.get("customers/customers");
+        this.setState({allMarkets: allMarkets.data})
     }
 
     async startCam() {
@@ -205,7 +211,7 @@ export default class Bucketstarter extends React.Component {
                                         borderColor: "#7c9d32",
                                         flexDirection: "row",
                                         justifyContent: "space-around",
-                                        zIndex:99999999999999999
+                                        zIndex: 99999999999999999
                                     }}
                                     itemStyle={{flexDirection: "row", justifyContent: "space-around"}}
                                     onChangeItem={(text) =>

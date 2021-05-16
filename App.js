@@ -57,6 +57,7 @@ import {ProgramLockContext} from "./src/functions/Hooks/Authentication/Lock/Prog
 import axios from "axios";
 import OneCheck from "./src/screens/tabs/home/Components/OneCheck";
 import SetFace from "./src/screens/auth/verify/SetFace";
+import Beforebuy from "./src/screens/tabs/bucket/Beforebuy";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -225,6 +226,7 @@ const BucketStackScreen = ({navigation, route}) => {
                 <BucketStack.Screen name="CartList" component={CartList}/>
                 <BucketStack.Screen name="InCustomer" component={InCustomer}/>
                 <BucketStack.Screen name="ProductInfo" component={ProductInfo}/>
+                <BucketStack.Screen name="BeforeBuy" component={Beforebuy}/>
                 <BucketStack.Screen name="PayThanks" component={PayThanks}/>
             </BucketStack.Navigator>
         </Provider>

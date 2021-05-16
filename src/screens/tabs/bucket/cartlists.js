@@ -162,8 +162,8 @@ function CartList(props) {
                                 justifyContent: "space-around"
                             }]}
                             onPress={() =>
-                                props.navigation.navigate("PayThanks", {
-                                    checkid: 2,
+                                props.navigation.navigate("BeforeBuy", {
+                                    routeParams: routeParams,
                                 })
                             }
                         >
@@ -217,7 +217,7 @@ function CartList(props) {
                             fontSize: 22,
                         }}
                     >
-                        {Math.fround(totalBalance).toString().substring(0,5)} ₼
+                        {Math.fround(totalBalance).toString().substring(0, 5)} ₼
                     </Textpopins>
                 </View>
                 <View style={{
@@ -238,7 +238,7 @@ function CartList(props) {
                             fontSize: 20,
                         }}
                     >
-                        {Math.fround(totalBalance * 18 / 100).toString().substring(0,4)} ₼
+                        {Math.fround(totalBalance * 18 / 100).toString().substring(0, 4)} ₼
                     </Textpopins>
                 </View>
 

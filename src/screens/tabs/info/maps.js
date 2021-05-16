@@ -66,7 +66,6 @@ export default class Map extends React.Component {
                     markerCount: data.numChildren(),
                     refresh: false
                 });
-                console.log(data)
             });
     }
 
