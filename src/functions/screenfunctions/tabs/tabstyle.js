@@ -68,12 +68,12 @@ export default function TabComponent({
         ]}
       >
         <View style={[styles.cont, { justifyContent: "center" }]}>
-          <Ionicons name={icon} size={22} color="#7c9d32" />
+          <Ionicons name={icon} size={22} color="#AF0045" />
           {!focused ? (
             <Textpopins
               style={[
                 styles.label,
-                { color: focused ? textColors[labid] : "#7c9d32" },
+                { color: focused ? textColors[labid] : "#AF0045" },
               ]}
             >
               {label}

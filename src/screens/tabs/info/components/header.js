@@ -18,7 +18,7 @@ export default class HeaderDrawer extends React.Component {
           transparent
           onPress={() => this.props.navigation.toggleDrawer()}
         >
-          <Ionicons name="menu" size={30} color="#7c9d32" />
+          <Ionicons name="menu" size={30} color="#C90052" />
         </Button>
         <Body style={styles.body}>
           <Textpopins
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     padding: 0,
     margin: 0,
-    color: "#7c9d32",
+    color: "#C90052",
   },
 });

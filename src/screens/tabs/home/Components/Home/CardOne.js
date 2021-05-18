@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet,Text, Dimensions, View, Animated} from 'react-native';
+import {StyleSheet, Text, Dimensions, View, Animated} from 'react-native';
 import {Right, Left} from 'native-base';
 import {Col, Grid} from 'react-native-easy-grid';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -7,6 +7,7 @@ import customStyle from '../../../../../../assets/Theme';
 import {t} from "../../../../../functions/lang";
 import firebase from '../../../../../functions/firebase/firebaseConfig';
 import {hideNumb} from '../../../../../functions/standart/helper';
+
 const {width, height} = Dimensions.get('window');
 export default function CardOne({index, y, item}) {
     const [cardCount, setCardCount] = React.useState(null);
@@ -54,16 +55,16 @@ export default function CardOne({index, y, item}) {
 
     const cardBgColors = [
         [
-            'rgb(52,85,255)',
-            'rgba(52,85,255,0.85)'
+            'rgba(75,2,102,.80)',
+            'rgba(175,0,69,.95)'
         ],
         [
-            'rgb(130,70,155)',
-            'rgba(130,70,155,0.85)'
+            'rgba(175,0,69,.95)',
+            'rgba(75,2,102,.80)'
         ],
         [
-            'rgb(143,52,255)',
-            'rgba(143,52,255,0.85)'
+            'rgb(75,52,255)',
+            'rgba(70,50,200,0.85)'
         ],
         [
             'rgb(103,152,255)',
@@ -134,8 +135,8 @@ export default function CardOne({index, y, item}) {
                 width: 18,
                 height: 8,
                 borderRadius: 4,
-                backgroundColor: cardBgColors[i][1]
-            } : {backgroundColor: cardBgColors[i][1]}
+                backgroundColor: cardBgColors[i][0]
+            } : {backgroundColor: cardBgColors[i][0]}
             elements.push(
                 <View key={i} style={[styles.cardCount, clear]}/>
             )
@@ -170,12 +171,15 @@ export default function CardOne({index, y, item}) {
                 style={[styles.slide, {opacity, transform: [{translateY}, {scale}]}]}>
                 <LinearGradient
                     style={styles.cardBg}
-                    colors={cardBgColors[index]}>
+                    colors={cardBgColors[index]}
+                    start={[0.1, 0.1]}
+                    end={[0.9, 0.9]}
+                >
                     <View style={styles.rightSec}>
                         <Left style={styles.left}>
                             <View style={[styles.leftPattern, styles.bigPattern]}/>
                             <View
-                                style={[styles.leftPattern, styles.littlePattern, {backgroundColor: cardBgColors[index][1]}]}/>
+                                style={[styles.leftPattern, styles.littlePattern, {backgroundColor: cardBgColors[index][0]}]}/>
                             <Text
                                 style={styles.priceText}
                                 children={item.cardInfo.cvc ? item.cardInfo.cvc + ' ₼' : item.cardInfo.price + ' ₼'}/>

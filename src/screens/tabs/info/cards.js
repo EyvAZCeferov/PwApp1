@@ -130,50 +130,50 @@ export default class Cards extends React.Component {
     function cardTypeFunc() {
       switch (item.cardInfo.type) {
         case "visa":
-          return <FontAwesome name="cc-visa" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-visa" size={30} color="#C90052" />;
           break;
         case "master-card":
-          return <FontAwesome name="cc-mastercard" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-mastercard" size={30} color="#C90052" />;
           break;
         case "american-express":
-          return <FontAwesome name="cc-amex" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-amex" size={30} color="#C90052" />;
           break;
         case "discover":
-          return <FontAwesome name="cc-discover" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-discover" size={30} color="#C90052" />;
           break;
         case "jcb":
-          return <FontAwesome name="cc-jcb" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-jcb" size={30} color="#C90052" />;
           break;
         case "diners-club-north-america":
           return (
-            <FontAwesome name="cc-diners-club" size={30} color="#7c9d32" />
+            <FontAwesome name="cc-diners-club" size={30} color="#C90052" />
           );
           break;
         case "diners-club":
           return (
-            <FontAwesome name="cc-diners-club" size={30} color="#7c9d32" />
+            <FontAwesome name="cc-diners-club" size={30} color="#C90052" />
           );
           break;
         case "diners-club-carte-blanche":
           return (
-            <FontAwesome name="cc-diners-club" size={30} color="#7c9d32" />
+            <FontAwesome name="cc-diners-club" size={30} color="#C90052" />
           );
           break;
         case "diners-club-international":
           return (
-            <FontAwesome name="cc-diners-club" size={30} color="#7c9d32" />
+            <FontAwesome name="cc-diners-club" size={30} color="#C90052" />
           );
           break;
         case "maestro":
           return (
-            <FontAwesome name="credit-card-alt" size={30} color="#7c9d32" />
+            <FontAwesome name="credit-card-alt" size={30} color="#C90052" />
           );
           break;
         case "visa-electron":
-          return <FontAwesome5 name="cc-visa" size={30} color="#7c9d32" />;
+          return <FontAwesome5 name="cc-visa" size={30} color="#C90052" />;
           break;
         default:
-          return <FontAwesome name="credit-card" size={30} color="#7c9d32" />;
+          return <FontAwesome name="credit-card" size={30} color="#C90052" />;
       }
     }
 
@@ -287,7 +287,7 @@ export default class Cards extends React.Component {
             active={this.state.active}
             direction="right"
             position="bottomRight"
-            style={{ backgroundColor:"#7c9d32" }}
+            style={{ backgroundColor:"#C90052" }}
             onPress={() => this.setState({ active: !this.state.active })}
           >
             <AntDesign name="plus" size={24} color="#fff" />

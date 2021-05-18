@@ -52,13 +52,13 @@ export default function RecentOperations() {
     function marketTypeFunc() {
       switch (item.type) {
         case "barcode":
-          return <FontAwesome name="barcode" size={30} color="#7c9d32" />;
+          return <FontAwesome name="barcode" size={30} color="#AF0045" />;
           break;
         case "bucket":
-          return <FontAwesome name="bucket" size={30} color="#7c9d32" />;
+          return <FontAwesome name="bucket" size={30} color="#AF0045" />;
           break;
         default:
-          return <FontAwesome name="shopping" size={30} color="#7c9d32" />;
+          return <FontAwesome name="shopping" size={30} color="#AF0045" />;
       }
     }
 
@@ -182,7 +182,7 @@ export default function RecentOperations() {
             alignItems: "center",
           }}
         >
-          <ActivityIndicator color="#7c9d32" animating={true} size="large" />
+          <ActivityIndicator color="#AF0045" animating={true} size="large" />
         </View>
       );
     } else {
@@ -217,7 +217,7 @@ export default function RecentOperations() {
               style={{
                 width: 40,
                 height: 40,
-                backgroundColor: "#7c9d32",
+                backgroundColor: "#AF0045",
                 borderRadius: 20,
                 marginTop: 20,
                 alignItems: "center",
@@ -240,7 +240,7 @@ export default function RecentOperations() {
       <View>
         <View
           style={{
-            borderTopColor: "#7c9d32",
+            borderTopColor: "#AF0045",
             borderTopWidth: 4,
             maxHeight: 60,
             minHeight: 45,
@@ -258,11 +258,11 @@ export default function RecentOperations() {
             }}
           >
             <Text
-              style={{ color: "#7c9d32", fontSize: 20, fontWeight: "bold" }}
+              style={{ color: "#AF0045", fontSize: 20, fontWeight: "bold" }}
               children={t("home.recentoperations.title")}
             />
             <Text
-              style={{ color: "#7c9d32", fontSize: 17 }}
+              style={{ color: "#AF0045", fontSize: 17 }}
               children={t("home.recentoperations.time.yesterday")}
             />
           </View>
@@ -283,13 +283,13 @@ const styles = StyleSheet.create({
   },
   seperatorText: {
     fontSize: 15,
-    color: "#7c9d32",
+    color: "#AF0045",
     paddingTop: 1,
     flex: 1,
     width: width,
   },
   listHeaderText: {
-    color: "#7c9d32",
+    color: "#AF0045",
     paddingVertical: 3,
     fontSize: 14,
   },

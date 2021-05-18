@@ -30,7 +30,7 @@ export default function DrawerStyle(props) {
                         <Textpopins
                             style={{
                                 fontSize: 17,
-                                color: "#7c9d32",
+                                color: "#4B0266",
                                 fontFamily: "Poppins_400Regular",
                                 fontWeight: "bold",
                                 textAlign: "left"
@@ -52,7 +52,7 @@ export default function DrawerStyle(props) {
                             name="home"
                             size={24}
                             style={{fontWeight: "bold", textAlign: "right"}}
-                            color="#7c9d32"
+                            color="#4B0266"
                         />
                     </Left>
                     <Body>
@@ -74,7 +74,7 @@ export default function DrawerStyle(props) {
                             name="creditcard"
                             size={24}
                             style={{fontWeight: "bold"}}
-                            color="#7c9d32"
+                            color="#4B0266"
                         />
                     </Left>
                     <Body>
@@ -96,7 +96,7 @@ export default function DrawerStyle(props) {
                             name="price-ribbon"
                             size={24}
                             style={{fontWeight: "bold"}}
-                            color="#7c9d32"
+                            color="#4B0266"
                         />
                     </Left>
                     <Body>
@@ -118,7 +118,7 @@ export default function DrawerStyle(props) {
                             name="map"
                             size={24}
                             style={{fontWeight: "bold"}}
-                            color="#7c9d32"
+                            color="#4B0266"
                         />
                     </Left>
                     <Body>
@@ -140,7 +140,7 @@ export default function DrawerStyle(props) {
                             name="history"
                             size={24}
                             style={{fontWeight: "bold"}}
-                            color="#7c9d32"
+                            color="#4B0266"
                         />
                     </Left>
                     <Body>
@@ -162,7 +162,7 @@ export default function DrawerStyle(props) {
                             name="telephone"
                             size={24}
                             style={{fontWeight: "bold"}}
-                            color="#7c9d32"
+                            color="#4B0266"
                         />
                     </Left>
                     <Body>
@@ -184,7 +184,7 @@ export default function DrawerStyle(props) {
                             name="setting"
                             size={24}
                             style={{fontWeight: "bold"}}
-                            color="#7c9d32"
+                            color="#4B0266"
                         />
                     </Left>
                     <Body>
@@ -203,7 +203,7 @@ export default function DrawerStyle(props) {
                             name="logout"
                             size={24}
                             style={{fontWeight: "bold"}}
-                            color="#7c9d32"
+                            color="#4B0266"
                         />
                     </Left>
                     <Body>
@@ -245,12 +245,12 @@ const styles = StyleSheet.create({
     seperator: {
         width: "100%",
         marginVertical: 5,
-        borderBottomColor: "#7c9d32",
+        borderBottomColor: "#4B0266",
         borderBottomWidth: 1.5,
     },
     texts: {
         fontSize: 16,
-        color: "#7c9d32",
+        color: "#4B0266",
         fontFamily: "Poppins_400Regular",
         fontWeight: "bold",
         textAlign: "left",

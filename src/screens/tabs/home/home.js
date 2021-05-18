@@ -42,13 +42,13 @@ export default class Home extends React.Component {
                         transparent
                         onPress={()=>this.props.navigation.toggleDrawer()}
                         >
-                        <Ionicons name="menu" size={30} color="#7c9d32"/>
+                        <Ionicons name="menu" size={30} color="#AF0045"/>
                     </Button>
                     <Thumbnail source={icon} style={styles.icon}/>
                     <Button
                         transparent
                         onPress={() => this.props.navigation.navigate('Notifications')}>
-                        <Ionicons name="ios-notifications" size={24} color="#7c9d32"/>
+                        <Ionicons name="ios-notifications" size={24} color="#AF0045"/>
                     </Button>
                 </View>
                     {this.renderContent()}
@@ -65,16 +65,15 @@ const styles = StyleSheet.create({
         paddingHorizontal:5,
         width: width,
         paddingBottom:2,
-        borderBottomColor:"#7c9d32",
+        borderBottomColor:"#AF0045",
         borderBottomWidth:2,
         marginTop:Constants.statusBarHeight,
     },
     icon: {
-        width: 45,
-        height: 45,
+        width: "25%",
+        height: "100%",
     },
     contentArena: {
        width:width,
-    //    backgroundColor:"#fff",
     },
 });
