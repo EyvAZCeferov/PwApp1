@@ -258,11 +258,11 @@ export default function RecentOperations() {
             }}
           >
             <Text
-              style={{ color: "#AF0045", fontSize: 20, fontWeight: "bold" }}
+              style={{ color: "#000", fontSize: 20, fontWeight: "bold" }}
               children={t("home.recentoperations.title")}
             />
             <Text
-              style={{ color: "#AF0045", fontSize: 17 }}
+              style={{ color: "#000", fontSize: 17 }}
               children={t("home.recentoperations.time.yesterday")}
             />
           </View>
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   noResult: {
-    color: "#D50000",
+    color: "#000",
     textAlign: "center",
     fontSize: 20,
     fontWeight: "700",

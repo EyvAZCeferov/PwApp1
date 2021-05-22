@@ -68,7 +68,7 @@ export default function TabComponent({
         ]}
       >
         <View style={[styles.cont, { justifyContent: "center" }]}>
-          <Ionicons name={icon} size={22} color="#AF0045" />
+          <Ionicons name={icon} size={22} color="#000" />
           {!focused ? (
             <Textpopins
               style={[
