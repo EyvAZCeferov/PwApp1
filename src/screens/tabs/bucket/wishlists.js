@@ -30,7 +30,7 @@ function WishList(props) {
                 <Right style={{flexDirection: "row"}}>
 
                     <Button transparent style={styles.buttonStyle} onPress={() => props.addtoCard(item)}>
-                        <Ionicons name="add" size={30} color="#7c9d32"/>
+                        <Ionicons name="add" size={30} color="#5C0082"/>
                     </Button>
                     <Button transparent style={styles.buttonStyle} onPress={() => props.removewishlist(item)}>
                         <EvilIcons name="trash" size={30} color="#BF360C"/>

@@ -75,9 +75,9 @@ function CartList(props) {
                         maxValue={100}
                         valueType="integer"
                         rounded
-                        textColor="#7c9d32"
+                        textColor="#5C0082"
                         iconStyle={{color: "white"}}
-                        rightButtonBackgroundColor="#7c9d32"
+                        rightButtonBackgroundColor="#5C0082"
                         leftButtonBackgroundColor="#E56B70"
                     />
 
@@ -148,7 +148,7 @@ function CartList(props) {
                     >
                         <Button
                             style={[styles.center, {
-                                backgroundColor: "#7c9d32",
+                                backgroundColor: "#5C0082",
                                 zIndex: 150,
                                 paddingHorizontal: Constants.statusBarHeight,
                                 position: "absolute",
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         flex: 0.15,
-        backgroundColor: "#7c9d32",
+        backgroundColor: "#5C0082",
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
         paddingHorizontal: Constants.statusBarHeight,

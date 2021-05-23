@@ -6,7 +6,6 @@ import {
     Keyboard,
     TouchableOpacity,
     SafeAreaView,
-    Text,
 } from 'react-native';
 import {Form, Input, Item} from 'native-base';
 
@@ -18,13 +17,13 @@ import {StatusBar} from 'expo-status-bar';
 import {LinearGradient} from 'expo-linear-gradient';
 import {t} from '../../../functions/lang';
 
-const icon = require('../../../../assets/icon-ios.png');
+const icon = require('../../../../assets/icon-white-no-bg.png');
 import AsyncStorage from "@react-native-community/async-storage";
 import Textpopins from '../../../functions/screenfunctions/text';
 import DropdownAlert from "react-native-dropdownalert";
 import auth from "../../../functions/actions/auth";
 import {CommonActions} from "@react-navigation/native";
-import {AntDesign, Feather, MaterialCommunityIcons} from "@expo/vector-icons";
+import {Feather, MaterialCommunityIcons} from "@expo/vector-icons";
 import axios from "axios";
 
 const succesImage = require('../../../../assets/images/Alert/tick.png');
@@ -95,7 +94,7 @@ export default class LoginScreen extends React.Component {
                     isInteraction={false}
                     successImageSrc={succesImage}
                 />
-                <StatusBar backgroundColor="#4066ed" style="light"/>
+                <StatusBar backgroundColor="#5C0082" style="light"/>
                 <View style={styles.header}>
                     <Animatable.Image
                         animation="fadeIn"
@@ -168,7 +167,7 @@ export default class LoginScreen extends React.Component {
                                 <LinearGradient
                                     start={{x: 0, y: 0}}
                                     end={{x: 1, y: 0}}
-                                    colors={['#4066ed', '#5e80f7']}
+                                    colors={['#5C0082', '#C90052']}
                                     style={styles.login}
                                 >
                                     <Textpopins
@@ -188,7 +187,7 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#4066ed',
+        backgroundColor: '#5C0082',
     },
     header: {
         flex: 1.6,
@@ -204,12 +203,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: Constants.statusBarHeight,
     },
     logo: {
-        width: width / 4,
+        width: "50%",
         height: width / 4,
         backgroundColor: "transparent"
     },
     title: {
-        color: '#4066ed',
+        color: '#5C0082',
         fontWeight: 'bold',
         fontSize: 20,
     },
@@ -217,18 +216,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: 'transparent',
+        marginLeft: 0
     },
     forget: {
         paddingTop: Constants.statusBarHeight,
         borderColor: 'transparent',
     },
     input: {
-        borderBottomColor: "#4066ed",
+        borderBottomColor: "#5C0082",
         borderBottomWidth: 2,
     },
     login: {
         paddingHorizontal: Constants.statusBarHeight,
-        borderColor: '#4066ed',
+        borderColor: '#5C0082',
         paddingVertical: 5,
         marginVertical: 5,
         borderWidth: 2,

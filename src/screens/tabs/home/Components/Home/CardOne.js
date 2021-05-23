@@ -55,12 +55,12 @@ export default function CardOne({index, y, item}) {
 
     const cardBgColors = [
         [
-            'rgba(75,2,102,.80)',
+            'rgba(92,0,130,.80)',
             'rgba(175,0,69,.95)'
         ],
         [
             'rgba(175,0,69,.95)',
-            'rgba(75,2,102,.80)'
+            'rgba(92,0,130,.80)'
         ],
         [
             'rgb(75,52,255)',

@@ -81,7 +81,7 @@ export default class SetFinger extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <StatusBar backgroundColor="#5C0082" style="light"/>
                 <View style={styles.panel}>
                     <View style={styles.topPanel}>
                         <TouchableOpacity onPress={() => this.onCancel()} style={styles.cancelButton}>
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: height,
-        backgroundColor: "#7c9d32",
+        backgroundColor: "#5C0082",
         flexDirection: "column",
         justifyContent: "space-around",
         alignItems: "center",

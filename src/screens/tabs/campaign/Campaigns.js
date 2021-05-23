@@ -11,10 +11,8 @@ import {
     ScrollView,
 } from 'react-native';
 import Constants from 'expo-constants';
-import Header from './components/Header';
 
 const {width} = Dimensions.get('screen');
-import {t} from "../../../functions/lang";
 import Textpopins from "../../../functions/screenfunctions/text";
 
 
@@ -108,7 +106,7 @@ class Campaigns extends React.Component {
                     }}
                 />
                 <View>
-                    <Textpopins style={[styles.productTitle, {color: '#7c9d32'}]}>
+                    <Textpopins style={[styles.productTitle, {color: '#5C0082'}]}>
                         {item.title}
                     </Textpopins>
                     <Textpopins style={styles.productDescription}>{item.description}</Textpopins>
@@ -212,7 +210,7 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,.6)',
     },
     productPrice: {
-        color: "#7c9d32",
+        color: "#5C0082",
         fontSize: 16
     },
 

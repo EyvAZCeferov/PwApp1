@@ -103,7 +103,7 @@ class Customer extends React.Component {
                     }}
                 />
                 <View>
-                    <Textpopins style={[styles.productTitle, {color: '#7c9d32'}]}>
+                    <Textpopins style={[styles.productTitle, {color: '#5C0082'}]}>
                         {item.title}
                     </Textpopins>
                     <Textpopins style={styles.productDescription}>{item.description}</Textpopins>
@@ -117,7 +117,7 @@ class Customer extends React.Component {
         if (this.state.refresh) {
             return (
                 <View style={[styles.container, styles.center]}>
-                    <ActivityIndicator size="large" color="#7c9d32"/>
+                    <ActivityIndicator size="large" color="#5C0082"/>
                 </View>
             );
         } else {
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,.6)',
     },
     productPrice: {
-        color: "#7c9d32",
+        color: "#5C0082",
         fontSize: 16
     },
 

@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     button: {
         paddingHorizontal: Constants.statusBarHeight / 2,
-        borderColor: '#7c9d32',
+        borderColor: '#5C0082',
         paddingVertical: 5,
         borderWidth: 2,
         borderRadius: Constants.statusBarHeight * 2,

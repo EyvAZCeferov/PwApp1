@@ -180,7 +180,7 @@ class Beforebuy extends React.Component {
                             justifyContent: 'space-between',
                             height: "57.5%",
                             borderTopWidth: 1,
-                            borderTopColor: "#7c9d32"
+                            borderTopColor: "#5C0082"
                         }}>
 
                             <ScrollView style={{marginTop: 0, flex: 0.8, backgroundColor: "#fff"}}>
@@ -306,12 +306,12 @@ class Beforebuy extends React.Component {
                                 }
                             >
                                 <Textpopins style={{
-                                    color: "#7c9d32",
+                                    color: "#5C0082",
                                     textAlign: "center"
                                 }}>
                                     {t("bucket.header.cartlists.finishpayment")}
                                 </Textpopins>
-                                <AntDesign style={{marginLeft: 10}} name="check" size={24} color="#7c9d32"/>
+                                <AntDesign style={{marginLeft: 10}} name="check" size={24} color="#5C0082"/>
                             </Button>
                         </View>
                     </View>
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     footer: {
         flex: 0.6,
         flexDirection: 'column',
-        backgroundColor: "#7c9d32",
+        backgroundColor: "#5C0082",
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
     },

@@ -1,8 +1,6 @@
 import React, { useRef } from "react";
 import {
   View,
-  Text,
-  Image,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
@@ -68,12 +66,12 @@ export default function TabComponent({
         ]}
       >
         <View style={[styles.cont, { justifyContent: "center" }]}>
-          <Ionicons name={icon} size={22} color="#000" />
+          <Ionicons name={icon} size={22} color="#5C0082" />
           {!focused ? (
             <Textpopins
               style={[
                 styles.label,
-                { color: focused ? textColors[labid] : "#AF0045" },
+                { color: focused ? textColors[labid] : "#5C0082" },
               ]}
             >
               {label}

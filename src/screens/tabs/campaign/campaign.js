@@ -149,7 +149,7 @@ class Campaign extends React.Component {
             <ScrollView style={{flexDirection: "column"}}>
 
                 <Textpopins
-                    style={{margin: Constants.statusBarHeight, fontSize: 30, fontWeight: "bold", color: "#7c9d32"}}>
+                    style={{margin: Constants.statusBarHeight, fontSize: 30, fontWeight: "bold", color: "#5C0082"}}>
                     {product.title}
                 </Textpopins>
                 <Textpopins style={{
@@ -183,7 +183,7 @@ class Campaign extends React.Component {
         if (this.state.refresh) {
             return (
                 <View style={[styles.container, styles.center]}>
-                    <ActivityIndicator size="large" color="#7c9d32"/>
+                    <ActivityIndicator size="large" color="#5C0082"/>
                 </View>
             );
         } else {

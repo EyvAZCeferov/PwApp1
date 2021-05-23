@@ -155,7 +155,7 @@ export default class Bucketstarter extends React.Component {
                         <View/>
                         <Textpopins style={styles.title}>{t("barcode.starter.selectmarketandcard")}</Textpopins>
                         <TouchableOpacity style={styles.addToCart} onPress={() => this.setState({openQr: true})}>
-                            <AntDesign name="camera" size={26} color="#7c9d32"/>
+                            <AntDesign name="camera" size={26} color="#5C0082"/>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -174,17 +174,17 @@ export default class Bucketstarter extends React.Component {
                                 backgroundColor: "#fff",
                                 margin: 10,
                                 height: 50,
-                                borderColor: "#7c9d32",
+                                borderColor: "#5C0082",
                                 flexDirection: "row",
                                 justifyContent: "space-around"
                             }}
                             itemStyle={{flexDirection: "row", justifyContent: "space-around"}}
                             onChangeItem={(text) =>
                                 this.setState({selectedMarket: text})}
-                            activeLabelStyle={{color: "#7c9d32"}}
-                            selectedLabelStyle={{color: "#7c9d32"}}
-                            activeItemStyle={{color: "#7c9d32"}}
-                            arrowColor="#7c9d32"
+                            activeLabelStyle={{color: "#5C0082"}}
+                            selectedLabelStyle={{color: "#5C0082"}}
+                            activeItemStyle={{color: "#5C0082"}}
+                            arrowColor="#5C0082"
                             autoScrollToDefaultValue={Constants.statusBarHeight}
                             min={15}
                             max={100}
@@ -208,7 +208,7 @@ export default class Bucketstarter extends React.Component {
                                         backgroundColor: "#fff",
                                         margin: 10,
                                         height: 50,
-                                        borderColor: "#7c9d32",
+                                        borderColor: "#5C0082",
                                         flexDirection: "row",
                                         justifyContent: "space-around",
                                         zIndex: 99999999999999999
@@ -216,10 +216,10 @@ export default class Bucketstarter extends React.Component {
                                     itemStyle={{flexDirection: "row", justifyContent: "space-around"}}
                                     onChangeItem={(text) =>
                                         this.setState({selectedMarket: text})}
-                                    activeLabelStyle={{color: "#7c9d32"}}
-                                    selectedLabelStyle={{color: "#7c9d32"}}
-                                    activeItemStyle={{color: "#7c9d32"}}
-                                    arrowColor="#7c9d32"
+                                    activeLabelStyle={{color: "#5C0082"}}
+                                    selectedLabelStyle={{color: "#5C0082"}}
+                                    activeItemStyle={{color: "#5C0082"}}
+                                    arrowColor="#5C0082"
                                     autoScrollToDefaultValue={Constants.statusBarHeight}
                                     min={15}
                                     max={100}
@@ -233,11 +233,11 @@ export default class Bucketstarter extends React.Component {
                                 <AntDesign
                                     name="checkcircle"
                                     size={25}
-                                    color="#7c9d32"
+                                    color="#5C0082"
                                 />
                             }
                             animationTypes={['zoomIn', 'pulse', 'shake', 'rotate']}
-                            deactiveColor="#7c9d32"
+                            deactiveColor="#5C0082"
                             duration={500}
                         />
                         <View style={{
@@ -260,14 +260,14 @@ export default class Bucketstarter extends React.Component {
                             >
                                 <Textpopins
                                     style={{
-                                        color: "#7c9d32",
+                                        color: "#5C0082",
                                         marginRight: Constants.statusBarHeight / 3,
                                         fontSize: 20,
                                         fontWeight: "bold"
                                     }}
                                     onPress={() => this.next()}
                                 >{t("form.buttons.continue")}</Textpopins>
-                                <AntDesign name="arrowright" size={24} color="#7c9d32"/>
+                                <AntDesign name="arrowright" size={24} color="#5C0082"/>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -299,7 +299,7 @@ export default class Bucketstarter extends React.Component {
                             <BarcodeMask
                                 outerMaskOpacity={0.6}
                                 edgeBorderWidth={3}
-                                edgeColor={"#7c9d32"}
+                                edgeColor={"#5C0082"}
                                 animatedLineColor="#DD2C00"
                                 animatedLineHeight={2}
                                 showAnimatedLine={true}
@@ -375,7 +375,7 @@ export default class Bucketstarter extends React.Component {
                                     alignItems: "center",
                                     alignContent: "center",
                                     textAlign: "center",
-                                    backgroundColor: "#7c9d32",
+                                    backgroundColor: "#5C0082",
                                 }}
                                 onPress={() => {
                                     this.flashToggle();
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
         paddingVertical: 4,
         backgroundColor: '#fff',
         borderRadius: Constants.statusBarHeight,
-        borderColor: "#7c9d32",
+        borderColor: "#5C0082",
         borderWidth: 2,
         justifyContent: "center",
         alignContent: "center",

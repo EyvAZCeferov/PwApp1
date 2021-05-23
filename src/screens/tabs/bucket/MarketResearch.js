@@ -114,7 +114,7 @@ class InCustomer extends React.Component {
                         borderRadius: width / 2.3,
                     }}
                 />
-                <Text style={[styles.productTitle, {color: '#7c9d32'}]}>
+                <Text style={[styles.productTitle, {color: '#5C0082'}]}>
                     {item.title}
                 </Text>
                 <Text style={styles.productDescription}>Lorem Ipsum dummy text.</Text>
@@ -151,7 +151,7 @@ class InCustomer extends React.Component {
         if (this.state.refresh) {
             return (
                 <View style={[styles.container, styles.center]}>
-                    <ActivityIndicator size="large" color="#7c9d32"/>
+                    <ActivityIndicator size="large" color="#5C0082"/>
                 </View>
             );
         } else {
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: -Constants.statusBarHeight / 2,
         top: "50%",
-        backgroundColor: "#7C9D32",
+        backgroundColor: "#5C0082",
         padding: Constants.statusBarHeight / 2,
         paddingVertical: Constants.statusBarHeight / 3,
         zIndex: 9999999,

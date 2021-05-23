@@ -20,7 +20,7 @@ function Header(props) {
                 <StatusBar backgroundColor="#ffffff" style="dark"/>
                 {props.button ? (
                     <TouchableOpacity style={styles.button} onPress={() => navigation.pop()}>
-                        <Ionicons name="arrow-back" size={24} color="black"/>
+                        <Ionicons name="arrow-back" size={24} color="#5C0082"/>
                     </TouchableOpacity>
                 ) : (
                     <View style={{
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     },
     button: {
         paddingHorizontal: Constants.statusBarHeight / 2,
-        borderColor: '#7c9d32',
+        borderColor: '#5C0082',
         paddingVertical: 5,
         borderWidth: 2,
         borderRadius: Constants.statusBarHeight * 2,

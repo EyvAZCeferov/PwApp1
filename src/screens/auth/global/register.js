@@ -18,7 +18,7 @@ import {StatusBar} from 'expo-status-bar';
 import {LinearGradient} from 'expo-linear-gradient';
 import {t} from '../../../functions/lang';
 
-const icon = require('../../../../assets/icon-ios.png');
+const icon = require('../../../../assets/icon-white-no-bg.png');
 import AsyncStorage from "@react-native-community/async-storage";
 import Textpopins from '../../../functions/screenfunctions/text';
 import DropdownAlert from "react-native-dropdownalert";
@@ -29,7 +29,7 @@ import {LiteCreditCardInput} from "react-native-credit-card-input";
 
 const succesImage = require('../../../../assets/images/Alert/tick.png');
 
-export default class LoginScreen extends React.Component {
+export default class Register extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -82,7 +82,7 @@ export default class LoginScreen extends React.Component {
                     isInteraction={false}
                     successImageSrc={succesImage}
                 />
-                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <StatusBar backgroundColor="#5C0082" style="light"/>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.pop()}>
                         <Ionicons name="arrow-back" size={24} color="#fff"/>
@@ -156,7 +156,7 @@ export default class LoginScreen extends React.Component {
                                 <LinearGradient
                                     start={{x: 0, y: 0}}
                                     end={{x: 1, y: 0}}
-                                    colors={['#7c9d32', '#b7d477']}
+                                    colors={['#5C0082', '#C90052']}
                                     style={styles.login}
                                 >
                                     <Textpopins
@@ -175,7 +175,7 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#7c9d32',
+        backgroundColor: '#5C0082',
     },
     header: {
         flex: 1,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     content: {
-        flex: 3,
+        flex: 2,
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
         backgroundColor: '#fff',
@@ -191,12 +191,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: Constants.statusBarHeight,
     },
     logo: {
-        width: width / 4,
+        width: "50%",
         height: width / 4,
         backgroundColor: "transparent"
     },
     title: {
-        color: '#7c9d32',
+        color: '#5C0082',
         fontWeight: 'bold',
         fontSize: 20,
     },
@@ -204,19 +204,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: 'transparent',
-        marginVertical: Constants.statusBarHeight / 2
+        marginVertical: Constants.statusBarHeight / 2,
+        marginLeft: 0
     },
     forget: {
         paddingTop: Constants.statusBarHeight,
         borderColor: 'transparent',
     },
     input: {
-        borderBottomColor: "#7c9d32",
+        borderBottomColor: "#5C0082",
         borderBottomWidth: 2,
     },
     login: {
         paddingHorizontal: Constants.statusBarHeight,
-        borderColor: '#7c9d30',
+        borderColor: '#5C0082',
         paddingVertical: 5,
         marginVertical: 5,
         borderWidth: 2,

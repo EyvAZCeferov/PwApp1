@@ -15,7 +15,7 @@ import ShoppingList from "./src/screens/tabs/barcode/shoppingList";
 
 enableScreens();
 console.disableYellowBox = true;
-import AppSlider from "./src/screens/appintro/appslider";   
+import AppSlider from "./src/screens/appintro/appslider";
 import Splash from "./src/screens/Splash/Splash";
 
 import LoginScreen from "./src/screens/auth/global/loginscreen";
@@ -23,7 +23,6 @@ import Register from "./src/screens/auth/global/register";
 import SetFinger from "./src/screens/auth/verify/SetFinger";
 import MobileVerify from "./src/screens/auth/verify/mobileverify";
 import ForgotPassword from "./src/screens/auth/global/forgetpass";
-import ProgramLock from "./src/screens/auth/verify/programlock";
 import SetPass from "./src/screens/auth/verify/SetPass";
 
 import Home from "./src/screens/tabs/home/home";
@@ -52,12 +51,13 @@ import Campaigns from "./src/screens/tabs/campaign/Campaigns";
 import Campaign from "./src/screens/tabs/campaign/campaign";
 import Customer from "./src/screens/tabs/campaign/customer";
 import ProductInfo from "./src/screens/tabs/bucket/productinfo";
-
+import {CreateAccContext} from "./src/functions/Hooks/Authentication/CreateAccount/CreateAccContext";
 import {ProgramLockContext} from "./src/functions/Hooks/Authentication/Lock/ProgramLockContext";
 import axios from "axios";
 import OneCheck from "./src/screens/tabs/home/Components/OneCheck";
 import SetFace from "./src/screens/auth/verify/SetFace";
 import Beforebuy from "./src/screens/tabs/bucket/Beforebuy";
+import Lock from "./src/screens/auth/verify/Lock";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -71,26 +71,25 @@ const AuthStackScreen = (props) => (
         <AuthStack.Screen name="Login" {...props} component={LoginScreen}/>
         <AuthStack.Screen name="ForgotPass" component={ForgotPassword} {...props} />
         <AuthStack.Screen name="Register" component={Register} {...props} />
+        <AuthStack.Screen name="MobileVerify" component={MobileVerify} {...props} />
         <AuthStack.Screen name="SetPass" component={SetPass}/>
         <AuthStack.Screen name="SetFinger" component={SetFinger} {...props} />
-        <AuthStack.Screen name="MobileVerify" component={MobileVerify} {...props} />
     </AuthStack.Navigator>
 );
 
 const VerifyStack = createStackNavigator();
 const VerifyStackScreen = (props) => (
-    <ProgramLockContext.Provider>
-        <VerifyStack.Navigator
-            headerMode="none"
-            screenOptions={{
-                animationEnabled: true,
-                animationTypeForReplace: "pop",
-            }}
-        >
-            <VerifyStack.Screen name="ProgramLock" component={ProgramLock}/>
-            <VerifyStack.Screen name="FP" component={ForgotPassword} {...props} />
-        </VerifyStack.Navigator>
-    </ProgramLockContext.Provider>
+    <VerifyStack.Navigator
+        headerMode="none"
+        initialRouteName="ProgramLock"
+        screenOptions={{
+            animationEnabled: true,
+            animationTypeForReplace: "push",
+        }}
+    >
+        <VerifyStack.Screen name="ProgramLock" component={Lock}/>
+        <VerifyStack.Screen name="ForgotPass" component={ForgotPassword} {...props} />
+    </VerifyStack.Navigator>
 );
 
 const Tabs = createBottomTabNavigator();
@@ -234,25 +233,21 @@ const BucketStackScreen = ({navigation, route}) => {
 };
 
 const BarcodeStack = createStackNavigator();
-const BarcodeStackScreen = ({
-                                navigation, route
-                            }
-    ) => {
-        if (route.state && route.state.index > 0) {
-            navigation.setOptions({tabBarVisible: false});
-        } else {
-            navigation.setOptions({tabBarVisible: true});
-        }
-        return (
-            <BarcodeStack.Navigator headerMode="none" initialRouteName="BarcodeStarted">
-                <BarcodeStack.Screen name="BarcodeStarted" component={BarcodeStarted}/>
-                <BarcodeStack.Screen name="ShoppingList" component={ShoppingList}/>
-                <BarcodeStack.Screen name="Buy" component={Buy}/>
-                <BarcodeStack.Screen name="PayThanks" component={PayThanks}/>
-            </BarcodeStack.Navigator>
-        );
+const BarcodeStackScreen = ({navigation, route}) => {
+    if (route.state && route.state.index > 0) {
+        navigation.setOptions({tabBarVisible: false});
+    } else {
+        navigation.setOptions({tabBarVisible: true});
     }
-;
+    return (
+        <BarcodeStack.Navigator headerMode="none" initialRouteName="BarcodeStarted">
+            <BarcodeStack.Screen name="BarcodeStarted" component={BarcodeStarted}/>
+            <BarcodeStack.Screen name="ShoppingList" component={ShoppingList}/>
+            <BarcodeStack.Screen name="Buy" component={Buy}/>
+            <BarcodeStack.Screen name="PayThanks" component={PayThanks}/>
+        </BarcodeStack.Navigator>
+    );
+}
 
 export default function (props) {
     const [firstOpenSlider, setfirstOpenSlider] = React.useState(null);
@@ -274,11 +269,13 @@ export default function (props) {
     }
 
     function SwitchProgram(props) {
-        const [program, setProgram] = React.useState(true);
+        const [program, setProgram] = React.useState(false);
         return program ? (
             <TabsScreen {...props} />
         ) : (
-            <VerifyStackScreen {...props} />
+            <ProgramLockContext.Provider value={{program, setProgram}}>
+                <VerifyStackScreen {...props} />
+            </ProgramLockContext.Provider>
         );
     }
 
@@ -301,7 +298,9 @@ export default function (props) {
         return !userToken ? (
             <SwitchProgram {...props} />
         ) : (
-            <AuthStackScreen {...props} />
+            <CreateAccContext.Provider value={{userToken, setUserToken}}>
+                <AuthStackScreen {...props} />
+            </CreateAccContext.Provider>
         );
     }
 

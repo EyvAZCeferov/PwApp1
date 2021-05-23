@@ -19,7 +19,7 @@ import styles, {
 } from './CodeFieldStyles';
 import AsyncStorage from "@react-native-community/async-storage";
 
-export default function CodeFieldInput(prop) {
+export default function Codefield(prop) {
     const {Value, Text: AnimatedText} = Animated;
 
     const CELL_COUNT = 4;
@@ -34,12 +34,12 @@ export default function CodeFieldInput(prop) {
     function animateCell({hasValue, index, isFocused}) {
         Animated.parallel([
             Animated.timing(animationsColor[index], {
-                useNativeDriver: true,
+                useNativeDriver: false,
                 toValue: isFocused ? 1 : 0,
                 duration: 250,
             }),
             Animated.spring(animationsScale[index], {
-                useNativeDriver: true,
+                useNativeDriver: false,
                 toValue: hasValue ? 0 : 1,
                 duration: hasValue ? 300 : 250,
             }),
@@ -136,4 +136,3 @@ export default function CodeFieldInput(prop) {
         </View>
     );
 };
-

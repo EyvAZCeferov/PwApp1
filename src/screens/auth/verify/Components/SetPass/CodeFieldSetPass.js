@@ -34,12 +34,12 @@ export default function CodeFieldSetPass(prop) {
     function animateCell({hasValue, index, isFocused}) {
         Animated.parallel([
             Animated.timing(animationsColor[index], {
-                useNativeDriver: true,
+                useNativeDriver: false,
                 toValue: isFocused ? 1 : 0,
                 duration: 250,
             }),
             Animated.spring(animationsScale[index], {
-                useNativeDriver: true,
+                useNativeDriver: false,
                 toValue: hasValue ? 0 : 1,
                 duration: hasValue ? 300 : 250,
             }),
@@ -128,4 +128,3 @@ export default function CodeFieldSetPass(prop) {
         </View>
     );
 };
-

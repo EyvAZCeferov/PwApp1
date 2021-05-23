@@ -17,12 +17,12 @@ const {width,height} = Dimensions.get('window');
 import {t} from "../../../functions/lang";
 import AsyncStorage from '@react-native-community/async-storage';
 import DropdownAlert from "react-native-dropdownalert";
-// import {ProgramLockContext} from "../../../../../Functions/Hooks/Authentication/Lock/ProgramLockContext";
+import {ProgramLockContext} from "../../../functions/Hooks/Authentication/Lock/ProgramLockContext";
 import {setting} from '../../../functions/standart/helper';
 
 var reqems = '';
 export default class MobileVerify extends React.Component {
-    // static contextType = ProgramLockContext
+    static contextType = ProgramLockContext
 
     constructor(props) {
         super(props);
@@ -128,10 +128,7 @@ export default class MobileVerify extends React.Component {
                     />
                 </View>
                 <View style={styles.codefieldArena}>
-                    <CodeFieldInput
-                        completed={() => this.completed()}
-                        value={this.state.pass} {...this.props} 
-                      />
+
                 </View>
                 <View style={styles.buttons}>
                     <NumberButtons
@@ -157,7 +154,7 @@ export default class MobileVerify extends React.Component {
                         isInteraction={false}
                         successImageSrc={succesImage}
                     />
-                    <StatusBar  backgroundColor="#7c9d32" style="light" />
+                    <StatusBar  backgroundColor="#5C0082" style="light" />
                     {this.renderContent()}
                 </View>
             </KeyboardAwareScrollView>

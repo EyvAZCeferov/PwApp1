@@ -5,7 +5,7 @@ var height = Dimensions.get('window').height;
 export const CELL_SIZE = 50;
 export const CELL_BORDER_RADIUS = 0;
 export const DEFAULT_CELL_BG_COLOR = '#fff';
-export const NOT_EMPTY_CELL_BG_COLOR = '#7c9d32';
+export const NOT_EMPTY_CELL_BG_COLOR = '#C90052';
 export const ACTIVE_CELL_BG_COLOR = '#f1f1f1';
 
 const styles = StyleSheet.create({
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         backgroundColor: '#fff',
         textAlign: 'center',
-        color: '#7c9d32',
+        color: '#C90052',
         borderColor: 'transparent',
         borderBottomColor: "#6d7587",
         borderBottomWidth: 1.54,
