@@ -10,9 +10,6 @@ import Constants from 'expo-constants';
 
 
 export default class MobileVerifyHeader extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

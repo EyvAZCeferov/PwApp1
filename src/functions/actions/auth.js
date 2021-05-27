@@ -25,20 +25,22 @@ export default {
     },
     actions: {
         signin(cred) {
-            return fetch('http://localhost:8000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(cred)
-            }).then(response => response.json()).then(async (res) => {
-                console.log(res)
-                console.log(response)
-                // await AsyncStorage.setItem("token", res.data.access_token)
-            }).catch(error => {
-                console.log(error)
-            });
+            // return fetch('http://localhost:8000/api/auth/login', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Accept': 'application/json',
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(cred)
+            // }).then(response => response.json()).then(async (res) => {
+            //     console.log(res)
+            //     console.log(response)
+            //     // await AsyncStorage.setItem("token", res.data.access_token)
+            // }).catch(error => {
+            //     console.log(error)
+            // });
+            let response = axios.post("/auth/login", cred);
+            return dispatch("attempt", response.data.access_token)
         },
         async register({dispatch}, cred) {
             let response = await axios.post("/auth/register", cred);

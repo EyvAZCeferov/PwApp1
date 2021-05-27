@@ -6,7 +6,6 @@ import {
     Keyboard,
     TouchableOpacity,
     SafeAreaView,
-    Text,
 } from 'react-native';
 import {Form, Input, Item} from 'native-base';
 
@@ -26,6 +25,8 @@ import auth from "../../../functions/actions/auth";
 import {CommonActions} from "@react-navigation/native";
 import {AntDesign, Feather, Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import {LiteCreditCardInput} from "react-native-credit-card-input";
+import {CreateAccContext} from "../../../functions/Hooks/Authentication/CreateAccount/CreateAccContext";
+import axios from "axios";
 
 const succesImage = require('../../../../assets/images/Alert/tick.png');
 
@@ -35,6 +36,7 @@ export default class Register extends React.Component {
         this.state = {
             phone: null,
             password: null,
+            card: null,
         };
     }
 
@@ -42,31 +44,26 @@ export default class Register extends React.Component {
         await AsyncStorage.setItem('haveFinger', '');
         await AsyncStorage.setItem('localAuthPass', '');
         if (this.state.phone !== null && this.state.password !== null) {
-            var cred = {"phone": this.state.phone, "password": this.state.password};
-            auth.actions.register(cred).then((e) => {
+            var cred = {"phone": this.state.phone, "password": this.state.password, "card": this.state.card};
+            await axios.post("/auth/register", cred).then((e) => {
+                console.log(e.data);
                 this.dropDownAlertRef.alertWithType('info', t('form.validation.loginregister.login.success'));
-                this.navigationreset()
+                this.props.navigation.navigate("MobileVerify", {
+                    cred: cred
+                })
             }).catch(e => {
                 this.dropDownAlertRef.alertWithType('error', e);
+                console.log(e);
             });
         } else {
             this.dropDownAlertRef.alertWithType('error', t('actions.noResult'));
         }
     };
 
-    navigationreset() {
-        return this.props.navigation.dispatch(
-            CommonActions.reset({
-                index: 1,
-                routes: [
-                    {name: "Home"},
-                    {
-                        name: "Home",
-                    },
-                ],
-            })
-        );
-    }
+    _onChange = (data) => {
+        this.setState({card: data.values});
+    };
+
 
     render() {
         return (

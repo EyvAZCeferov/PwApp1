@@ -295,7 +295,7 @@ export default function (props) {
             }, 3000)
         }, [])
 
-        return !userToken ? (
+        return userToken ? (
             <SwitchProgram {...props} />
         ) : (
             <CreateAccContext.Provider value={{userToken, setUserToken}}>
@@ -305,7 +305,7 @@ export default function (props) {
     }
 
     React.useEffect(() => {
-        axios.defaults.baseURL = "http://localhost:8000/api/";
+        axios.defaults.baseURL = "https://admin.paygo.az/api/";
         getLang();
         getfirstOpen()
     }, []);
