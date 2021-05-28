@@ -20,44 +20,61 @@ import Textpopins from "../../../functions/screenfunctions/text";
 import { Button } from "native-base";
 import Filter from "./components/filter";
 import axios from "axios";
+import { convertaz } from "../../../functions/standart/helper";
 
 class BucketHome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       datas: null,
-      routeParams: null,
+      location_key: null,
+      checkid: null,
       activeFilter: false,
       brands: null,
-      refresh:true,
+      refresh: true,
     };
   }
 
   componentDidMount() {
-      this.setState({refresh:true});
-    let routeParams = this.props.route.params;
-    this.setState({
-      routeParams: routeParams,
-    });
-    this.getInfo()
+    this.setState({ refresh: true });
+    // let checkid = this.props.route.params;
+    // this.setState({
+    // checkid: checkid,
+    // });
+    this.getInfo();
   }
 
   async getInfo() {
-    fetch("http://admin.paygo.az/api/customers/customers")
+    fetch("http://admin.paygo.az/api/actions/shops/" + this.state.checkid)
+      .then((res) => res.json())
+      .then((e) => {
+        this.setState({
+          location_key: e.info.location_key,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    var cat = [];
+    fetch("http://admin.paygo.az/api/customers/products/1")
       .then((response) => response.json())
       .then((json) => {
-          console.log(json);
+        cat.push(json[1].home_cat);
+        cat.push(json[1].child_cat1);
+        cat.push(json[1].child_cat2);
+        cat.push(json[1].child_cat3);
         this.setState({
-          brands: json,
+          brands: cat,
         });
       })
       .catch((error) => console.error(error));
-    fetch("http://admin.paygo.az/api/customers/customers")
+
+    fetch("http://admin.paygo.az/api/customers/products/1")
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         this.setState({
-          datas: JSON.parse(json),
+          datas: json,
         });
       })
       .catch((error) => console.error(error))
@@ -67,18 +84,18 @@ class BucketHome extends React.Component {
   }
 
   renderHorizontalList() {
-    return this.state.datas.map((element) => {
+    return this.state.brands.map((e) => {
       return (
         <TouchableOpacity
           style={styles.topListsProduct}
           onPress={() =>
             this.props.navigation.navigate("InCustomer", {
-              catid: element.id,
+              catid: e,
             })
           }
+          key={index}
         >
-          {element.icon}
-          <Text style={styles.productTitle}>{element.title}</Text>
+          <Text style={styles.productTitle}>{e}</Text>
         </TouchableOpacity>
       );
     });
@@ -91,13 +108,15 @@ class BucketHome extends React.Component {
         key={index}
         onPress={() =>
           this.props.navigation.navigate("ProductInfo", {
-            uid: item.id,
+            uid: item.barcode,
           })
         }
       >
         <Image
           source={{
-            uri: item.image,
+            uri:
+              item.image ??
+              "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
           }}
           style={{
             width: width / 2.3,
@@ -106,9 +125,11 @@ class BucketHome extends React.Component {
           }}
         />
         <Text style={[styles.productTitle, { color: "#5C0082" }]}>
-          {item.title}
+          {convertaz(item.name)}
         </Text>
-        <Text style={styles.productDescription}>{item.description}</Text>
+        <Text style={styles.productDescription}>
+          {convertaz(item.home_cat)}
+        </Text>
         <View style={styles.actions}>
           <TouchableOpacity
             onPress={() => this.props.addtoCard(item)}
@@ -131,7 +152,9 @@ class BucketHome extends React.Component {
             )}
           </TouchableOpacity>
           <TouchableOpacity style={styles.addToCart}>
-            <Textpopins>{item.price} ₼</Textpopins>
+            <Textpopins>
+              {item.price[this.state.location_key ?? "price"]} ₼
+            </Textpopins>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -155,7 +178,7 @@ class BucketHome extends React.Component {
               alwaysBounceVertical={true}
               horizontal={true}
             >
-              {this.renderHorizontalList()}
+              {/* {this.renderHorizontalList()} */}
             </ScrollView>
           </View>
           <Button
@@ -272,7 +295,7 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
   },
   productTitle: {
-    fontSize: 20,
+    fontSize: 15,
     color: "rgba(0,0,0,.8)",
     fontWeight: "bold",
   },

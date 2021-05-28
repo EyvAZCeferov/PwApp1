@@ -154,10 +154,23 @@ export default class Bucketstarter extends React.Component {
 
   next() {
     if (this.state.selectedMarket != null && this.state.selectedCard) {
-      this.props.navigation.navigate("BucketHome", {
-        checkid: this.state.checkid,
-        selectedCard: this.state.selectedCard,
+      var id = 0;
+
+      var data = new FormData();
+      data.append("shoptype", "bucket");
+      data.append("checkid", this.state.checkid);
+      data.append("selectedCard", this.state.checkid);
+      data.append("selectedMarket", this.state.selectedMarket);
+      data.append("selectedFilial", this.state.selectedFilial);
+      data.append("pay_card", this.state.pay_card);
+      data.append("bonus_card", this.state.bonus_card);
+
+      fetch("http://admin.paygo.az/api/actions/shops", {
+        method: "POST",
+        body: data,
       });
+
+      this.props.navigation.navigate("BucketHome", { id: id });
     } else {
       this.dropDownAlertRef.alertWithType(
         "info",
@@ -234,7 +247,7 @@ export default class Bucketstarter extends React.Component {
             />
           </View>
           <View style={styles.footer}>
-            {this.state.selectedMarket  ? (
+            {this.state.selectedMarket ? (
               <View style={[styles.center, { flexDirection: "column" }]}>
                 <Textpopins>{t("barcode.starter.selectfilial")}</Textpopins>
                 <DropDownPicker

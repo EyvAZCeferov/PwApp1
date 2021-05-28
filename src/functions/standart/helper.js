@@ -1,3 +1,4 @@
+import utf8 from "utf8";
 export function setting(token, field) {
   try {
     const settings = null;
@@ -63,6 +64,29 @@ export function hideNumb(e) {
   return hiddenNumbers;
 }
 
-export function get_image($image) {
-  return "http://admin.paygo.az/storage/uploads/" + $image;
+export function get_image(image) {
+  return "http://admin.paygo.az/storage/uploads/" + image;
+}
+
+export function convertaz(text = null) {
+  if (text != null) {
+    text = text.split("_");
+    text = text[1];
+    return checkUTF8(text);
+  } else {
+    return null;
+  }
+}
+
+function checkUTF8(text) {
+  var utf8Text = text;
+  try {
+    // Try to convert to utf-8
+    utf8Text = decodeURIComponent(escape(text));
+    // If the conversion succeeds, text is not utf-8
+  } catch (e) {
+    // console.log(e.message); // URI malformed
+    // This exception means text is utf-8
+  }
+  return utf8Text; // returned text is always utf-8
 }
