@@ -32,12 +32,13 @@ import {
   FontAwesome,
   FontAwesome5,
 } from "@expo/vector-icons";
-import firebase from "../../../functions/firebase/firebaseConfig";
 import Textpopins from "../../../functions/screenfunctions/text";
+
 const { width, height } = Dimensions.get("window");
 import { t } from "../../../functions/lang";
 import { makeid, hideNumb } from "../../../functions/standart/helper";
 import { StatusBar } from "expo-status-bar";
+import axios from "axios";
 
 export default class Cards extends React.Component {
   constructor(props) {
@@ -47,27 +48,18 @@ export default class Cards extends React.Component {
       cardCount: 0,
       active: false,
       cardInfos: [],
-      pinCode: null,
       refreshing: true,
     };
   }
 
   async getInfo() {
-    var datas = [];
-    firebase
-      .database()
-      .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/cards")
-      .on("value", (data) => {
-        data.forEach((data) => {
-          datas.push(data.val());
-        });
-        this.setState({
-          cards: datas,
-          refreshing: false,
-          cardCount: data.numChildren(),
-        });
-        this.listComponent();
-      });
+    let response = await axios.get("actions/cards/type/pay");
+    this.setState({
+      cards: response.data,
+      cardCount: response.data.length,
+      refreshing: false,
+    });
+    this.listComponent();
   }
 
   componentDidMount() {
@@ -97,8 +89,7 @@ export default class Cards extends React.Component {
       );
     }
 
-    function deleteYes(index) {
-      var user = firebase.auth().currentUser;
+    async function deleteYes(index) {
       if (
         that.state.cardCount < 2 ||
         that.state.cardCount == 1 ||
@@ -106,74 +97,70 @@ export default class Cards extends React.Component {
       ) {
         that.dropDownAlertRef.alertWithType("error", t("cards.minimal"));
       } else {
-        firebase
-          .database()
-          .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/cards/" + index)
-          .remove()
-          .then(
-            () => {
-              that.setState({ cards: null, cardCount: 1, refreshing: true });
-              that.dropDownAlertRef.alertWithType(
-                "success",
-                t("actions.deleted")
-              );
-              that.handleRefresh();
-            },
-            (err) => {
-              that.dropDownAlertRef.alertWithType("error", err.message);
-              that.handleRefresh();
-            }
-          );
+        await axios
+          .delete("cards/" + index)
+          .then((e) => {
+            that.setState({ cards: null, cardCount: 1, refreshing: true });
+            that.dropDownAlertRef.alertWithType(
+              "success",
+              t("actions.deleted")
+            );
+            that.handleRefresh();
+          })
+          .catch((e) => {
+            that.dropDownAlertRef.alertWithType("error", e);
+            that.handleRefresh();
+          });
       }
     }
 
     function cardTypeFunc() {
       switch (item.cardInfo.type) {
         case "visa":
-          return <FontAwesome name="cc-visa" size={30} color="#C90052" />;
+          return <FontAwesome name="cc-visa" size={30} color="#5C0082" />;
           break;
         case "master-card":
-          return <FontAwesome name="cc-mastercard" size={30} color="#C90052" />;
+          return <FontAwesome name="cc-mastercard" size={30} color="#5C0082" />;
           break;
         case "american-express":
-          return <FontAwesome name="cc-amex" size={30} color="#C90052" />;
+          return <FontAwesome name="cc-amex" size={30} color="#5C0082" />;
           break;
         case "discover":
-          return <FontAwesome name="cc-discover" size={30} color="#C90052" />;
+          return <FontAwesome name="cc-discover" size={30} color="#5C0082" />;
           break;
         case "jcb":
-          return <FontAwesome name="cc-jcb" size={30} color="#C90052" />;
+          return <FontAwesome name="cc-jcb" size={30} color="#5C0082" />;
           break;
         case "diners-club-north-america":
           return (
-            <FontAwesome name="cc-diners-club" size={30} color="#C90052" />
+            <FontAwesome name="cc-diners-club" size={30} color="#5C0082" />
           );
           break;
         case "diners-club":
           return (
-            <FontAwesome name="cc-diners-club" size={30} color="#C90052" />
+            <FontAwesome name="cc-diners-club" size={30} color="#5C0082" />
           );
           break;
         case "diners-club-carte-blanche":
           return (
-            <FontAwesome name="cc-diners-club" size={30} color="#C90052" />
+            <FontAwesome name="cc-diners-club" size={30} color="#5C0082" />
           );
           break;
         case "diners-club-international":
           return (
-            <FontAwesome name="cc-diners-club" size={30} color="#C90052" />
+            <FontAwesome name="cc-diners-club" size={30} color="#5C0082" />
           );
           break;
         case "maestro":
           return (
-            <FontAwesome name="credit-card-alt" size={30} color="#C90052" />
+            <FontAwesome name="credit-card-alt" size={30} color="#5C0082" />
           );
           break;
         case "visa-electron":
-          return <FontAwesome5 name="cc-visa" size={30} color="#C90052" />;
+          return <FontAwesome5 name="cc-visa" size={30} color="#5C0082" />;
           break;
         default:
-          return <FontAwesome name="credit-card" size={30} color="#C90052" />;
+          return <FontAwesome name="credit-card" size={30} color="#5C0082" />;
       }
     }
 
@@ -181,14 +168,11 @@ export default class Cards extends React.Component {
       <ListItem thumbnail>
         <Left>{cardTypeFunc()}</Left>
         <Body>
-          <Text
-            style={styles.cardNumbText}
-            children={hideNumb(item.cardInfo.number)}
-          />
-          <Text children={item.cardInfo.cvc + " Azn"} />
+          <Text style={styles.cardNumbText} children={hideNumb(item.number)} />
+          <Text children={item.price + " Azn"} />
         </Body>
         <Right>
-          <Button transparent onPress={() => deleteItem(item.cardId)}>
+          <Button transparent onPress={() => deleteItem(item.id)}>
             <EvilIcons name="trash" size={30} color="#BF360C" />
           </Button>
         </Right>
@@ -207,36 +191,35 @@ export default class Cards extends React.Component {
     );
   }
 
-  addCard = () => {
+  addCard = async () => {
     if (this.state.pinCode == null) {
       this.setState({ active: false });
-      this.dropDownAlertRef.alertWithType("info", t("pinCodeNull"));
+      this.dropDownAlertRef.alertWithType("info", t("actions.noResult"));
     } else {
       this.setState({ active: false });
-      var user = firebase.auth().currentUser;
-      var uid = this.makeid("numb", 15);
-      firebase
-        .database()
-        .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/cards/" + uid)
-        .set({
-          cardInfo: this.state.cardInfos,
-          cardPass: this.state.pinCode,
-          cardId: uid,
+
+      var data = new FormData();
+      data.append("card", this.state.card);
+      fetch("http://admin.paygo.az/api/actions/cards", {
+        method: "POST",
+        body: data,
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          this.setState({
+            active: false,
+            cardInfos: null,
+            pinCode: null,
+            refreshing: true,
+          });
+          this.dropDownAlertRef.alertWithType("success", t("actions.added"));
+
+          this.handleRefresh();
         })
-        .then(
-          () => {
-            this.setState({
-              active: false,
-              cardInfos: null,
-              pinCode: null,
-              refreshing: true,
-            });
-            this.handleRefresh();
-          },
-          (err) => {
-            this.handleRefresh();
-          }
-        );
+        .catch((e) => {
+          this.handleRefresh();
+          this.dropDownAlertRef.alertWithType("error", e);
+        });
     }
   };
 
@@ -261,7 +244,7 @@ export default class Cards extends React.Component {
     return (
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <HeaderDrawer {...this.props} name={t("drawer.cards")} />
-        <View style={{ flex:1 }}>
+        <View style={{ flex: 1 }}>
           {this.state.cardCount == 0 || this.state.cards == null ? (
             <List
               style={{
@@ -287,7 +270,7 @@ export default class Cards extends React.Component {
             active={this.state.active}
             direction="right"
             position="bottomRight"
-            style={{ backgroundColor:"#C90052" }}
+            style={{ backgroundColor: "#5C0082" }}
             onPress={() => this.setState({ active: !this.state.active })}
           >
             <AntDesign name="plus" size={24} color="#fff" />
@@ -346,20 +329,20 @@ export default class Cards extends React.Component {
                         />
                       </View>
                     </View>
-                    <View style={styles.itemStyle}>
-                      <Input
-                        style={styles.inputstyle}
-                        keyboardType="number-pad"
-                        keyboardShouldPersistTaps="handled"
-                        placeholder={t("form.labels.password")}
-                        maxLength={4}
-                        placeholderTextColor="rgba(0,0,0,.4)"
-                        secureTextEntry={true}
-                        onChangeText={(text) =>
-                          this.setState({ pinCode: text })
-                        }
-                      />
-                    </View>
+                    {/*<View style={styles.itemStyle}>*/}
+                    {/*    <Input*/}
+                    {/*        style={styles.inputstyle}*/}
+                    {/*        keyboardType="number-pad"*/}
+                    {/*        keyboardShouldPersistTaps="handled"*/}
+                    {/*        placeholder={t("form.labels.password")}*/}
+                    {/*        maxLength={4}*/}
+                    {/*        placeholderTextColor="rgba(0,0,0,.4)"*/}
+                    {/*        secureTextEntry={true}*/}
+                    {/*        onChangeText={(text) =>*/}
+                    {/*            this.setState({pinCode: text})*/}
+                    {/*        }*/}
+                    {/*    />*/}
+                    {/*</View>*/}
                   </Form>
                 </CardItem>
                 <CardItem footer>
@@ -387,7 +370,7 @@ export default class Cards extends React.Component {
 const styles = StyleSheet.create({
   cardNumbText: {
     fontSize: 17,
-    color: "#6d7587",
+    color: "#5C0082",
     fontWeight: "bold",
   },
   thumbImage: {
@@ -427,7 +410,7 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     backgroundColor: "#fff",
     paddingLeft: 10,
-    color: "#6d7587",
+    color: "#5C0082",
     fontWeight: "bold",
     fontSize: 16,
     borderRadius: 6,

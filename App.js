@@ -304,8 +304,7 @@ export default function (props) {
         );
     }
 
-    React.useEffect(() => {
-        axios.defaults.baseURL = "https://admin.paygo.az/api/";
+    React.useEffect(async () => {
         getLang();
         getfirstOpen()
     }, []);
@@ -315,7 +314,7 @@ export default function (props) {
         React.useEffect(() => {
             setTimeout(() => {
                 setisReady(true);
-            }, 1000);
+            }, 1500);
         }, []);
         return isready ? <FirstOpen {...props} /> : <Splash/>;
     }

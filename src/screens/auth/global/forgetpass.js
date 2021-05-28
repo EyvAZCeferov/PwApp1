@@ -112,7 +112,9 @@ export default class LoginScreen extends React.Component {
                                 }
                                 style={styles.input}
                                 onSubmitEditing={() => Keyboard.dismiss}
-                                placeholder={t('form.labels.phonenumb')}/>
+                                placeholder={t('form.labels.phonenumb')}
+                                keyboardType={'phone-pad'}
+                            />
                         </Item>
 
                         <Item
@@ -152,12 +154,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#5C0082',
     },
     header: {
-        flex: 1.5,
+        flex: 0.6,
         justifyContent: 'center',
         alignItems: 'center',
     },
     content: {
-        flex: 1.5,
+        flex: 0.4,
         borderTopLeftRadius: Constants.statusBarHeight,
         borderTopRightRadius: Constants.statusBarHeight,
         backgroundColor: '#fff',

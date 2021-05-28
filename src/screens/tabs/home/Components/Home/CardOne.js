@@ -7,6 +7,7 @@ import customStyle from '../../../../../../assets/Theme';
 import {t} from "../../../../../functions/lang";
 import firebase from '../../../../../functions/firebase/firebaseConfig';
 import {hideNumb} from '../../../../../functions/standart/helper';
+import axios from "axios";
 
 const {width, height} = Dimensions.get('window');
 export default function CardOne({index, y, item}) {
@@ -36,15 +37,9 @@ export default function CardOne({index, y, item}) {
         outputRange: [0, 1, 1, 0],
     });
 
-    function getCount() {
-        var digit = 0;
-        firebase
-            .database()
-            .ref('users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/cards')
-            .on('value', (data) => {
-                digit = digit + data.numChildren()
-            });
-        setCardCount(digit)
+    async function getCount() {
+        let response = await axios.get("actions/cards");
+        setCardCount(response.data.length)
         renderCards()
 
     }

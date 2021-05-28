@@ -2,33 +2,27 @@ import React from 'react';
 import {StyleSheet, Dimensions, SafeAreaView, View, FlatList, Animated, ActivityIndicator} from 'react-native';
 import firebase from '../../../../../functions/firebase/firebaseConfig';
 import CardOne from "./CardOne";
+import axios from "axios";
 
 const {width, height} = Dimensions.get('window');
 export default function SliderCards() {
     const [cards, setcards] = React.useState(null)
     const [refreshing, setrefreshing] = React.useState(true)
 
-    function getInfo() {
+    async function getInfo() {
         setrefreshing(true);
-        var datas=[];
-        firebase.database()
-                .ref('users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/cards')
-                .on('value', (data) => {
-                    data.forEach((data) => {
-                        datas.push(data.val());
-                    });
-                });
-        setcards(datas)
+        let response = await axios.get("actions/cards");
+        setcards(response.data)
         setrefreshing(false)
         renderBodyContent();
     }
 
     React.useEffect(() => {
         getInfo();
-        setInterval(()=>{
+        setInterval(() => {
             getInfo()
-        },15085045)
-    },[]);
+        }, 15085045)
+    }, []);
 
     function onHandleRefresh() {
         setrefreshing(true);
@@ -57,27 +51,27 @@ export default function SliderCards() {
                 style={{
                     flex: 1,
                     flexDirection: 'row',
-                    backgroundColor:"#fff",
+                    backgroundColor: "#fff",
                     justifyContent: 'center',
                 }}>
-                {!cards || cards==null ? getInfo() :(
-                <AnimatedFlatlist
-                    vertical={true}
-                    scrollEventThrottle={20}
-                    windowSize={width}
-                    bounces={false}
-                    showsVerticalScrollIndicator={false}
-                    loop={true}
-                    refreshing={refreshing}
-                    onRefresh={onHandleRefresh}
-                    data={cards}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={renderCardOne}
-                    disableVirtualization
-                    ItemSeperatorComponent={ComponentSep}
-                    {...{onScroll}}
-                    useNativeDriver={true}
-                />
+                {!cards || cards == null ? getInfo() : (
+                    <AnimatedFlatlist
+                        vertical={true}
+                        scrollEventThrottle={20}
+                        windowSize={width}
+                        bounces={false}
+                        showsVerticalScrollIndicator={false}
+                        loop={true}
+                        refreshing={refreshing}
+                        onRefresh={onHandleRefresh}
+                        data={cards}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={renderCardOne}
+                        disableVirtualization
+                        ItemSeperatorComponent={ComponentSep}
+                        {...{onScroll}}
+                        useNativeDriver={true}
+                    />
                 )}
             </View>
         );
@@ -123,6 +117,6 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: 201,
-        backgroundColor:"#fff"
+        backgroundColor: "#fff"
     },
 });

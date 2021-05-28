@@ -76,7 +76,7 @@ export default class Paying extends React.Component {
             .database()
             .ref(
                 "users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/checks/" +
-                this.props.checkid +
+                this.props.id +
                 "/products/"
             )
             .on("value", (data) => {
@@ -226,7 +226,7 @@ export default class Paying extends React.Component {
         return (
             <View
                 style={{
-                    backgroundColor: "#7c9d32",
+                    backgroundColor: "#5C0082",
                     width: width / 2.6,
                     height: "100%",
                     borderBottomLeftRadius: Constants.statusBarHeight * 2,
@@ -305,7 +305,7 @@ export default class Paying extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <StatusBar backgroundColor="#5C0082" style="light"/>
                 <View style={styles.card}>{this.renderTopPanel()}</View>
             </View>
         );
@@ -315,7 +315,7 @@ export default class Paying extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#7c9d32",
+        backgroundColor: "#5C0082",
         alignItems: "center",
         justifyContent: "center",
     },
@@ -347,6 +347,6 @@ const styles = StyleSheet.create({
     },
     cardOneVal: {
         fontSize: 15,
-        color: "#7c9d32",
+        color: "#5C0082",
     },
 });

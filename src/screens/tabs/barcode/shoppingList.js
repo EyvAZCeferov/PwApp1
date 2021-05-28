@@ -5,7 +5,7 @@ import {
   Dimensions,
   ActivityIndicator,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import RecentOperation from "./components/recentoperations";
 import { StatusBar } from "expo-status-bar";
@@ -23,7 +23,7 @@ export default class ShoppingList extends React.Component {
 
   componentDidMount() {
     const params = this.props.route.params;
-    if (params.checkid != null && params.selectedCard != null) {
+    if (params.id != null) {
       this.setState({ refresh: false });
       this.renderArena();
     }
@@ -50,18 +50,18 @@ export default class ShoppingList extends React.Component {
             }}
           >
             <StatusBar backgroundColor="#fff" style="dark" />
-            <ActivityIndicator size="large" color="#7c9d32" />
+            <ActivityIndicator size="large" color="#5C0082" />
           </View>
         ) : (
           <View>
-            <StatusBar backgroundColor="#7c9d32" style="light" />
+            <StatusBar backgroundColor="#5C0082" style="light" />
             <SafeAreaView style={styles.upperView}>
               <View
                 style={{
                   position: "absolute",
                   top: 20,
                   left: 0,
-                  backgroundColor: "#7c9d32",
+                  backgroundColor: "#5C0082",
                   width: width,
                   zIndex: 2,
                 }}
@@ -80,13 +80,13 @@ export default class ShoppingList extends React.Component {
                 </TouchableOpacity>
               </View>
               <PayCards
-                checkid={params.checkid}
+                id={params.id}
                 cardNumb={params.selectedCard}
                 {...this.props}
               />
             </SafeAreaView>
             <View style={styles.downerView}>
-              <RecentOperation checkid={params.checkid} {...this.props} />
+              <RecentOperation id={params.id} {...this.props} />
             </View>
           </View>
         )}

@@ -113,7 +113,7 @@ export default class NoBarcode extends React.Component {
                   <TouchableOpacity
                     onPress={() => this.barcodeWrited()}
                     style={{
-                      backgroundColor: "#7c9d32",
+                      backgroundColor: "#5C0082",
                       width: width - 50,
                       borderRadius: 8,
                       height: 50,

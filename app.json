@@ -39,7 +39,6 @@
           "apiKey": "AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
         }
       },
-      "enableDangerousExperimentalLeanBuilds": true,
       "softwareKeyboardLayoutMode": "resize",
       "useNextNotificationsApi": true
     },

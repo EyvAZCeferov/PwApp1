@@ -27,34 +27,21 @@ export default class RecentOperations extends React.Component {
       checks: null,
       checksCount: 0,
       refresh: true,
-      checkid: this.props.checkid,
+      id: this.props.id,
     };
   }
 
   getInfo() {
-    firebase.database().goOnline();
     this.setState({ refresh: true });
     let datas = [];
-    firebase
-      .database()
-      .ref(
-        "users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/checks/" +
-          this.props.checkid +
-          "/products"
-      )
-      .on("value", (data) => {
-        if (data.numChildren() != 0) {
-          data.forEach((data) => {
-            datas.push(data.val());
-          });
-          this.setState({
-            checks: datas,
-            checksCount: data.numChildren(),
-            refresh: false,
-          });
-        } else {
-          this.setState({ checks: null, checksCount: 0, refresh: false });
-        }
+    fetch("http://admin.paygo.az/api/actions/shops/" + this.state.id)
+      .then((res) => res.json())
+      .then((r) => {
+        this.setState({
+          checks:r,
+          checksCount:r.length,
+          refresh: false,
+        })
       });
     this.renderStateList();
   }
@@ -80,7 +67,7 @@ export default class RecentOperations extends React.Component {
         >
           <ActivityIndicator
             size="large"
-            color="#7c9d32"
+            color="#5C0082"
             focusable={true}
             animating={true}
           />
@@ -135,21 +122,21 @@ export default class RecentOperations extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate("Buy", {
-                  uid: this.state.checkid,
+                  uid: this.state.id,
                 })
               }
               style={[
                 styles.buttonBarcode,
                 {
                   backgroundColor: "#fff",
-                  borderColor: "#7c9d32",
+                  borderColor: "#5C0082",
                   borderWidth: 2,
                   width: 50,
                   height: 50,
                 },
               ]}
             >
-              <Entypo name="camera" size={24} color="#7c9d32" />
+              <Entypo name="camera" size={24} color="#5C0082" />
             </TouchableOpacity>
           </View>
         </View>
@@ -199,87 +186,13 @@ export default class RecentOperations extends React.Component {
     return parseFloat(lastPrice);
   }
 
-  updateShopping(d) {
-    firebase.database().goOnline();
-    firebase
-      .database()
-      .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/checks/" + this.state.checkid)
-      .update({
-        date: d,
-      });
-    var rums = 0;
-    let resultSummary = this.price();
-    var havePin = false;
-    firebase
-      .database()
-      .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/pinArena/1")
-      .on("value", (data) => {
-        var jsonDat = JSON.stringify(data.toJSON());
-        var jsonParse = JSON.parse(jsonDat);
-        if (data.exists()) {
-          havePin = true;
-        }
-        if (havePin) {
-          pinprice = parseFloat(jsonParse.cardInfo.price);
-          rums = data.numChildren();
-        } else {
-          pinprice = 0;
-          rums = 0;
-        }
-      });
-    if (havePin) {
-      if (rums > 0) {
-        var pice = parseFloat(pinprice) + parseFloat(resultSummary / 10);
-        firebase
-          .database()
-          .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/pinArena/1/cardInfo")
-          .update({
-            price: pice,
-          });
-        var date = Date.now();
-        firebase
-          .database()
-          .ref(
-            "users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/pinArena/1/shoppings/" +
-              this.state.checkid
-          )
-          .set({
-            checks: this.state.checks,
-            checkId: this.props.checkid,
-            price: resultSummary,
-            bonuse: resultSummary / 10,
-            date: date.toLocaleString(),
-          });
-      }
-    } else {
-      var cardNumb = makeid(16, "number");
-      var stripedNumb = this.toCardStr(cardNumb);
-      firebase
-        .database()
-        .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/pinArena/1")
-        .set({
-          cardInfo: {
-            price: 0,
-            number: stripedNumb,
-            type: "Pin",
-            expiry: "∞/∞",
-          },
-          cardId: 1,
-        })
-        .then(() => {
-          firebase
-            .database()
-            .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/pinArena/1")
-            .on("value", (data) => {
-              var datas = data.toJSON();
-              if (datas !== null) {
-                havePin = true;
-              }
-              pinprice = parseFloat(datas.cardInfo.price);
-              rums = data.numChildren();
-            });
-        });
-    }
+  updateShopping(id) {
+    var data = new FormData();
+    data.append("payed", true);
+    fetch("http://admin.paygo.az/api/actions/shops/" + id, {
+      method: "PUT",
+      body: data,
+    });
   }
 
   toCardStr(e) {
@@ -300,9 +213,9 @@ export default class RecentOperations extends React.Component {
   go() {
     if (this.state.checks != null) {
       var date = Date.now();
-      this.updateShopping(date.toLocaleString());
+      this.updateShopping(id);
       this.props.navigation.navigate("PayThanks", {
-        checkid: this.state.checkid,
+        id: this.state.id,
       });
     }
   }
@@ -339,21 +252,21 @@ export default class RecentOperations extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate("Buy", {
-                  uid: this.state.checkid,
+                  id: this.state.id,
                 })
               }
               style={[
                 styles.buttonBarcode,
                 {
                   backgroundColor: "#fff",
-                  borderColor: "#7c9d32",
+                  borderColor: "#5C0082",
                   borderWidth: 2,
                   width: 50,
                   height: 50,
                 },
               ]}
             >
-              <Entypo name="camera" size={24} color="#7c9d32" />
+              <Entypo name="camera" size={24} color="#5C0082" />
             </TouchableOpacity>
           </View>
           <View>
@@ -363,14 +276,14 @@ export default class RecentOperations extends React.Component {
                 styles.buttonBarcode,
                 {
                   backgroundColor: "#fff",
-                  borderColor: "#7c9d32",
+                  borderColor: "#5C0082",
                   borderWidth: 2,
                   width: 50,
                   height: 50,
                 },
               ]}
             >
-              <AntDesign name="check" size={24} color="#7c9d32" />
+              <AntDesign name="check" size={24} color="#5C0082" />
             </TouchableOpacity>
           </View>
         </View>
@@ -410,7 +323,7 @@ export default class RecentOperations extends React.Component {
           "users/" +
             user.uid +
             "/checks/" +
-            that.state.checkid +
+            that.state.id +
             "/products/" +
             index
         )
@@ -433,7 +346,7 @@ export default class RecentOperations extends React.Component {
             name="shoppingcart"
             style={{ paddingLeft: 10 }}
             size={24}
-            color="#7c9d32"
+            color="#5C0082"
           />
         </Left>
         <Body style={{ borderColor: "transparent" }}>
@@ -489,7 +402,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   btnText: {
-    color: "#7c9d32",
+    color: "#5C0082",
     fontSize: 17,
     padding: 5,
   },
@@ -506,7 +419,7 @@ const styles = StyleSheet.create({
   },
   seperatorText: {
     fontSize: 15,
-    color: "#7c9d32",
+    color: "#5C0082",
     marginTop: 0,
     marginBottom: 0,
     fontWeight: "bold",
@@ -557,7 +470,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
-    shadowColor: "#7c9d32",
+    shadowColor: "#5C0082",
     shadowOffset: {
       width: 0,
       height: 5,

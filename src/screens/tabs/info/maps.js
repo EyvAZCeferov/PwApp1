@@ -5,7 +5,6 @@ import {
     Dimensions,
     Text,
     TouchableOpacity,
-    KeyboardAvoidingView,
     FlatList,
     ActivityIndicator, ScrollView
 } from "react-native";
@@ -14,12 +13,12 @@ import {t} from "../../../functions/lang";
 import Constants from "expo-constants";
 import MapView, {Callout, Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import * as Permissions from "expo-permissions";
-import firebase from "../../../functions/firebase/firebaseConfig";
 import Textpopins from "../../../functions/screenfunctions/text";
-import {Body, Button, Input, Left, ListItem, Right, Thumbnail} from "native-base";
-import {AntDesign} from "@expo/vector-icons";
+import {Body, Left, ListItem, Right, Thumbnail} from "native-base";
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import MapViewDirections from "react-native-maps-directions";
+import axios from "axios";
+import { get_image } from "../../../functions/standart/helper";
 
 const {width} = Dimensions.get("screen");
 
@@ -52,20 +51,20 @@ export default class Map extends React.Component {
         );
     }
 
-    async getInfo() {
-        var datas = [];
-        firebase
-            .database()
-            .ref("maps")
-            .on("value", (data) => {
-                data.forEach((data) => {
-                    datas.push(data.val());
-                });
+    getInfo() {
+        this.setState({refresh: true});
+        fetch('http://admin.paygo.az/api/paygo/maps')
+            .then((response) => response.json())
+            .then((json) => {
                 this.setState({
-                    markers: datas,
-                    markerCount: data.numChildren(),
+                    markers: json,
+                    markerCount: json.length,
                     refresh: false
                 });
+            })
+            .catch((error) => console.error(error))
+            .finally(() => {
+                this.setState({refresh: false});
             });
     }
 
@@ -76,27 +75,25 @@ export default class Map extends React.Component {
 
     renderMarker() {
         return this.state.markers.map((element, index) => {
-            const {lat, lng} = element.coords;
+            const {latitude, longitude} = element.geometry;
             return (
                 <Marker
                     key={index}
-                    title={element.name}
-                    coordinate={{latitude: parseFloat(lat), longitude: parseFloat(lng)}}
-                    description={element.address}
+                    title={element.name['az_name']}
+                    coordinate={{latitude: parseFloat(latitude), longitude: parseFloat(longitude)}}
                     image={require("../../../../assets/images/Map/marker.png")}
                 >
                     <Callout>
                         <TouchableOpacity>
-                            <Text>{element.name}</Text>
+                            <Text>{element.name['az_name']}</Text>
                         </TouchableOpacity>
                     </Callout>
                     <MapViewDirections
                         origin={{latitude: this.state.latitude, longitude: this.state.longitude}}
-                        destination={{latitude: parseFloat(lat), longitude: parseFloat(lng)}}
+                        destination={{latitude: parseFloat(latitude), longitude: parseFloat(longitude)}}
                         apikey="AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
                         strokeWidth={3}
                         strokeColor="hotpink"
-
                     />
                 </Marker>
             );
@@ -107,7 +104,7 @@ export default class Map extends React.Component {
         return (
             <MapViewDirections
                 origin={{latitude: this.state.latitude, longitude: this.state.longitude}}
-                destination={item.coords}
+                destination={item.geometry}
                 apikey="AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
                 strokeWidth={3}
                 strokeColor="hotpink"
@@ -121,18 +118,18 @@ export default class Map extends React.Component {
             <ListItem key={index} style={{flex: 1}} onPress={() => this.toLoc(item)}>
                 <Left style={{flex: 0.2}}>
                     <Thumbnail
-                        source={{uri: item.image_url}}
+                        source={{uri: get_image(item.images[0])}}
                     />
                 </Left>
                 <Body style={{flex: 0.7}}>
                     <Textpopins style={{
-                        fontSize: 19,
+                        fontSize: 14,
                         color: "rgba(0,0,0,.8)"
-                    }}>{item.name}</Textpopins>
+                    }}>{item.name['az_name']}</Textpopins>
                     <Textpopins style={{
                         fontSize: 15,
                         color: "rgba(0,0,0,.4)"
-                    }}>{item.address}</Textpopins>
+                    }}>{item.get_customer.name['az_name']}</Textpopins>
                 </Body>
                 <Right style={{flex: 0.2}}>
                     <Textpopins style={{
@@ -148,11 +145,12 @@ export default class Map extends React.Component {
         if (this.state.refresh) {
             return (
                 <View style={{
+                    flex: 1,
                     justifyContent: "center",
                     alignItems: "center",
                     alignContent: "center"
                 }}>
-                    <ActivityIndicator color="#7c9d32" size="large"/>
+                    <ActivityIndicator color="#5C0082" size="large"/>
                 </View>
             )
         } else {
@@ -176,7 +174,7 @@ export default class Map extends React.Component {
                             paddingAdjustmentBehavior="always"
                             rotateEnabled={true}
                             mapType="hybrid"
-                            loadingIndicatorColor="#7c9d32"
+                            loadingIndicatorColor="#5C0082"
                             provider={PROVIDER_GOOGLE}
                             showsMyLocationButton={true}
                             initialRegion={{
@@ -222,7 +220,7 @@ export default class Map extends React.Component {
                                     textInput: {
                                         height: 42,
                                         backgroundColor: "transparent",
-                                        borderBottomColor: "#7c9d32",
+                                        borderBottomColor: "#5C0082",
                                         borderBottomWidth: 2,
                                         fontSize: 17,
                                         color: "rgba(0,0,0,.8)",
