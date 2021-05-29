@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Form, Input, Item } from "native-base";
 import FormData from "form-data";
+import { CommonActions } from "@react-navigation/native";
 
 import * as Animatable from "react-native-animatable";
 import Constants from "expo-constants";
@@ -30,6 +31,7 @@ import {
 } from "@expo/vector-icons";
 import { LiteCreditCardInput } from "react-native-credit-card-input";
 import { CreateAccContext } from "../../../functions/Hooks/Authentication/CreateAccount/CreateAccContext";
+import axios from "axios";
 
 const succesImage = require("../../../../assets/images/Alert/tick.png");
 
@@ -51,44 +53,21 @@ export default class Register extends React.Component {
       data.append("phone", this.state.phone);
       data.append("password", this.state.password);
       data.append("card", this.state.card);
-      fetch("https://admin.paygo.az/api/auth/register", {
-        method: "POST",
-        body: data,
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          console.log(json);
-          this.dropDownAlertRef.alertWithType(
-            "success",
-            t("form.validation.loginregister.login.success")
-          );
 
+      await axios
+        .post("auth/register", data)
+        .then((res) => {
+          this.dropDownAlertRef.alertWithType("info", res.data);
           this.props.navigation.navigate("MobileVerify", {
             phone: this.state.phone,
             password: this.state.password,
           });
-          AsyncStorage.setItem("token",json.access_token)
-          this.navigationreset();
         })
         .catch((error) => error);
     } else {
       this.dropDownAlertRef.alertWithType("error", t("actions.noResult"));
     }
   };
-
-  navigationreset() {
-    return this.props.navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [
-          { name: "Home" },
-          {
-            name: "Home",
-          },
-        ],
-      })
-    );
-  }
 
   _onChange = (data) => {
     this.setState({ card: data.values });

@@ -39,28 +39,23 @@ export default class LoginScreen extends React.Component {
 
   login = async () => {
     Keyboard.dismiss();
+    await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("haveFinger");
     await AsyncStorage.removeItem("localAuthPass");
     if (this.state.phone !== null && this.state.password !== null) {
       var data = new FormData();
       data.append("phone", this.state.phone);
       data.append("password", this.state.password);
-      console.log(data);
-      fetch("https://admin.paygo.az/api/auth/login", {
-        method: "POST",
-        body: data,
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          console.log(json);
-          this.dropDownAlertRef.alertWithType(
-            "success",
-            t("form.validation.loginregister.login.success")
-          );
-          AsyncStorage.setItem("token",json.access_token)
-          this.navigationreset();
+      await axios
+        .post("auth/login", data)
+        .then((res) => {
+          this.dropDownAlertRef.alertWithType("info", res.data);
+          this.props.navigation.navigate("MobileVerify", {
+            phone: this.state.phone,
+            password: this.state.password,
+          });
         })
-        .catch((error) => this.dropDownAlertRef.alertWithType("error", error));
+        .catch((error) => error);
     } else {
       this.dropDownAlertRef.alertWithType("error", t("actions.noResult"));
     }

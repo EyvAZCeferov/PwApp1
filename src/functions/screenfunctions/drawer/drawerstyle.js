@@ -17,7 +17,7 @@ import {
   FontAwesome,
 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-community/async-storage";
-
+import { CommonActions } from "@react-navigation/native";
 
 const icon = require("../../../../assets/icon-ios.png");
 import { t } from "../../lang";
@@ -26,6 +26,19 @@ const { width, height } = Dimensions.get("window");
 import Textpopins from "../text";
 
 export default function DrawerStyle(props) {
+  function navigationreset() {
+    return props.navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          { name: "Login" },
+          {
+            name: "Login",
+          },
+        ],
+      })
+    );
+  }
   return (
     <View>
       <StatusBar backgroundColor="#fff" style="dark" />
@@ -181,7 +194,12 @@ export default function DrawerStyle(props) {
         <View style={styles.seperator} />
         <TouchableOpacity
           style={styles.oneElement}
-          onPress={async () => await AsyncStorage.removeItem("token")}
+          onPress={async () => {
+            await axios.post("/auth/logout").then(async (e) => {
+              AsyncStorage.removeItem("token");
+              navigationreset();
+            });
+          }}
         >
           <Left>
             <AntDesign

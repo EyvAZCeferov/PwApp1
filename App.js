@@ -63,6 +63,7 @@ const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
   <AuthStack.Navigator
     headerMode="none"
+    initialRouteName="Login"
     screenOptions={{
       animationEnabled: true,
       animationTypeForReplace: "push",
@@ -279,16 +280,14 @@ export default function (props) {
     async function getToken() {
       if (await AsyncStorage.getItem("token")) {
         await AsyncStorage.getItem("token").then((token) => {
-          axios.defaults.headers.common["Authorization"] = "Bearer" + token;
+          axios.defaults.headers.common["Authorization"] = "Bearer " + token;
           setUserToken(token);
         });
       }
     }
 
     React.useEffect(() => {
-      setInterval(() => {
-        getToken();
-      }, 3000);
+      getToken();
     }, []);
 
     return userToken ? (
@@ -303,7 +302,18 @@ export default function (props) {
   React.useEffect(async () => {
     getLang();
     getfirstOpen();
+    getConfig();
   }, []);
+
+  async function getConfig() {
+    axios.defaults.baseURL = "https://admin.paygo.az/api/";
+    var token = await AsyncStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+    axios.defaults.headers.common["Accept"] = "application/json";
+    axios.defaults.headers.common["Content-Type"] = "application/json";
+  }
 
   function SystemOpen(props) {
     const [isready, setisReady] = React.useState(false);
@@ -318,7 +328,7 @@ export default function (props) {
   return (
     <Root>
       <NavigationContainer>
-        <SystemOpen/>
+        <SystemOpen />
       </NavigationContainer>
     </Root>
   );
