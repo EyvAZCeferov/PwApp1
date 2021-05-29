@@ -36,29 +36,33 @@ import Textpopins from "../../../functions/screenfunctions/text";
 
 const { width, height } = Dimensions.get("window");
 import { t } from "../../../functions/lang";
-import { makeid, hideNumb } from "../../../functions/standart/helper";
+import { hideNumb } from "../../../functions/standart/helper";
 import { StatusBar } from "expo-status-bar";
 import axios from "axios";
+import FormData from "form-data";
 
 export default class Cards extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       cards: [],
-      cardCount: 0,
       active: false,
-      cardInfos: [],
-      refreshing: true,
+      newcard: null,
+      loading: true,
     };
   }
 
   async getInfo() {
-    let response = await axios.get("actions/cards/type/pay");
     this.setState({
-      cards: response.data,
-      cardCount: response.data.length,
-      refreshing: false,
+      loading: true,
     });
+    await axios.get("actions/cards/type/pay").then((e) => {
+      this.setState({
+        cards: e.data,
+        loading: false,
+      });
+    });
+
     this.listComponent();
   }
 
@@ -90,28 +94,9 @@ export default class Cards extends React.Component {
     }
 
     async function deleteYes(index) {
-      if (
-        that.state.cardCount < 2 ||
-        that.state.cardCount == 1 ||
-        that.state.cardCount === 1
-      ) {
-        that.dropDownAlertRef.alertWithType("error", t("cards.minimal"));
-      } else {
-        await axios
-          .delete("cards/" + index)
-          .then((e) => {
-            that.setState({ cards: null, cardCount: 1, refreshing: true });
-            that.dropDownAlertRef.alertWithType(
-              "success",
-              t("actions.deleted")
-            );
-            that.handleRefresh();
-          })
-          .catch((e) => {
-            that.dropDownAlertRef.alertWithType("error", e);
-            that.handleRefresh();
-          });
-      }
+      await axios.delete("actions/cards/" + index).then((e) => {
+        that.handleRefresh();
+      });
     }
 
     function cardTypeFunc() {
@@ -183,7 +168,7 @@ export default class Cards extends React.Component {
   async handleRefresh() {
     this.setState(
       {
-        refreshing: true,
+        loading: true,
       },
       () => {
         this.getInfo();
@@ -192,60 +177,27 @@ export default class Cards extends React.Component {
   }
 
   addCard = async () => {
-    if (this.state.pinCode == null) {
-      this.setState({ active: false });
-      this.dropDownAlertRef.alertWithType("info", t("actions.noResult"));
-    } else {
-      this.setState({ active: false });
-
-      var data = new FormData();
-      data.append("card", this.state.card);
-      fetch("https://admin.paygo.az/api/actions/cards", {
-        method: "POST",
-        body: data,
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          this.setState({
-            active: false,
-            cardInfos: null,
-            pinCode: null,
-            refreshing: true,
-          });
-          this.dropDownAlertRef.alertWithType("success", t("actions.added"));
-
-          this.handleRefresh();
-        })
-        .catch((e) => {
-          this.handleRefresh();
-          this.dropDownAlertRef.alertWithType("error", e);
-        });
-    }
+    this.setState({ active: false });
+    var data = new FormData();
+    data.append("card", this.state.newcard);
+    data.append("type_in", "pay");
+    data.append("price", 0.0);
+    await axios.post("actions/cards", data).then((e) => {
+      console.log(e.data);
+      this.handleRefresh();
+    });
   };
 
   _onChange = (data) => {
     this.setState({ cardInfos: data.values });
   };
 
-  listComponent() {
-    return (
-      <FlatList
-        data={this.state.cards}
-        renderItem={this.renderItems.bind(this)}
-        keyExtractor={(item, index) => index.toString()}
-        disableVirtualization
-        refreshing={this.state.refreshing}
-        onRefresh={this.handleRefresh}
-      />
-    );
-  }
-
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <HeaderDrawer {...this.props} name={t("drawer.cards")} />
         <View style={{ flex: 1 }}>
-          {this.state.cardCount == 0 || this.state.cards == null ? (
+          {this.state.cards.length == 0 ? (
             <List
               style={{
                 marginTop: 5 * Constants.statusBarHeight,
@@ -262,7 +214,16 @@ export default class Cards extends React.Component {
             </List>
           ) : (
             <ScrollView>
-              <List style={{ flex: 1 }}>{this.listComponent()}</List>
+              <List style={{ flex: 1 }}>
+                <FlatList
+                  data={this.state.cards}
+                  renderItem={this.renderItems.bind(this)}
+                  keyExtractor={(item, index) => index.toString()}
+                  disableVirtualization
+                  refreshing={this.state.loading}
+                  onRefresh={this.handleRefresh}
+                />
+              </List>
             </ScrollView>
           )}
 
@@ -270,7 +231,7 @@ export default class Cards extends React.Component {
             active={this.state.active}
             direction="right"
             position="bottomRight"
-            style={{ backgroundColor: "#5C0082" }}
+            style={{ backgroundColor: "#AF0045" }}
             onPress={() => this.setState({ active: !this.state.active })}
           >
             <AntDesign name="plus" size={24} color="#fff" />
@@ -329,20 +290,6 @@ export default class Cards extends React.Component {
                         />
                       </View>
                     </View>
-                    {/*<View style={styles.itemStyle}>*/}
-                    {/*    <Input*/}
-                    {/*        style={styles.inputstyle}*/}
-                    {/*        keyboardType="number-pad"*/}
-                    {/*        keyboardShouldPersistTaps="handled"*/}
-                    {/*        placeholder={t("form.labels.password")}*/}
-                    {/*        maxLength={4}*/}
-                    {/*        placeholderTextColor="rgba(0,0,0,.4)"*/}
-                    {/*        secureTextEntry={true}*/}
-                    {/*        onChangeText={(text) =>*/}
-                    {/*            this.setState({pinCode: text})*/}
-                    {/*        }*/}
-                    {/*    />*/}
-                    {/*</View>*/}
                   </Form>
                 </CardItem>
                 <CardItem footer>

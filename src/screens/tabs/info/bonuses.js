@@ -21,8 +21,6 @@ import {
   CardItem,
   Fab,
   Form,
-  Input,
-  Thumbnail,
 } from "native-base";
 import Constants from "expo-constants";
 import { LiteCreditCardInput } from "react-native-credit-card-input";
@@ -33,7 +31,6 @@ import {
   FontAwesome,
   FontAwesome5,
 } from "@expo/vector-icons";
-import firebase from "../../../functions/firebase/firebaseConfig";
 import Textpopins from "../../../functions/screenfunctions/text";
 const { width, height } = Dimensions.get("window");
 import { t } from "../../../functions/lang";
@@ -42,7 +39,7 @@ const pinicon = require("../../../../assets/images/Pin/pin.png");
 import { hideNumb } from "../../../functions/standart/helper";
 import { StatusBar } from "expo-status-bar";
 import axios from "axios";
-import AsyncStorage from "@react-native-community/async-storage";
+import FormData from "form-data";
 
 export default class Bonuses extends React.Component {
   constructor(props) {
@@ -192,7 +189,12 @@ export default class Bonuses extends React.Component {
 
   addCard = async () => {
     this.setState({ active: false });
-    await axios.post("actions/cards", this.state.newcard).then((e) => {
+    var data = new FormData();
+    data.append("card", this.state.newcard);
+    data.append("type_in", "pay");
+    data.append("price", 0.0);
+    await axios.post("actions/cards", data).then((e) => {
+      console.log(e.data)
       this.handleRefresh();
     });
   };
