@@ -11,14 +11,12 @@ import { AntDesign, Entypo } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
 import AsyncStorage from "@react-native-community/async-storage";
 import * as LocalAuthentication from "expo-local-authentication";
-import { PasswordSetAndFingerSetContext } from "../../../functions/Hooks/Authentication/FingerAndSetPass/PasswordSetAndFingerSetContext";
-import { CommonActions } from "@react-navigation/native";
+import { CreateAccContext } from "../../../functions/Hooks/Authentication/CreateAccount/CreateAccContext";
 
 const { width, height } = Dimensions.get("window");
-import { Restart } from "fiction-expo-restart";
 
 export default class SetFinger extends React.Component {
-  static contextType = PasswordSetAndFingerSetContext;
+  static contextType = CreateAccContext;
 
   constructor(props) {
     super(props);
@@ -67,34 +65,21 @@ export default class SetFinger extends React.Component {
               ) {
                 this.props.navigation.pop();
               } else {
-                const { haveLocalAuth, sethaveLocalAuth } = this.context;
+                const { userToken, setUserToken } = this.context;
                 sethaveLocalAuth(true);
                 this.setState({ setFinger: true });
                 await AsyncStorage.setItem(
                   "token",
                   this.props.route.params.token
                 );
-                this.navigationreset();
               }
+
+              setUserToken(params.token);
             }
           }
         }
       }
     }
-  }
-
-  navigationreset() {
-    return this.props.navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [
-          { name: "Home" },
-          {
-            name: "Home",
-          },
-        ],
-      })
-    );
   }
 
   async onCancel() {

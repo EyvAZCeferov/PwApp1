@@ -11,8 +11,6 @@ import * as LocalAuthentication from "expo-local-authentication";
 import { CreateAccContext } from "../../../functions/Hooks/Authentication/CreateAccount/CreateAccContext";
 import Constants from "expo-constants";
 import Textpopins from "../../../functions/screenfunctions/text";
-import { CommonActions } from "@react-navigation/native";
-import { Restart } from "fiction-expo-restart";
 
 var reqems = "";
 export default class SetPass extends React.Component {
@@ -63,6 +61,7 @@ export default class SetPass extends React.Component {
   }
 
   async completed() {
+    const { userToken, setUserToken } = this.context;
     const params = this.props.route.params;
     if (this.state.pass1 !== "" && this.state.pass2 !== "") {
       if (this.state.pass1 === this.state.pass2) {
@@ -71,24 +70,10 @@ export default class SetPass extends React.Component {
           this.props.navigation.pop();
         } else {
           await AsyncStorage.setItem("token", params.token);
-          this.navigationreset();
+          setUserToken(params.token);
         }
       }
     }
-  }
-
-  navigationreset() {
-    return this.props.navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [
-          { name: "Home" },
-          {
-            name: "Home",
-          },
-        ],
-      })
-    );
   }
 
   changeVal(val) {

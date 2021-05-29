@@ -70,7 +70,6 @@ export default class Lock extends React.Component {
     this.setState({
       userData: response.data,
     });
-    console.log(response.data);
   }
 
   completed() {
@@ -158,7 +157,7 @@ export default class Lock extends React.Component {
           isInteraction={false}
           successImageSrc={succesImage}
         />
-        <StatusBar backgroundColor="#D1D1D1" style="light" />
+        <StatusBar backgroundColor="#6d7587" style="light" />
         <View style={styles.header}>
           <Animatable.Image
             animation="fadeIn"

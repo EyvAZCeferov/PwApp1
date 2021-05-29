@@ -8,29 +8,26 @@ import {
   Animated,
   ActivityIndicator,
 } from "react-native";
-import firebase from "../../../../../functions/firebase/firebaseConfig";
 import CardOne from "./CardOne";
-import axios from "axios";
-import AsyncStorage from "@react-native-community/async-storage";
 
 const { width, height } = Dimensions.get("window");
-export default function SliderCards() {
+export default function SliderCards(props) {
   const [cards, setcards] = React.useState(null);
   const [refreshing, setrefreshing] = React.useState(true);
 
-  async function getInfo() {
+  function getInfo() {
+    console.log(props);
     setrefreshing(true);
-    axios.get("actions/cards").then((e) => {
-      console.log(e.data);
-      setcards(e.data);
-    });
-    setrefreshing(false);
+    setcards(props.cards);
+    if (cards != null) {
+      setrefreshing(false);
+    }
     renderBodyContent();
   }
 
   React.useEffect(() => {
     getInfo();
-  }, [cards]);
+  }, []);
 
   function onHandleRefresh() {
     setrefreshing(true);
@@ -110,7 +107,7 @@ export default function SliderCards() {
                 paddingTop: height / 55,
               }}
             >
-              {renderCards()}
+              {cards != null ? renderCards() : null}
             </SafeAreaView>
           </View>
         )}

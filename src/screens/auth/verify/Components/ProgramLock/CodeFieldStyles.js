@@ -6,7 +6,7 @@ export const CELL_SIZE = 50;
 export const CELL_BORDER_RADIUS = 0;
 export const DEFAULT_CELL_BG_COLOR = '#fff';
 export const NOT_EMPTY_CELL_BG_COLOR = '#C90052';
-export const ACTIVE_CELL_BG_COLOR = '#f1f1f1';
+export const ACTIVE_CELL_BG_COLOR = '#6d7587';
 
 const styles = StyleSheet.create({
     codearea: {

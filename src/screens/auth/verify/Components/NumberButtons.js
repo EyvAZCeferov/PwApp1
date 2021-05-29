@@ -112,7 +112,7 @@ export default function NumberButtons(props) {
                                 <MaterialCommunityIcons
                                     name="backspace-outline"
                                     size={24}
-                                    color="#D1D1D1"
+                                    color="#6d7587"
                                 />
                             </TouchableOpacity>
                         </Col>
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     btnText: {
         fontSize: 23,
         fontWeight: '400',
-        color: '#D1D1D1',
+        color: '#6d7587',
     },
     cancText: {
         fontSize: 15,

@@ -6,24 +6,39 @@ const { width, height } = Dimensions.get("window");
 import { Ionicons } from "@expo/vector-icons";
 import RecentOperations from "./Components/Home/RecentOperations";
 import SliderCards from "./Components/Home/SliderCards";
-
+import axios from "axios";
 const icon = require("../../../../assets/adaptive-icon.png");
 
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      cards: null,
+      shops: null,
+    };
   }
 
-  async componentDidMount() {
-    this.renderContent();
-    alert(await AsyncStorage.getItem("token"));
+  componentDidMount() {
+    setInterval(() => {
+      this.getInfo();
+    }, 5000);
+  }
+
+  async getInfo() {
+    await axios.get("auth/me").then((e) => {
+      this.setState({
+        cards: e.data.cards,
+        shops: e.data.shops,
+      });
+      this.renderContent();
+    });
   }
 
   renderContent() {
     return (
       <View style={styles.contentArena}>
-        <SliderCards {...this.props} />
-        <RecentOperations {...this.props} />
+        <SliderCards {...this.props} cards={this.state.cards} />
+        <RecentOperations {...this.props} shops={this.state.shops} />
       </View>
     );
   }
