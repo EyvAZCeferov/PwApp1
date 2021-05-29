@@ -64,7 +64,7 @@ export default class Bucketstarter extends React.Component {
 
   async getDat() {
     var customers = [];
-    fetch("http://admin.paygo.az/api/customers/customers")
+    fetch("https://admin.paygo.az/api/customers/customers")
       .then((response) => response.json())
       .then((json) => {
         json.map((e) => {
@@ -79,7 +79,7 @@ export default class Bucketstarter extends React.Component {
       .catch((error) => console.error(error));
 
     // var cards = [];
-    // fetch("http://admin.paygo.az/api/actions/cards")
+    // fetch("https://admin.paygo.az/api/actions/cards")
     //   .then((response) => response.json())
     //   .then((json) => {
     //     var d = {
@@ -135,7 +135,7 @@ export default class Bucketstarter extends React.Component {
   change_customer(text) {
     var locations = [];
     fetch(
-      "http://admin.paygo.az/api/customers/customers/locations/" + text.value
+      "https://admin.paygo.az/api/customers/customers/locations/" + text.value
     )
       .then((response) => response.json())
       .then((json) => {
@@ -165,7 +165,7 @@ export default class Bucketstarter extends React.Component {
       data.append("pay_card", this.state.pay_card);
       data.append("bonus_card", this.state.bonus_card);
 
-      fetch("http://admin.paygo.az/api/actions/shops", {
+      fetch("https://admin.paygo.az/api/actions/shops", {
         method: "POST",
         body: data,
       });

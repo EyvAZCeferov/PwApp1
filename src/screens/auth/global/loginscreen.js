@@ -46,7 +46,7 @@ export default class LoginScreen extends React.Component {
       data.append("phone", this.state.phone);
       data.append("password", this.state.password);
       console.log(data);
-      fetch("http://admin.paygo.az/api/auth/login", {
+      fetch("https://admin.paygo.az/api/auth/login", {
         method: "POST",
         body: data,
       })
@@ -71,7 +71,7 @@ export default class LoginScreen extends React.Component {
   }
 
   getInfo() {
-    // fetch("http://localhost:8000/api/pwabout/settings").then(response => response.json()).then(res => {
+    // fetch("https://localhost:8000/api/pwabout/settings").then(response => response.json()).then(res => {
     //     console.log(res)
     // }).catch(error => {
     //     console.log(error)

@@ -34,7 +34,7 @@ export default class RecentOperations extends React.Component {
   getInfo() {
     this.setState({ refresh: true });
     let datas = [];
-    fetch("http://admin.paygo.az/api/actions/shops/" + this.state.id)
+    fetch("https://admin.paygo.az/api/actions/shops/" + this.state.id)
       .then((res) => res.json())
       .then((r) => {
         this.setState({
@@ -189,7 +189,7 @@ export default class RecentOperations extends React.Component {
   updateShopping(id) {
     var data = new FormData();
     data.append("payed", true);
-    fetch("http://admin.paygo.az/api/actions/shops/" + id, {
+    fetch("https://admin.paygo.az/api/actions/shops/" + id, {
       method: "PUT",
       body: data,
     });

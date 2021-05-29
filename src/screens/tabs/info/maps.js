@@ -53,7 +53,7 @@ export default class Map extends React.Component {
 
     getInfo() {
         this.setState({refresh: true});
-        fetch('http://admin.paygo.az/api/paygo/maps')
+        fetch('https://admin.paygo.az/api/paygo/maps')
             .then((response) => response.json())
             .then((json) => {
                 this.setState({

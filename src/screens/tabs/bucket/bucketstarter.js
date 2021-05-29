@@ -51,11 +51,6 @@ export default class Bucketstarter extends React.Component {
     };
   }
 
-  setId() {
-    let id = makeid(15);
-    this.setState({ checkid: id });
-  }
-
   componentDidMount() {
     this.setId();
     this.startCam();
@@ -64,7 +59,7 @@ export default class Bucketstarter extends React.Component {
 
   async getDat() {
     var customers = [];
-    fetch("http://admin.paygo.az/api/customers/customers")
+    fetch("https://admin.paygo.az/api/customers/customers")
       .then((response) => response.json())
       .then((json) => {
         json.map((e) => {
@@ -79,7 +74,7 @@ export default class Bucketstarter extends React.Component {
       .catch((error) => console.error(error));
 
     // var cards = [];
-    // fetch("http://admin.paygo.az/api/actions/cards")
+    // fetch("https://admin.paygo.az/api/actions/cards")
     //   .then((response) => response.json())
     //   .then((json) => {
     //     var d = {
@@ -135,7 +130,7 @@ export default class Bucketstarter extends React.Component {
   change_customer(text) {
     var locations = [];
     fetch(
-      "http://admin.paygo.az/api/customers/customers/locations/" + text.value
+      "https://admin.paygo.az/api/customers/customers/locations/" + text.value
     )
       .then((response) => response.json())
       .then((json) => {
@@ -143,6 +138,7 @@ export default class Bucketstarter extends React.Component {
           var d = {
             value: e.id,
             label: e.name["az_name"],
+            location_key: e.key,
           };
           locations.push(d);
         });
@@ -158,19 +154,25 @@ export default class Bucketstarter extends React.Component {
 
       var data = new FormData();
       data.append("shoptype", "bucket");
-      data.append("checkid", this.state.checkid);
-      data.append("selectedCard", this.state.checkid);
-      data.append("selectedMarket", this.state.selectedMarket);
-      data.append("selectedFilial", this.state.selectedFilial);
+      data.append("ficsal", makeid(7));
+      data.append("selectedCard", this.state.selectedCard.value);
+      data.append("selectedMarket", this.state.selectedMarket.value);
+      data.append("selectedFilial", this.state.selectedFilial.value);
+      data.append("location_key", this.state.selectedFilial.location_key);
       data.append("pay_card", this.state.pay_card);
       data.append("bonus_card", this.state.bonus_card);
 
-      fetch("http://admin.paygo.az/api/actions/shops", {
+      fetch("https://admin.paygo.az/api/actions/shops", {
         method: "POST",
         body: data,
-      });
-
-      this.props.navigation.navigate("BucketHome", { id: id });
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          this.setState({
+            checkid: json,
+          });
+          this.props.navigation.navigate("BucketHome", { checkid: json });
+        });
     } else {
       this.dropDownAlertRef.alertWithType(
         "info",

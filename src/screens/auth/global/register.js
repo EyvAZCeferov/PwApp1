@@ -51,7 +51,7 @@ export default class Register extends React.Component {
       data.append("phone", this.state.phone);
       data.append("password", this.state.password);
       data.append("card", this.state.card);
-      fetch("http://admin.paygo.az/api/auth/register", {
+      fetch("https://admin.paygo.az/api/auth/register", {
         method: "POST",
         body: data,
       })

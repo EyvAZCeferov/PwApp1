@@ -318,8 +318,7 @@ export default function (props) {
   return (
     <Root>
       <NavigationContainer>
-        {/* <SystemOpen/> */}
-        <ProductInfo />
+        <SystemOpen/>
       </NavigationContainer>
     </Root>
   );

@@ -21,22 +21,34 @@ import Header from "./components/BucketHeader";
 const { width, height } = Dimensions.get("window");
 import Constants from "expo-constants";
 
-export default class ProductInfo extends React.Component {
+class ProductInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       refresh: true,
-      datas: null,
       product: null,
+      customer: null,
+      location_key: null,
     };
   }
 
   getInfo() {
     this.setState({ refresh: true });
-    // const params = this.props.route.params;
-    // const { uid } = params;
-    fetch("http://admin.paygo.az/api/customers/products/1/1_4607154694763")
-      .then((response) => response.json()) 
+    const params = this.props.route.params;
+    const { customer, barcode } = params;
+
+    fetch("https://admin.paygo.az/api/actions/shops/")
+      .then((res) => res.json())
+      .then((json) => {
+        this.setState({
+          location_key: json.info.location_key,
+        });
+      })
+      .catch((e) => console.log(e));
+    fetch(
+      "https://admin.paygo.az/api/customers/product/" + customer + "/" + barcode
+    )
+      .then((response) => response.json())
       .then((json) => {
         console.log(json);
         this.setState({
@@ -51,6 +63,16 @@ export default class ProductInfo extends React.Component {
 
   componentDidMount() {
     this.getInfo();
+  }
+
+  name(item) {
+    if (Localization.locale == "en" || Localization.locale === "en") {
+      return item["en_name"];
+    } else if (Localization.locale == "ru" || Localization.locale === "ru") {
+      return item["ru_name"];
+    } else if (Localization.locale == "az" || Localization.locale === "az") {
+      return item["az_name"];
+    }
   }
 
   content() {
@@ -91,16 +113,20 @@ export default class ProductInfo extends React.Component {
               style={styles.addToCart}
               onPress={() => this.props.addWishList(this.state.product)}
             >
-              {/* {this.props.wishitems.find(
+              {this.props.wishitems.find(
                 (element) => element.id == this.state.product.id
               ) ? (
                 <AntDesign name="heart" size={24} color="black" />
               ) : (
                 <AntDesign name="hearto" size={24} color="black" />
-              )} */}
+              )}
             </TouchableOpacity>
             <TouchableOpacity style={styles.addToCart}>
-              <Textpopins>{this.state.product.price} ₼</Textpopins>
+              <Textpopins>
+                {this.state.product.price[this.state.location_key] ??
+                  this.state.product.price["price"]}
+                ₼
+              </Textpopins>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -117,7 +143,7 @@ export default class ProductInfo extends React.Component {
             color: "#5C0082",
           }}
         >
-          {product.title}
+          {product.name["az_name"]}
         </Textpopins>
         <Textpopins
           style={{
@@ -127,32 +153,15 @@ export default class ProductInfo extends React.Component {
             marginBottom: Constants.statusBarHeight,
           }}
         >
-          "Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
-          ab illo inventore veritatis et quasi architecto beatae vitae dicta
-          sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-          aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
-          qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui
-          dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed
-          quia non numquam eius modi tempora incidunt ut labore et dolore magnam
-          aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum
-          exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex
-          ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in
-          ea voluptate velit esse quam nihil molestiae consequatur, vel illum
-          qui dolorem eum fugiat quo voluptas nulla pariatur?" "Sed ut
-          perspiciatis unde omnis iste natus error sit voluptatem accusantium
-          doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-          inventore veritatis et quasi architecto beatae vitae dicta sunt
-          explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
-          odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-          voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum
-          quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam
-          eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat
-          voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem
-          ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-          consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate
-          velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum
-          fugiat quo voluptas nulla pariatur?"
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book. It has survived not only
+          five centuries, but also the leap into electronic typesetting,
+          remaining essentially unchanged. It was popularised in the 1960s with
+          the release of Letraset sheets containing Lorem Ipsum passages, and
+          more recently with desktop publishing software like Aldus PageMaker
+          including versions of Lorem Ipsum.
         </Textpopins>
       </ScrollView>
     );
@@ -168,7 +177,10 @@ export default class ProductInfo extends React.Component {
         return (
           <View style={styles.container}>
             <View style={styles.header}>
-              {/* <Header button={true} title={this.state.product.title} /> */}
+              <Header
+                button={true}
+                title={this.name(this.state.product.name)}
+              />
             </View>
             <View style={styles.content}>
               <View style={styles.top}>{header(this.state.product.image)}</View>
@@ -184,7 +196,7 @@ export default class ProductInfo extends React.Component {
             <View style={styles.header}>
               {/* <Header button={true} title={t("actions.noResult")} /> */}
             </View>
-            <View style={styles.content}>
+            <View style={[styles.content, styles.center]}>
               <Textpopins
                 children={t("actions.noResult")}
                 style={styles.noResult}
@@ -206,24 +218,24 @@ export default class ProductInfo extends React.Component {
   }
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     wishitems: state.wishitems,
-//     bucketitems: state.bucketitems,
-//   };
-// };
+const mapStateToProps = (state) => {
+  return {
+    wishitems: state.wishitems,
+    bucketitems: state.bucketitems,
+  };
+};
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     addtoCard: (product) => dispatch({ type: "ADD_TO_CART", payload: product }),
-//     removewishlist: (product) =>
-//       dispatch({ type: "REMOVE_FROM_WISHLIST", payload: product }),
-//     addWishList: (product) =>
-//       dispatch({ type: "ADD_TO_WISHLIST", payload: product }),
-//   };
-// };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addtoCard: (product) => dispatch({ type: "ADD_TO_CART", payload: product }),
+    removewishlist: (product) =>
+      dispatch({ type: "REMOVE_FROM_WISHLIST", payload: product }),
+    addWishList: (product) =>
+      dispatch({ type: "ADD_TO_WISHLIST", payload: product }),
+  };
+};
 
-// export default connect(mapStateToProps, mapDispatchToProps)(ProductInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductInfo);
 
 const styles = StyleSheet.create({
   container: {

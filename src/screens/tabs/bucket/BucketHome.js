@@ -28,6 +28,7 @@ class BucketHome extends React.Component {
     this.state = {
       datas: null,
       location_key: null,
+      customer: null,
       checkid: null,
       activeFilter: false,
       brands: null,
@@ -37,19 +38,20 @@ class BucketHome extends React.Component {
 
   componentDidMount() {
     this.setState({ refresh: true });
-    // let checkid = this.props.route.params;
-    // this.setState({
-    // checkid: checkid,
-    // });
+    let checkid = this.props.route.params;
+    this.setState({
+      checkid: checkid,
+    });
     this.getInfo();
   }
 
   async getInfo() {
-    fetch("http://admin.paygo.az/api/actions/shops/" + this.state.checkid)
+    fetch("https://admin.paygo.az/api/actions/shops/" + this.state.checkid)
       .then((res) => res.json())
       .then((e) => {
         this.setState({
           location_key: e.info.location_key,
+          customer: e.info.selectedMarket,
         });
       })
       .catch((e) => {
@@ -57,7 +59,7 @@ class BucketHome extends React.Component {
       });
 
     var cat = [];
-    fetch("http://admin.paygo.az/api/customers/products/1")
+    fetch("https://admin.paygo.az/api/customers/products/1")
       .then((response) => response.json())
       .then((json) => {
         cat.push(json[1].home_cat);
@@ -65,16 +67,8 @@ class BucketHome extends React.Component {
         cat.push(json[1].child_cat2);
         cat.push(json[1].child_cat3);
         this.setState({
-          brands: cat,
-        });
-      })
-      .catch((error) => console.error(error));
-
-    fetch("http://admin.paygo.az/api/customers/products/1")
-      .then((response) => response.json())
-      .then((json) => {
-        this.setState({
           datas: json,
+          brands: cat,
         });
       })
       .catch((error) => console.error(error))
@@ -108,7 +102,8 @@ class BucketHome extends React.Component {
         key={index}
         onPress={() =>
           this.props.navigation.navigate("ProductInfo", {
-            uid: item.barcode,
+            customer: this.state.customer,
+            barcode: item.barcode,
           })
         }
       >
@@ -153,7 +148,14 @@ class BucketHome extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity style={styles.addToCart}>
             <Textpopins>
-              {item.price[this.state.location_key ?? "price"]} ₼
+              {
+                item.price[
+                  this.state.location_key > 0.0
+                    ? this.state.location_key
+                    : "price"
+                ]
+              }
+              ₼
             </Textpopins>
           </TouchableOpacity>
         </View>
@@ -178,7 +180,7 @@ class BucketHome extends React.Component {
               alwaysBounceVertical={true}
               horizontal={true}
             >
-              {/* {this.renderHorizontalList()} */}
+              {this.renderHorizontalList()}
             </ScrollView>
           </View>
           <Button

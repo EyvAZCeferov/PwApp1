@@ -200,7 +200,7 @@ export default class Cards extends React.Component {
 
       var data = new FormData();
       data.append("card", this.state.card);
-      fetch("http://admin.paygo.az/api/actions/cards", {
+      fetch("https://admin.paygo.az/api/actions/cards", {
         method: "POST",
         body: data,
       })

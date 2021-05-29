@@ -230,13 +230,13 @@ export default function Buy(props) {
 
   function barcodeScanned(item) {
     fetch(
-      "http://admin.paygo.az/api/customers/product/1/" + "1_" + item.barcode
+      "https://admin.paygo.az/api/customers/product/1/" + "1_" + item.barcode
     )
       .then((response) => response.json())
       .then((json) => {
         if (json.length != 0) {
           var datas = [];
-          fetch("http://admin.paygo.az/api/actions/shops/" + id)
+          fetch("https://admin.paygo.az/api/actions/shops/" + id)
             .then((res) => res.json())
             .then((r) => {
               datas = r;
@@ -249,7 +249,7 @@ export default function Buy(props) {
           dat.append("price", datas.price.price);
           dat.append("product_edv", datas.edv);
           fetch(
-            "http://admin.paygo.az/api/actions/products/" +
+            "https://admin.paygo.az/api/actions/products/" +
               id +
               "/add_pay_item",
             {
