@@ -268,7 +268,9 @@ export default function (props) {
   function SwitchProgram(props) {
     const [program, setProgram] = React.useState(false);
     return program ? (
-      <TabsScreen {...props} />
+      <ProgramLockContext.Provider value={{ program, setProgram }}>
+        <TabsScreen {...props} />
+      </ProgramLockContext.Provider>
     ) : (
       <ProgramLockContext.Provider value={{ program, setProgram }}>
         <VerifyStackScreen {...props} />

@@ -16,10 +16,9 @@ export default function SliderCards(props) {
   const [refreshing, setrefreshing] = React.useState(true);
 
   function getInfo() {
-    console.log(props);
     setrefreshing(true);
     setcards(props.cards);
-    if (cards != null) {
+    if (props.cardcount > 0) {
       setrefreshing(false);
     }
     renderBodyContent();
@@ -41,7 +40,12 @@ export default function SliderCards(props) {
   });
 
   function renderCardOne({ item, index }) {
-    return <CardOne {...{ index, y, item }} />;
+    return (
+      <CardOne
+        {...{ index, y, item }}
+        cardcount={props ? props.cardcount : 1}
+      />
+    );
   }
 
   function ComponentSep() {

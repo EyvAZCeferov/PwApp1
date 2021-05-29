@@ -8,7 +8,7 @@ import { t } from "../../../../../functions/lang";
 import { hideNumb } from "../../../../../functions/standart/helper";
 
 const { width, height } = Dimensions.get("window");
-export default function CardOne({ index, y, item }, cardcount) {
+export default function CardOne({ index, y, item }, props) {
   const [cardCount, setCardCount] = React.useState(null);
   const position = Animated.subtract(index * 200, y);
   const isDissappering = -180;
@@ -35,8 +35,8 @@ export default function CardOne({ index, y, item }, cardcount) {
     outputRange: [0, 1, 1, 0],
   });
 
-  async function getCount() {
-    setCardCount(3);
+  function getCount() {
+    setCardCount(props.cardcount);
     renderCards();
   }
 

@@ -38,6 +38,12 @@ export default class Lock extends React.Component {
     };
   }
 
+  async refreshToken() {
+    await axios.post("auth/refresh").then(async (e) => {
+      await AsyncStorage.setItem("token", e.data.access_token);
+    });
+  }
+
   async getSoragePerm() {
     await AsyncStorage.getItem("haveFinger").then((a) => {
       if (a != null) {
@@ -61,6 +67,7 @@ export default class Lock extends React.Component {
   }
 
   componentDidMount() {
+    this.refreshToken();
     this.getSoragePerm();
     this.getInfo();
   }

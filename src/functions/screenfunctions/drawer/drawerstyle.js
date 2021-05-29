@@ -18,27 +18,35 @@ import {
 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-community/async-storage";
 import { CommonActions } from "@react-navigation/native";
+import { ProgramLockContext } from "../../../functions/Hooks/Authentication/Lock/ProgramLockContext";
 
 const icon = require("../../../../assets/icon-ios.png");
 import { t } from "../../lang";
 
 const { width, height } = Dimensions.get("window");
 import Textpopins from "../text";
+import axios from "axios";
 
 export default function DrawerStyle(props) {
+  const contextType = React.useContext(ProgramLockContext);
+  const [userDat, setUserDat] = React.useState(null);
+
   function navigationreset() {
-    return props.navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [
-          { name: "Login" },
-          {
-            name: "Login",
-          },
-        ],
-      })
-    );
+    const { program, setProgram } = contextType;
+    setProgram(false);
   }
+
+  React.useEffect(() => {
+    getInfo();
+  }, []);
+
+  async function getInfo() {
+    await axios.post("/auth/me").then((e) => {
+      console.log(e);
+      setUserDat(e.data);
+    });
+  }
+
   return (
     <View>
       <StatusBar backgroundColor="#fff" style="dark" />
@@ -57,7 +65,7 @@ export default function DrawerStyle(props) {
                 textAlign: "left",
               }}
             >
-              Eyvaz Cəfərov
+              {userDat ? userDat.phone : null}
             </Textpopins>
           </Body>
           <Right />
