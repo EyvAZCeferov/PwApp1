@@ -139,7 +139,7 @@ export default class LoginScreen extends React.Component {
                 onChangeText={(text) => this.setState({ phone: text })}
                 style={styles.input}
                 onSubmitEditing={() => Keyboard.dismiss}
-                placeholder={t("form.labels.phonenumb")}
+                placeholder={"994xxxxxxxxx"}
                 keyboardType={"phone-pad"}
               />
             </Item>

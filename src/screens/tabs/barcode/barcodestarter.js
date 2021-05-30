@@ -21,6 +21,7 @@ import RadioButtonRN from "radio-buttons-react-native";
 import { makeid } from "../../../functions/standart/helper";
 import DropdownAlert from "react-native-dropdownalert";
 import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const succesImage = require("../../../../assets/images/Alert/tick.png");
 
@@ -52,7 +53,7 @@ export default class Bucketstarter extends React.Component {
   }
 
   setId() {
-    let id = makeid(15);
+    let id = makeid(7);
     this.setState({ checkid: id });
   }
 
@@ -78,19 +79,13 @@ export default class Bucketstarter extends React.Component {
       })
       .catch((error) => console.error(error));
 
-    // var cards = [];
-    // fetch("https://admin.paygo.az/api/actions/cards")
-    //   .then((response) => response.json())
-    //   .then((json) => {
-    //     var d = {
-    //       value: json.id,
-    //       label: json.number,
-    //     };
-    //     cards.push(d);
-    //   })
-    //   .catch((error) => console.error(error));
-
-    // this.setState({ cards: customers });
+    await axios.get("actions/cards").then((e) => {
+      if (e.data.length > 0) {
+        this.setState({
+          cards: e.data,
+        });
+      }
+    });
   }
 
   async startCam() {
@@ -143,6 +138,7 @@ export default class Bucketstarter extends React.Component {
           var d = {
             value: e.id,
             label: e.name["az_name"],
+            location_key: e.key,
           };
           locations.push(d);
         });
@@ -152,25 +148,29 @@ export default class Bucketstarter extends React.Component {
     this.setState({ selectedMarket: text });
   }
 
-  next() {
-    if (this.state.selectedMarket != null && this.state.selectedCard) {
+  async next() {
+    if (this.state.selectedMarket != null && this.state.selectedFilial) {
       var id = 0;
 
       var data = new FormData();
       data.append("shoptype", "barcode");
-      data.append("checkid", this.state.checkid);
-      data.append("selectedCard", this.state.checkid);
-      data.append("selectedMarket", this.state.selectedMarket);
-      data.append("selectedFilial", this.state.selectedFilial);
-      data.append("pay_card", this.state.pay_card);
-      data.append("bonus_card", this.state.bonus_card);
+      data.append("ficsal", this.state.checkid);
+      if (this.state.selectedCard) {
+        data.append("selectedCard", this.state.selectedCard.value);
+      }
+      data.append("selectedMarket", this.state.selectedMarket.value);
+      data.append("selectedFilial", this.state.selectedFilial.value);
+      data.append("location_key", this.state.selectedFilial.location_key);
+      // data.append("bonus_card", this.state.bonus_card);
 
-      fetch("https://admin.paygo.az/api/actions/shops", {
-        method: "POST",
-        body: data,
-      });
-
-      this.props.navigation.navigate("ShoppingList", { id: id });
+      await axios
+        .post("actions/shops", data)
+        .then((e) => {
+          this.props.navigation.navigate("BarcodeHome", { checkid: e.data });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       this.dropDownAlertRef.alertWithType(
         "info",
@@ -285,14 +285,19 @@ export default class Bucketstarter extends React.Component {
                 />
               </View>
             ) : null}
-            <RadioButtonRN
-              data={this.state.cards}
-              selectedBtn={(e) => this.setState({ selectedCard: e.id })}
-              icon={<AntDesign name="checkcircle" size={25} color="#5C0082" />}
-              animationTypes={["zoomIn", "pulse", "shake", "rotate"]}
-              deactiveColor="#5C0082"
-              duration={500}
-            />
+            {this.state.cards.length > 1 ? (
+              <RadioButtonRN
+                data={this.state.cards}
+                selectedBtn={(e) => this.setState({ selectedCard: e.id })}
+                icon={
+                  <AntDesign name="checkcircle" size={25} color="#5C0082" />
+                }
+                animationTypes={["zoomIn", "pulse", "shake", "rotate"]}
+                deactiveColor="#5C0082"
+                duration={500}
+              />
+            ) : null}
+
             <View
               style={{
                 flexDirection: "row",

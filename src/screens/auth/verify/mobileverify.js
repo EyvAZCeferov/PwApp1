@@ -31,7 +31,10 @@ export default class MobileVerify extends React.Component {
     var data = new FormData();
 
     data.append("phone", this.props.route.params.phone);
-    if (!this.props.route.params.prevpage == "forget") {
+    if (
+      !this.props.route.params.prevpage ||
+      this.props.route.params.prevpage != "forget"
+    ) {
       data.append("password", this.props.route.params.password);
     }
     data.append("code", this.state.pass);
@@ -40,7 +43,10 @@ export default class MobileVerify extends React.Component {
         .post("auth/verify", data)
         .then((e) => {
           if (e.data.access_token) {
-            if (!this.props.route.params.prevpage == "forget") {
+            if (
+              !this.props.route.params.prevpage ||
+              this.props.route.params.prevpage != "forget"
+            ) {
               this.props.navigation.navigate("SetPass", {
                 token: e.data.access_token,
               });

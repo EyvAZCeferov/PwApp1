@@ -170,7 +170,7 @@ export default class ContactUs extends React.Component {
           style={{
             zIndex: 9999,
             position: "absolute",
-            bottom: 0,
+            bottom: -Constants.statusBarHeight * 5,
             left: 0,
             right: 0,
             backgroundColor: "#fff",

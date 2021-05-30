@@ -6,6 +6,7 @@ import {
   Keyboard,
   TouchableOpacity,
   SafeAreaView,
+  TextInput
 } from "react-native";
 import { Form, Input, Item } from "native-base";
 import FormData from "form-data";
@@ -144,8 +145,10 @@ export default class Register extends React.Component {
                 onChangeText={(text) => this.setState({ phone: text })}
                 style={styles.input}
                 onSubmitEditing={() => Keyboard.dismiss}
-                placeholder={t("form.labels.phonenumb")}
+                placeholder={"994xxxxxxxxx"}
                 keyboardType={"phone-pad"}
+                returnKeyType="next"
+                maxLength={12}
               />
             </Item>
 

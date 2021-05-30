@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import customStyle from "../../../../../../assets/Theme";
 import { t } from "../../../../../functions/lang";
 import { hideNumb } from "../../../../../functions/standart/helper";
+import Textpopins from "../../../../../functions/screenfunctions/text";
 
 const { width, height } = Dimensions.get("window");
 export default function CardOne({ index, y, item }, props) {
@@ -132,9 +133,9 @@ export default function CardOne({ index, y, item }, props) {
               <Text
                 style={styles.priceText}
                 children={
-                  item.cvc
-                    ? item.cvc + " ₼"
-                    : item.price + " ₼"
+                  item.price
+                    ? item.price + " ₼"
+                    : 0 + " ₼"
                 }
               />
             </Left>
@@ -144,9 +145,9 @@ export default function CardOne({ index, y, item }, props) {
           </View>
           <View style={styles.centerCardNum}>
             <View>
-              <Text
+              <Textpopins
                 style={styles.cardNumbText}
-                children={hideNumb(item.number)}
+                children={item.number}
               />
             </View>
           </View>

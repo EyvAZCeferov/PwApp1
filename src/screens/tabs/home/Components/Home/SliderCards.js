@@ -13,19 +13,19 @@ import CardOne from "./CardOne";
 const { width, height } = Dimensions.get("window");
 export default function SliderCards(props) {
   const [cards, setcards] = React.useState(null);
-  const [refreshing, setrefreshing] = React.useState(true);
+  const [refreshing, setrefreshing] = React.useState(false);
 
   function getInfo() {
-    setrefreshing(true);
+    props.call();
     setcards(props.cards);
-    if (props.cardcount > 0) {
-      setrefreshing(false);
-    }
+    setrefreshing(false);
     renderBodyContent();
   }
 
   React.useEffect(() => {
-    getInfo();
+    setInterval(() => {
+      onHandleRefresh();
+    }, 1000);
   }, []);
 
   function onHandleRefresh() {

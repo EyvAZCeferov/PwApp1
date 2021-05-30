@@ -13,18 +13,19 @@ import PayCards from "./components/paying";
 import { AntDesign } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
-export default class ShoppingList extends React.Component {
+class ShoppingList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       refresh: true,
+      checkid: null,
     };
   }
 
   componentDidMount() {
     const params = this.props.route.params;
-    if (params.id != null) {
-      this.setState({ refresh: false });
+    if (params.checkid != null) {
+      this.setState({ refresh: false, checkid: params.checkid });
       this.renderArena();
     }
   }
@@ -86,7 +87,7 @@ export default class ShoppingList extends React.Component {
               />
             </SafeAreaView>
             <View style={styles.downerView}>
-              <RecentOperation id={params.id} {...this.props} />
+              <RecentOperation value={this.props.bucketitems} {...this.props} />
             </View>
           </View>
         )}
@@ -98,6 +99,19 @@ export default class ShoppingList extends React.Component {
     return <View style={styles.content}>{this.renderArena()}</View>;
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    bucketitems: state.bucketitems,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addtoCard: (product) => dispatch({ type: "ADD_TO_CART", payload: product }),
+  };
+};
+// export default connect(mapStateToProps, mapDispatchToProps)(ShoppingList);
 
 const styles = StyleSheet.create({
   content: {

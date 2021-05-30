@@ -73,9 +73,10 @@ export default class Lock extends React.Component {
   }
 
   async getInfo() {
-    let response = await axios.get("auth/me");
-    this.setState({
-      userData: response.data,
+    await axios.get("auth/me").then((e) => {
+      this.setState({
+        userData: e.data,
+      });
     });
   }
 
@@ -193,7 +194,7 @@ export default class Lock extends React.Component {
             }}
           >
             {this.state.userData
-              ? this.state.userData.phone
+              ? this.state.userData.name
               : t("loginregister.programlock.namesurname")}
           </Animatable.Text>
         </View>

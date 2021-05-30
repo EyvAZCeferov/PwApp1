@@ -23,10 +23,10 @@ export default class NoBarcode extends React.Component {
   }
 
   barcodeWrited() {
-    console.log(this.state.text);
     Keyboard.dismiss();
     if (this.state.text != null) {
       this.props.bar(this.state.text);
+      this.props.togMod()
     } else {
       alert("Barcode Null");
     }

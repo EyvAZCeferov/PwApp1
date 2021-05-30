@@ -29,11 +29,11 @@ export default function RecentOperations(props) {
 
   async function getInfo() {
     setRefresh(true);
-    if (props.shops.length > 0) {
-      setList(props.shops);
-    } else {
-      setList(null);
-    }
+    await axios.get("actions/shops").then((e) => {
+      if (e.data.length > 0) {
+        setList(e.data);
+      }
+    });
     setRefresh(false);
     renderContent();
   }
@@ -52,24 +52,17 @@ export default function RecentOperations(props) {
       }
     }
 
-    let allPrice = 0;
-
-    async function priceCollector(id) {
-      let response = await axios.get("/actions/shops/" + id);
-      if (response.data.length > 0 && response.data != null) {
-        return response.data;
-      }
-    }
-
-    function sumPrice(checkId) {
-      if (checkId != null) {
-        allPrice = 0;
-        var checkProducts = priceCollector(checkId);
-        checkProducts.map((element) => {
-          allPrice = allPrice + parseFloat(element.price);
-        });
-      }
-      return parseFloat(allPrice);
+    function priceCollector(id) {
+      let allPrice = 0;
+      axios.get("/actions/shops/" + id + "/products").then((e) => {
+        if (e.data.length > 0 || e.data != null) {
+          e.data.map((el) => {
+            allPrice = parseFloat(allPrice) + parseFloat(el.price);
+          });
+          return allPrice;
+        }
+      });
+      return allPrice;
     }
 
     function convertStampDate(unixtimestamp) {
@@ -103,7 +96,15 @@ export default function RecentOperations(props) {
       var seconds = "0" + date.getSeconds();
 
       var fulldate =
-        day + " " + month + " " + year + " " + hours + ":" + minutes.substr(-2);
+        day +
+        " " +
+        month +
+        " " +
+        year +
+        " -Saat: " +
+        hours +
+        " : " +
+        minutes.substr(-2);
 
       return fulldate;
     }
@@ -111,30 +112,25 @@ export default function RecentOperations(props) {
     return (
       <ListItem
         thumbnail
-        onPress={() =>
-          nav.navigate({
-            screen: "Check",
-            params: {
-              checkid: item.id,
-            },
-          })
-        }
+        onPress={() => {
+          nav.navigate("OneCheck", { checkid: item.id });
+        }}
         key={index}
       >
         <Left>{marketTypeFunc()}</Left>
         <Body>
           <Textpopins
             style={{ fontSize: 22, color: "rgba(0,0,0,.8)", textAlign: "left" }}
-            children={item.market}
+            children={item.get_customer.name["az_name"]}
           />
           <Textpopins
             style={{ fontSize: 14, color: "rgba(0,0,0,.6)", textAlign: "left" }}
-            children={convertStampDate(item.date)}
+            children={convertStampDate(new Date(item.created_at))}
           />
         </Body>
         <Right>
           <Button transparent>
-            <Textpopins children={sumPrice(item.id) + " AZN"} />
+            <Textpopins children={priceCollector(item.id) + " AZN"} />
           </Button>
         </Right>
       </ListItem>
@@ -163,7 +159,7 @@ export default function RecentOperations(props) {
         </View>
       );
     } else {
-      if (list != null) {
+      if (list != null || list.count > 0) {
         return (
           <FlatList
             data={list}
@@ -173,7 +169,7 @@ export default function RecentOperations(props) {
             onRefresh={onHandleRefresh}
           />
         );
-      } else if (list == null) {
+      } else if (list == null || !list.count > 0) {
         return (
           <View
             style={{
@@ -238,10 +234,10 @@ export default function RecentOperations(props) {
               style={{ color: "#000", fontSize: 20, fontWeight: "bold" }}
               children={t("home.recentoperations.title")}
             />
-            <Text
+            {/* <Text
               style={{ color: "#000", fontSize: 17 }}
               children={t("home.recentoperations.time.yesterday")}
-            />
+            /> */}
           </View>
         </View>
         <View style={{ width: width, height: height - 288, marginBottom: 20 }}>

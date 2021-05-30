@@ -58,6 +58,7 @@ export default class Bonuses extends React.Component {
     });
     await axios.get("actions/cards").then((e) => {
       if (e.data != "Trying to get property 'id' of non-object") {
+        console.log(e.data)
         this.setState({
           cards: e.data,
           loading: false,
@@ -158,7 +159,7 @@ export default class Bonuses extends React.Component {
         thumbnail
         onPress={
           item.type == "pin"
-            ? this.props.navigation.navigate("PinInfo", {
+            ? this.props.navigation.navigate("Pininfo", {
                 pinid: item.id,
               })
             : null

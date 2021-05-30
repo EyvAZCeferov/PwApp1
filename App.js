@@ -59,6 +59,7 @@ import SetFace from "./src/screens/auth/verify/SetFace";
 import Beforebuy from "./src/screens/tabs/bucket/Beforebuy";
 import Lock from "./src/screens/auth/verify/Lock";
 import ChangePass from "./src/screens/auth/global/changepass";
+import BarcodeHome from "./src/screens/tabs/barcode/barcodehome";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -72,6 +73,7 @@ const AuthStackScreen = (props) => (
   >
     <AuthStack.Screen name="Login" {...props} component={LoginScreen} />
     <AuthStack.Screen name="ForgotPass" component={ForgotPassword} {...props} />
+    <AuthStack.Screen name="ChangePass" component={ChangePass} {...props} />
     <AuthStack.Screen name="Register" component={Register} {...props} />
     <AuthStack.Screen name="MobileVerify" component={MobileVerify} {...props} />
     <AuthStack.Screen name="SetPass" component={SetPass} />
@@ -251,12 +253,17 @@ const BarcodeStackScreen = ({ navigation, route }) => {
     navigation.setOptions({ tabBarVisible: true });
   }
   return (
-    <BarcodeStack.Navigator headerMode="none" initialRouteName="BarcodeStarted">
-      <BarcodeStack.Screen name="BarcodeStarted" component={BarcodeStarted} />
-      <BarcodeStack.Screen name="ShoppingList" component={ShoppingList} />
-      <BarcodeStack.Screen name="Buy" component={Buy} />
-      <BarcodeStack.Screen name="PayThanks" component={PayThanks} />
-    </BarcodeStack.Navigator>
+    <Provider store={store}>
+      <BarcodeStack.Navigator
+        headerMode="none"
+        initialRouteName="BarcodeStarted"
+      >
+        <BarcodeStack.Screen name="BarcodeStarted" component={BarcodeStarted} />
+        <BarcodeStack.Screen name="BarcodeHome" component={BarcodeHome} />
+        <BarcodeStack.Screen name="ProductInfo" component={ProductInfo} />
+        <BarcodeStack.Screen name="PayThanks" component={PayThanks} />
+      </BarcodeStack.Navigator>
+    </Provider>
   );
 };
 
@@ -301,6 +308,9 @@ export default function (props) {
 
   function SwitchProgram(props) {
     const [program, setProgram] = React.useState(false);
+    React.useEffect(() => {
+      getConfig();
+    }, []);
     return program ? (
       <ProgramLockContext.Provider value={{ program, setProgram }}>
         <TabsScreen {...props} />
@@ -331,7 +341,7 @@ export default function (props) {
       getConfig();
       setTimeout(() => {
         setisReady(true);
-      }, 1000);
+      }, 500);
     }, []);
     return isready ? <FirstOpen {...props} /> : <Splash />;
   }

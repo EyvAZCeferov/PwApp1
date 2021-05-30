@@ -29,16 +29,11 @@ import axios from "axios";
 
 export default function DrawerStyle(props) {
   const contextType = React.useContext(ProgramLockContext);
-  const [userDat, setUserDat] = React.useState(null);
 
   function navigationreset() {
     const { program, setProgram } = contextType;
     setProgram(false);
   }
-
-  React.useEffect(() => {
-    setUserDat(props.usdata);
-  }, []);
 
   return (
     <View>
@@ -46,7 +41,13 @@ export default function DrawerStyle(props) {
       <SafeAreaView style={styles.container}>
         <ListItem style={{ borderColor: "transparent", borderWidth: 0 }}>
           <Left>
-            <Thumbnail source={icon} />
+            <Thumbnail
+              source={props.usdata ? props.usdata.image ?? icon : icon}
+              style={{
+                height: 80,
+                width: 80,
+              }}
+            />
           </Left>
           <Body>
             <Textpopins
@@ -56,9 +57,11 @@ export default function DrawerStyle(props) {
                 fontFamily: "Poppins_400Regular",
                 fontWeight: "bold",
                 textAlign: "left",
+                width: width,
+                marginLeft: -Constants.statusBarHeight,
               }}
             >
-              {userDat ? userDat.phone : null}
+              {props.usdata ? props.usdata.name : null}
             </Textpopins>
           </Body>
           <Right />

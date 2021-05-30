@@ -15,22 +15,18 @@ export default class Home extends React.Component {
     this.state = {
       cards: null,
       cardcount: 0,
-      shops: null,
     };
   }
 
   componentDidMount() {
-    setInterval(() => {
-      this.getInfo();
-    }, 5000);
+    this.getInfo();
   }
 
   async getInfo() {
-    await axios.get("auth/me").then((e) => {
+    await axios.get("actions/cards").then((e) => {
       this.setState({
-        // cards: e.data.cards,
-        // cardcount: e.data.cards.length,
-        // shops: e.data.shops,
+        cards: e.data,
+        cardcount: e.data.length,
       });
       this.renderContent();
     });
@@ -39,12 +35,13 @@ export default class Home extends React.Component {
   renderContent() {
     return (
       <View style={styles.contentArena}>
-        {/* <SliderCards
-          {...this.props}
+        <SliderCards
           cards={this.state.cards}
           cardcount={this.state.cardcount}
-        /> */}
-        {/* <RecentOperations {...this.props} shops={this.state.shops} /> */}
+          call={() => this.getInfo()}
+          {...this.props}
+        />
+        <RecentOperations {...this.props} />
       </View>
     );
   }

@@ -20,6 +20,7 @@
     "axios": "^0.21.1",
     "ex-react-native-i18n": "^0.0.6",
     "expo": "~40.0.0",
+    "expo-av": "^9.1.2",
     "expo-camera": "^10.0.0",
     "expo-cli": "^4.3.2",
     "expo-constants": "^10.0.1",
