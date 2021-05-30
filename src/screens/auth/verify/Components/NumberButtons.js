@@ -135,7 +135,7 @@ export default function NumberButtons(props) {
 const styles = StyleSheet.create({
     container: {
         width: width,
-        height: '85%',
+        height: '90%',
         backgroundColor: 'transparent',
         justifyContent: 'center',
         alignContent: 'center',

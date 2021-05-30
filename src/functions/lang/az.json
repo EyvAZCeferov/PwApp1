@@ -4,7 +4,8 @@
       "title": "Daxil ol"
     },
     "forgetpass": {
-      "title": "Şifrəmi unuttum"
+      "title": "Şifrəmi unuttum",
+      "changepass": "Şifrəni dəyiş"
     },
     "programlock": {
       "useFingerPrint": "Giriş üçün barmaq izinizdən istifadə edin",
@@ -45,6 +46,9 @@
   },
   "bonuses": {
     "cartadd": "Bonus kart əlavə et"
+  },
+  "pin": {
+    "pincount": "Pin saylarınız"
   },
   "maps": {
     "currentLoc": "Hal-hazırki məkan"
@@ -180,7 +184,8 @@
     "readallnotifications": "Bütün bildirimləri oxundu işarələ.",
     "submit": "Təstiqlə",
     "send": "Göndər",
-    "added": "Əlavə edildi"
+    "added": "Əlavə edildi",
+    "sended": "Göndərildi"
   },
   "tabs": {
     "home": "Əsas səhifə",

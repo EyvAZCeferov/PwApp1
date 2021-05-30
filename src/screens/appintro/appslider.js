@@ -81,7 +81,7 @@ export default class AppSlider extends React.Component {
 
     _renderDoneButton() {
         return (
-            <View style={[styles.button, {backgroundColor: "#7c9d32"}]}>
+            <View style={[styles.button, {backgroundColor: "#AF0045"}]}>
                 <AntDesign
                     style={styles.buttonIcon}
                     name="check"
@@ -114,7 +114,7 @@ export default class AppSlider extends React.Component {
                     onDone={() => this._onDone()}
                     bottomButton={true}
                     dotStyle={{backgroundColor: "rgba(0,0,0,.9)", width: 10, height: 10}}
-                    activeDotStyle={{backgroundColor: "#7c9d32", width: 20, height: 10}}
+                    activeDotStyle={{backgroundColor: "#AF0045", width: 20, height: 10}}
                     dotClickEnabled={false}
                     showNextButton={true}
                     showPrevButton={false}
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     buttonText: {
-        color: "#7c9d32",
+        color: "#AF0045",
         fontSize: 18,
         fontWeight: "bold",
         textAlign: "left",
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     title: {
-        color: "#7c9d32",
+        color: "#AF0045",
         fontSize: 32,
         fontWeight: "bold",
         justifyContent: "center",

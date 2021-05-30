@@ -58,6 +58,7 @@ import OneCheck from "./src/screens/tabs/home/Components/OneCheck";
 import SetFace from "./src/screens/auth/verify/SetFace";
 import Beforebuy from "./src/screens/tabs/bucket/Beforebuy";
 import Lock from "./src/screens/auth/verify/Lock";
+import ChangePass from "./src/screens/auth/global/changepass";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -167,16 +168,28 @@ const HomeStackScreen = ({ navigation, route }) => {
 
 const HomeDrawerStack = createDrawerNavigator();
 const HomeDrawerStackScreen = ({ navigation, route }) => {
+  const [usdata, setusdata] = React.useState();
   if (route.state && route.state.index > 0) {
     navigation.setOptions({ tabBarVisible: false });
   } else {
     navigation.setOptions({ tabBarVisible: true });
   }
+
+  async function getnameandphoto() {
+    await axios.get("auth/me").then((e) => {
+      setusdata(e.data);
+    });
+  }
+
+  React.useEffect(() => {
+    getnameandphoto();
+  }, []);
+
   return (
     <HomeDrawerStack.Navigator
       headerMode="none"
       initialRouteName="Home"
-      drawerContent={(props) => <DrawerStyle {...props} />}
+      drawerContent={(props) => <DrawerStyle usdata={usdata} {...props} />}
     >
       <HomeDrawerStack.Screen name="Home" component={Home} />
       <HomeDrawerStack.Screen name="Cards" component={Cards} />
@@ -257,6 +270,27 @@ export default function (props) {
     });
   }
 
+  async function getToken() {
+    if (await AsyncStorage.getItem("token")) {
+      await AsyncStorage.getItem("token").then((token) => {
+        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+        setUserToken(token);
+      });
+    } else {
+      setUserToken(null);
+    }
+  }
+
+  async function getConfig() {
+    axios.defaults.baseURL = "https://admin.paygo.az/api/";
+    var token = await AsyncStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+    axios.defaults.headers.common["Accept"] = "application/json";
+    axios.defaults.headers.common["Content-Type"] = "application/json";
+  }
+
   function FirstOpen(props) {
     return firstOpenSlider == null ? (
       <AppSlider getnewCall={() => getfirstOpen()} {...props} />
@@ -279,19 +313,6 @@ export default function (props) {
   }
 
   function NavigateAuth(props) {
-    async function getToken() {
-      if (await AsyncStorage.getItem("token")) {
-        await AsyncStorage.getItem("token").then((token) => {
-          axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-          setUserToken(token);
-        });
-      }
-    }
-
-    React.useEffect(() => {
-      getToken();
-    }, []);
-
     return userToken ? (
       <SwitchProgram {...props} />
     ) : (
@@ -301,28 +322,16 @@ export default function (props) {
     );
   }
 
-  React.useEffect(async () => {
-    getLang();
-    getfirstOpen();
-    getConfig();
-  }, []);
-
-  async function getConfig() {
-    axios.defaults.baseURL = "https://admin.paygo.az/api/";
-    var token = await AsyncStorage.getItem("token");
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-    axios.defaults.headers.common["Accept"] = "application/json";
-    axios.defaults.headers.common["Content-Type"] = "application/json";
-  }
-
   function SystemOpen(props) {
     const [isready, setisReady] = React.useState(false);
     React.useEffect(() => {
+      getLang();
+      getfirstOpen();
+      getToken();
+      getConfig();
       setTimeout(() => {
         setisReady(true);
-      }, 1500);
+      }, 1000);
     }, []);
     return isready ? <FirstOpen {...props} /> : <Splash />;
   }

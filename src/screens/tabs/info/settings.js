@@ -264,7 +264,7 @@ export default class Settings extends React.Component {
                         alignItems: "center",
                     }}
                 >
-                    <ActivityIndicator size="large" animating={true} color="#7c9d32"/>
+                    <ActivityIndicator size="large" animating={true} color="#5C0082"/>
                 </SafeAreaView>
             );
         } else {
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18,
-        color: "#7c9d32",
+        color: "#5C0082",
         fontWeight: "600",
     },
     active: {

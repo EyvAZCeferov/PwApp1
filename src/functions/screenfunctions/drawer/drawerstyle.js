@@ -37,15 +37,8 @@ export default function DrawerStyle(props) {
   }
 
   React.useEffect(() => {
-    getInfo();
+    setUserDat(props.usdata);
   }, []);
-
-  async function getInfo() {
-    await axios.post("/auth/me").then((e) => {
-      console.log(e);
-      setUserDat(e.data);
-    });
-  }
 
   return (
     <View>

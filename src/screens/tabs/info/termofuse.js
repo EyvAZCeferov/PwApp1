@@ -1,22 +1,24 @@
 import React from "react";
 import { StyleSheet, Dimensions, ScrollView, View, Text } from "react-native";
-import { Thumbnail, Header, Button } from "native-base";
+import { Thumbnail, Button } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
-import firebase from "../../../functions/firebase/firebaseConfig";
 import HTMLView from "react-native-htmlview";
 import { t } from "../../../functions/lang";
 import { StatusBar } from "expo-status-bar";
 import * as Localization from "expo-localization";
 import Constants from "expo-constants";
-import Textpopins from "../../../functions/screenfunctions/text";
+import axios from "axios";
+import { ActivityIndicator } from "react-native";
+const icon = require("../../../../assets/icon-ios.png");
 
 export default class Termofuse extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      datas: [],
+      datas: null,
+      refresh: true,
     };
   }
 
@@ -25,21 +27,25 @@ export default class Termofuse extends React.Component {
   }
 
   getInfo() {
-    firebase
-      .database()
-      .ref("termOfUse/1")
-      .on("value", (data) => {
-        this.setState({ datas: data.toJSON() });
+    this.setState({
+      refresh: true,
+    });
+    axios.get("actions/termofuse").then((e) => {
+      console.log(e.data);
+      this.setState({
+        datas: e.data,
+        refresh: false,
       });
+    });
   }
 
   langConvert(e) {
     if (Localization.locale == "en" || Localization.locale === "en") {
-      return e.en_text;
+      return e.en_description;
     } else if (Localization.locale == "ru" || Localization.locale === "ru") {
-      return e.ru_text;
+      return e.ru_description;
     } else if (Localization.locale == "az" || Localization.locale === "az") {
-      return e.az_text;
+      return e.az_description;
     }
   }
 
@@ -50,51 +56,42 @@ export default class Termofuse extends React.Component {
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "space-around",
             backgroundColor: "#fff",
             alignItems: "center",
             alignContent: "center",
             textAlign: "center",
             marginTop: Constants.statusBarHeight,
-            borderBottomColor: "#7c9d32",
+            borderBottomColor: "#5C0082",
             borderBottomWidth: 2,
             paddingBottom: 1,
           }}
         >
           <Button transparent onPress={() => this.props.navigation.goBack()}>
-            <AntDesign name="left" size={24} color="#7c9d32" />
+            <AntDesign name="left" size={24} color="#5C0082" />
           </Button>
 
           <Text
             style={styles.headerTitle}
             children={t("settings.listitems.termofuse")}
           />
-          <View />
+          {/* <View style={{ width: "10%" }} /> */}
         </View>
 
         <ScrollView style={{ marginBottom: 50 }}>
           <View style={styles.justify}>
-            <Thumbnail
-              source={{ uri: this.state.datas.icon }}
-              style={styles.icon}
-            />
-            <Textpopins
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                color: "#010101",
-                width: width,
-                height: 20,
-                textAlign: "center",
-                marginBottom: 10,
-              }}
-              children="Pay And Way"
-            />
-            <HTMLView
-              value={this.langConvert(this.state.datas)}
-              stylesheet={styles.textColor}
-              addLineBreaks={true}
-            />
+            <Thumbnail source={icon} style={styles.icon} />
+
+            {this.state.refresh ? (
+              <ActivityIndicator size="large" color="#5C0082" />
+            ) : (
+              <HTMLView
+                // value={this.langConvert(this.state.datas)}
+                value={this.state.datas.az_description}
+                stylesheet={styles.textColor}
+                addLineBreaks={true}
+              />
+            )}
           </View>
         </ScrollView>
       </View>
@@ -116,10 +113,13 @@ const styles = StyleSheet.create({
     height: height / 6,
   },
   headerTitle: {
-    color: "#7c9d32",
+    color: "#5C0082",
     fontWeight: "bold",
     fontSize: 19,
-    marginLeft: Constants.statusBarHeight,
+    textAlign: "center",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
   },
   textColor: {
     color: "#6d7587",

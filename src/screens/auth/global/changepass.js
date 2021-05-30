@@ -29,36 +29,34 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import axios from "axios";
+import FormData from "form-data";
 
 const succesImage = require("../../../../assets/images/Alert/tick.png");
 
-export default class LoginScreen extends React.Component {
+export default class ChangePass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      phone: null,
+      pass1: null,
+      pass2: null,
     };
   }
 
-  forget = async () => {
+  changepass = async () => {
     await AsyncStorage.removeItem("haveFinger");
     await AsyncStorage.removeItem("localAuthPass");
     await AsyncStorage.removeItem("token");
-    if (this.state.phone !== null) {
+    if (this.state.pass1 == this.state.pass2) {
       var data = new FormData();
-      data.append("phone", this.state.phone);
-      await axios
-        .post("auth/forget", data)
-        .then((e) => {
-          this.dropDownAlertRef.alertWithType("info", res.data);
-          if (res.data == "Success") {
-            this.props.navigation.navigate("MobileVerify", {
-              phone: this.state.phone,
-              prevpage: "forget",
-            });
-          }
-        })
-        .catch((error) => error);
+      data.append("phone", this.props.route.params.phone);
+      data.append("pass", this.state.pass1);
+      await axios.post("changepass", data).then((e) => {
+        if (e.data == "Success") {
+          this.dropDownAlertRef.alertWithType("info", e.data);
+          this.props.navigation.navigate("Login");
+        }
+      });
     } else {
       this.dropDownAlertRef.alertWithType("error", t("actions.noResult"));
     }
@@ -113,18 +111,32 @@ export default class LoginScreen extends React.Component {
           </Textpopins>
           <Form>
             <Item style={styles.item} success>
-              <Feather
-                name="phone"
-                size={24}
-                color="black"
+              <MaterialCommunityIcons
+                name="form-textbox-password"
                 style={{ paddingRight: 5 }}
+                size={28}
+                color="black"
               />
               <Input
-                onChangeText={(text) => this.setState({ phone: text })}
+                onChangeText={(text) => this.setState({ pass1: text })}
                 style={styles.input}
                 onSubmitEditing={() => Keyboard.dismiss}
-                placeholder={t("form.labels.phonenumb")}
-                keyboardType={"phone-pad"}
+                placeholder={t("loginregister.mobileverify.title")}
+              />
+            </Item>
+
+            <Item style={styles.item} success>
+              <MaterialCommunityIcons
+                name="form-textbox-password"
+                style={{ paddingRight: 5 }}
+                size={28}
+                color="black"
+              />
+              <Input
+                onChangeText={(text) => this.setState({ pass2: text })}
+                style={styles.input}
+                onSubmitEditing={() => Keyboard.dismiss}
+                placeholder={t("loginregister.setpass.repeatpassword")}
               />
             </Item>
 
@@ -139,7 +151,7 @@ export default class LoginScreen extends React.Component {
                 },
               ]}
             >
-              <TouchableOpacity onPress={this.forget}>
+              <TouchableOpacity onPress={this.changepass}>
                 <LinearGradient
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
@@ -147,7 +159,7 @@ export default class LoginScreen extends React.Component {
                   style={styles.login}
                 >
                   <Textpopins style={[styles.title, { color: "#fff" }]}>
-                    {t("form.buttons.submit")} !
+                    {t("loginregister.forgetpass.changepass")} !
                   </Textpopins>
                 </LinearGradient>
               </TouchableOpacity>
@@ -165,12 +177,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#5C0082",
   },
   header: {
-    flex: 0.6,
+    flex: 0.4,
     justifyContent: "center",
     alignItems: "center",
   },
   content: {
-    flex: 0.4,
+    flex: 0.6,
     borderTopLeftRadius: Constants.statusBarHeight,
     borderTopRightRadius: Constants.statusBarHeight,
     backgroundColor: "#fff",

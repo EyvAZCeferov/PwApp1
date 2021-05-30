@@ -57,13 +57,15 @@ export default class Bonuses extends React.Component {
       loading: true,
     });
     await axios.get("actions/cards").then((e) => {
-      this.setState({
-        cards: e.data,
-        loading: false,
-      });
+      if (e.data != "Trying to get property 'id' of non-object") {
+        this.setState({
+          cards: e.data,
+          loading: false,
+        });
+      } else {
+        this.getInfo();
+      }
     });
-
-    this.listComponent();
   }
 
   componentDidMount() {
@@ -152,7 +154,16 @@ export default class Bonuses extends React.Component {
     }
 
     return (
-      <ListItem thumbnail>
+      <ListItem
+        thumbnail
+        onPress={
+          item.type == "pin"
+            ? this.props.navigation.navigate("PinInfo", {
+                pinid: item.id,
+              })
+            : null
+        }
+      >
         <Left>{cardTypeFunc()}</Left>
         <Body>
           <Text style={styles.cardNumbText} children={hideNumb(item.number)} />
@@ -191,10 +202,10 @@ export default class Bonuses extends React.Component {
     this.setState({ active: false });
     var data = new FormData();
     data.append("card", this.state.newcard);
-    data.append("type_in", "pay");
+    data.append("type_in", "bonuse");
     data.append("price", 0.0);
     await axios.post("actions/cards", data).then((e) => {
-      console.log(e.data)
+      console.log(e.data);
       this.handleRefresh();
     });
   };
@@ -232,6 +243,7 @@ export default class Bonuses extends React.Component {
                   keyExtractor={(item, index) => index.toString()}
                   refreshing={this.state.loading}
                   onRefresh={this.handleRefresh}
+                  disableVirtualization
                 />
               </List>
             </ScrollView>

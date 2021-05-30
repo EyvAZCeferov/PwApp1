@@ -45,7 +45,7 @@ export function makeid(length = 16, type = null) {
 }
 
 export function hideNumb(e) {
-  var numb = e;
+  var numb = toString(e);
   //use slice to remove first 12 elements
   let first12 = numb.slice(4, 12);
   //define what char to use to replace numbers

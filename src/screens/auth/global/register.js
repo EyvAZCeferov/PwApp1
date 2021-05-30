@@ -39,20 +39,21 @@ export default class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: null,
       phone: null,
       password: null,
-      card: null,
     };
   }
 
   register = async () => {
-    await AsyncStorage.setItem("haveFinger", "");
-    await AsyncStorage.setItem("localAuthPass", "");
+    await AsyncStorage.removeItem("haveFinger");
+    await AsyncStorage.removeItem("localAuthPass");
+    await AsyncStorage.removeItem("token");
     if (this.state.phone !== null && this.state.password !== null) {
       var data = new FormData();
       data.append("phone", this.state.phone);
       data.append("password", this.state.password);
-      data.append("card", this.state.card);
+      data.append("name", this.state.name);
 
       await axios
         .post("auth/register", data)
@@ -67,10 +68,6 @@ export default class Register extends React.Component {
     } else {
       this.dropDownAlertRef.alertWithType("error", t("actions.noResult"));
     }
-  };
-
-  _onChange = (data) => {
-    this.setState({ card: data.values });
   };
 
   render() {
@@ -123,6 +120,21 @@ export default class Register extends React.Component {
           <Form>
             <Item style={styles.item} success>
               <Feather
+                name="edit"
+                size={24}
+                color="black"
+                style={{ paddingRight: 5 }}
+              />
+              <Input
+                placeholder={t("loginregister.programlock.namesurname")}
+                onChangeText={(text) => this.setState({ name: text })}
+                style={styles.input}
+                onSubmitEditing={() => Keyboard.dismiss}
+              />
+            </Item>
+
+            <Item style={styles.item} success>
+              <Feather
                 name="phone"
                 size={24}
                 color="black"
@@ -134,21 +146,6 @@ export default class Register extends React.Component {
                 onSubmitEditing={() => Keyboard.dismiss}
                 placeholder={t("form.labels.phonenumb")}
                 keyboardType={"phone-pad"}
-              />
-            </Item>
-
-            <Item style={styles.item} success>
-              <AntDesign
-                name="creditcard"
-                size={24}
-                color="black"
-                style={{ paddingRight: 5, marginLeft: 25 }}
-              />
-              <LiteCreditCardInput
-                keyboardShouldPersistTaps="handled"
-                keyboardType="number-pad"
-                onChange={this._onChange}
-                style={styles.input}
               />
             </Item>
 

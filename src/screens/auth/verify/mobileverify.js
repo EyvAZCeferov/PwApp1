@@ -29,18 +29,24 @@ export default class MobileVerify extends React.Component {
 
   async completed() {
     var data = new FormData();
+
     data.append("phone", this.props.route.params.phone);
-    data.append("password", this.props.route.params.password);
+    if (!this.props.route.params.prevpage == "forget") {
+      data.append("password", this.props.route.params.password);
+    }
     data.append("code", this.state.pass);
     if (this.state.pass) {
       await axios
         .post("auth/verify", data)
         .then((e) => {
           if (e.data.access_token) {
-            this.props.navigation.navigate("SetPass", {
-              token: e.data.access_token,
-            });
-            
+            if (!this.props.route.params.prevpage == "forget") {
+              this.props.navigation.navigate("SetPass", {
+                token: e.data.access_token,
+              });
+            } else {
+              this.props.navigation.navigate("ChangePass");
+            }
           }
         })
         .catch((e) => {
@@ -125,7 +131,7 @@ const styles = StyleSheet.create({
   },
   codefieldArena: {
     maxHeight: "20%",
-    minHeight: "15%",
+    minHeight: "10%",
     width: width,
     backgroundColor: "#fff",
   },

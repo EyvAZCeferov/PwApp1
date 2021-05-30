@@ -57,13 +57,13 @@ export default class Cards extends React.Component {
       loading: true,
     });
     await axios.get("actions/cards/type/pay").then((e) => {
-      this.setState({
-        cards: e.data,
-        loading: false,
-      });
+      if (e.data != "Trying to get property 'id' of non-object") {
+        this.setState({
+          cards: e.data,
+          loading: false,
+        });
+      }
     });
-
-    this.listComponent();
   }
 
   componentDidMount() {
@@ -100,7 +100,7 @@ export default class Cards extends React.Component {
     }
 
     function cardTypeFunc() {
-      switch (item.cardInfo.type) {
+      switch (item.type) {
         case "visa":
           return <FontAwesome name="cc-visa" size={30} color="#5C0082" />;
           break;
@@ -189,7 +189,7 @@ export default class Cards extends React.Component {
   };
 
   _onChange = (data) => {
-    this.setState({ cardInfos: data.values });
+    this.setState({ newcard: data.values });
   };
 
   render() {
@@ -219,7 +219,6 @@ export default class Cards extends React.Component {
                   data={this.state.cards}
                   renderItem={this.renderItems.bind(this)}
                   keyExtractor={(item, index) => index.toString()}
-                  disableVirtualization
                   refreshing={this.state.loading}
                   onRefresh={this.handleRefresh}
                 />

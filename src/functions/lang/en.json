@@ -4,7 +4,8 @@
       "title": "Login"
     },
     "forgetpass": {
-      "title": "Forget password"
+      "title": "Forget password",
+      "changepass": "Change the password"
     },
     "programlock": {
       "useFingerPrint": "Use your fingerprint to log in",
