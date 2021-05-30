@@ -25,9 +25,9 @@ export default function SliderCards(props) {
   React.useEffect(() => {
     getInfo();
     setInterval(() => {
-        getInfo()
-    }, 13000)
-}, []);
+      getInfo();
+    }, 13000);
+  }, []);
   function onHandleRefresh() {
     setrefreshing(true);
     getInfo();
