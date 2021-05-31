@@ -49,10 +49,7 @@ class BarcodeHome extends React.Component {
   async getInfo() {
     var cardid = null;
     await axios
-      .get(
-        "actions/shops/" +
-          this.props.route.params.checkid
-      )
+      .get("actions/shops/" + this.props.route.params.checkid)
       .then((e) => {
         this.setState({
           location_key: e.data.info["location_key"],
@@ -136,12 +133,13 @@ class BarcodeHome extends React.Component {
         key={index}
         style={{
           width: width,
-          height: 50,
+          height: 80,
           marginLeft: -Constants.statusBarHeight,
         }}
         onPress={() =>
           props.navigation.navigate("ProductInfo", {
-            uid: item.id,
+            customer:this.state.customer,
+            barcode: item.barcode,
           })
         }
       >
@@ -269,7 +267,6 @@ class BarcodeHome extends React.Component {
         formdata.append("product_qyt", e.qyt);
         formdata.append("price", price);
         formdata.append("product_edv", true);
-        console.log(formdata)
         await axios.post(
           "actions/products/" +
             this.props.route.params.checkid +
@@ -277,10 +274,15 @@ class BarcodeHome extends React.Component {
           formdata
         );
       });
-
-      this.props.navigation.navigate("PayThanks", {
-        checkid: this.props.route.params.checkid,
-      });
+      var formData = new FormData();
+      formData.append("payed", true);
+      await axios
+        .put("actions/shops/" + this.props.route.params.checkid, formData)
+        .then((e) => {
+          this.props.navigation.navigate("PayThanks", {
+            checkid: this.props.route.params.checkid,
+          });
+        });
     } else {
       alert("Məhsul yoxdur");
     }

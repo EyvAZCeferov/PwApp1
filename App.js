@@ -11,7 +11,6 @@ import store from "./src/functions/store";
 import { Root } from "native-base";
 import TabComponent from "./src/functions/screenfunctions/tabs/tabstyle";
 import DrawerStyle from "./src/functions/screenfunctions/drawer/drawerstyle";
-import ShoppingList from "./src/screens/tabs/barcode/shoppingList";
 
 enableScreens();
 console.disableYellowBox = true;
@@ -38,8 +37,6 @@ import Contactus from "./src/screens/tabs/info/contactus";
 import Settings from "./src/screens/tabs/info/settings";
 import Termofuse from "./src/screens/tabs/info/termofuse";
 
-import BarcodeStarted from "./src/screens/tabs/barcode/barcodestarter";
-import Buy from "./src/screens/tabs/barcode/buy";
 import PayThanks from "./src/screens/tabs/barcode/paythanks";
 
 import BucketStarter from "./src/screens/tabs/bucket/bucketstarter";
@@ -60,6 +57,7 @@ import Beforebuy from "./src/screens/tabs/bucket/Beforebuy";
 import Lock from "./src/screens/auth/verify/Lock";
 import ChangePass from "./src/screens/auth/global/changepass";
 import BarcodeHome from "./src/screens/tabs/barcode/barcodehome";
+import BarcodeStarter from "./src/screens/tabs/barcode/barcodestarter";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -256,9 +254,9 @@ const BarcodeStackScreen = ({ navigation, route }) => {
     <Provider store={store}>
       <BarcodeStack.Navigator
         headerMode="none"
-        initialRouteName="BarcodeStarted"
+        initialRouteName="BarcodeStarter"
       >
-        <BarcodeStack.Screen name="BarcodeStarted" component={BarcodeStarted} />
+        <BarcodeStack.Screen name="BarcodeStarter" component={BarcodeStarter} />
         <BarcodeStack.Screen name="BarcodeHome" component={BarcodeHome} />
         <BarcodeStack.Screen name="ProductInfo" component={ProductInfo} />
         <BarcodeStack.Screen name="PayThanks" component={PayThanks} />

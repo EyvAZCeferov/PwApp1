@@ -10,7 +10,7 @@ import {
 import Constants from "expo-constants";
 
 const { width, height } = Dimensions.get("screen");
-import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
 import Textpopins from "../../../functions/screenfunctions/text";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -18,30 +18,19 @@ import BarcodeMask from "react-native-barcode-mask";
 import { Camera } from "expo-camera";
 import { StatusBar } from "expo-status-bar";
 import RadioButtonRN from "radio-buttons-react-native";
-import { makeid } from "../../../functions/standart/helper";
+import { hideNumb, makeid } from "../../../functions/standart/helper";
 import DropdownAlert from "react-native-dropdownalert";
 import axios from "axios";
 
 const succesImage = require("../../../../assets/images/Alert/tick.png");
 
-export default class Bucketstarter extends React.Component {
+export default class BucketStarter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       allMarkets: [],
       filials: [],
-      cards: [
-        {
-          label: "4169 7414 0464 9764",
-          type: "Visa",
-          id: "aU6GnXRS9FCTy8H",
-        },
-        {
-          label: "6272 9273 3617 172",
-          type: "Unionpay",
-          id: "zz4nOZPRG98cS5V",
-        },
-      ],
+      cards: [],
       selectedMarket: null,
       selectedFilial: null,
       openQr: false,
@@ -49,6 +38,11 @@ export default class Bucketstarter extends React.Component {
       selectedCard: null,
       checkid: null,
     };
+  }
+
+  setId() {
+    let id = makeid(7);
+    this.setState({ checkid: id });
   }
 
   componentDidMount() {
@@ -73,19 +67,22 @@ export default class Bucketstarter extends React.Component {
       })
       .catch((error) => console.error(error));
 
-    // var cards = [];
-    // fetch("https://admin.paygo.az/api/actions/cards")
-    //   .then((response) => response.json())
-    //   .then((json) => {
-    //     var d = {
-    //       value: json.id,
-    //       label: json.number,
-    //     };
-    //     cards.push(d);
-    //   })
-    //   .catch((error) => console.error(error));
-
-    // this.setState({ cards: customers });
+    var cards = [];
+    await axios.get("actions/cards").then((e) => {
+      if (e.data.length > 0) {
+        e.data.map((en) => {
+          var d = {
+            label: hideNumb(en.number) + "  -  " + en.price + " ₼",
+            type: en.cardType,
+            id: en.id,
+          };
+          cards.push(d);
+        });
+        this.setState({
+          cards: cards,
+        });
+      }
+    });
   }
 
   async startCam() {
@@ -148,30 +145,28 @@ export default class Bucketstarter extends React.Component {
     this.setState({ selectedMarket: text });
   }
 
-  next() {
-    if (this.state.selectedMarket != null && this.state.selectedCard) {
+  async next() {
+    if (this.state.selectedMarket != null && this.state.selectedFilial) {
       var id = 0;
 
       var data = new FormData();
       data.append("shoptype", "bucket");
-      data.append("ficsal", makeid(7));
-      data.append("selectedCard", this.state.selectedCard.value);
+      data.append("ficsal", this.state.checkid);
+      if (this.state.selectedCard) {
+        data.append("selectedCard", this.state.selectedCard.value);
+      }
       data.append("selectedMarket", this.state.selectedMarket.value);
       data.append("selectedFilial", this.state.selectedFilial.value);
       data.append("location_key", this.state.selectedFilial.location_key);
-      data.append("pay_card", this.state.pay_card);
-      data.append("bonus_card", this.state.bonus_card);
+      // data.append("bonus_card", this.state.bonus_card);
 
-      fetch("https://admin.paygo.az/api/actions/shops", {
-        method: "POST",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          this.setState({
-            checkid: json,
-          });
-          this.props.navigation.navigate("BucketHome", { checkid: json });
+      await axios
+        .post("actions/shops", data)
+        .then((e) => {
+          this.props.navigation.navigate("BucketHome", { checkid: e.data });
+        })
+        .catch((e) => {
+          console.log(e);
         });
     } else {
       this.dropDownAlertRef.alertWithType(
@@ -257,8 +252,11 @@ export default class Bucketstarter extends React.Component {
                   items={this.state.filials}
                   label={t("barcode.starter.selectfilial")}
                   placeholder={t("barcode.starter.selectfilial")}
-                  containerStyle={{ height: 80, width: width - 50 }}
-                  dropDownMaxHeight={500}
+                  containerStyle={{
+                    height: 90,
+                    width: width - 50,
+                  }}
+                  dropDownMaxHeight={height}
                   searchable={true}
                   searchableStyle={styles.searchable}
                   style={{
@@ -268,7 +266,6 @@ export default class Bucketstarter extends React.Component {
                     borderColor: "#5C0082",
                     flexDirection: "row",
                     justifyContent: "space-around",
-                    zIndex: 99999999999999999,
                   }}
                   itemStyle={{
                     flexDirection: "row",
@@ -287,14 +284,17 @@ export default class Bucketstarter extends React.Component {
                 />
               </View>
             ) : null}
-            <RadioButtonRN
-              data={this.state.cards}
-              selectedBtn={(e) => this.setState({ selectedCard: e.id })}
-              icon={<AntDesign name="checkcircle" size={25} color="#5C0082" />}
-              animationTypes={["zoomIn", "pulse", "shake", "rotate"]}
-              deactiveColor="#5C0082"
-              duration={500}
-            />
+            {this.state.cards.length > 0 ? (
+              <RadioButtonRN
+                data={this.state.cards}
+                selectedBtn={(e) => this.setState({ selectedCard: e.id })}
+                icon={<AntDesign name="creditcard" size={25} color="#5C0082" />}
+                animationTypes={["zoomIn", "pulse", "shake", "rotate"]}
+                deactiveColor="#5C0082"
+                duration={500}
+              />
+            ) : null}
+
             <View
               style={{
                 flexDirection: "row",

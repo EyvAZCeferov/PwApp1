@@ -13,10 +13,10 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { connect } from "react-redux";
 import { t } from "../../../functions/lang";
-import { Left, Body, Right, Button } from "native-base";
-import { AntDesign, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import Textpopins from "../../../functions/screenfunctions/text";
 import Header from "./components/BucketHeader";
+import * as Localization from "expo-localization";
 
 const { width, height } = Dimensions.get("window");
 import Constants from "expo-constants";
@@ -50,7 +50,6 @@ class ProductInfo extends React.Component {
     )
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         this.setState({
           product: json,
         });

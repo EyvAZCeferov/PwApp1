@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Dimensions, SafeAreaView, StyleSheet } from "react-native";
+import {
+  View,
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Button, Thumbnail } from "native-base";
 import Constants from "expo-constants";
 const { width, height } = Dimensions.get("window");
@@ -14,33 +20,66 @@ export default class Home extends React.Component {
     super(props);
     this.state = {
       cards: null,
-      cardcount: 0,
+      refresh: true,
     };
   }
 
   componentDidMount() {
     this.getInfo();
+    setInterval(() => {
+      this.renderContent.bind(this);
+    });
   }
 
   async getInfo() {
+    this.setState({
+      refresh: true,
+    });
     await axios.get("actions/cards").then((e) => {
       this.setState({
         cards: e.data,
-        cardcount: e.data.length,
+        refresh: false,
       });
-      this.renderContent();
     });
+    this.renderContent.bind(this);
   }
 
   renderContent() {
     return (
       <View style={styles.contentArena}>
-        <SliderCards
-          cards={this.state.cards}
-          cardcount={this.state.cardcount}
-          call={() => this.getInfo()}
-          {...this.props}
-        />
+        <View
+          style={{
+            width: width,
+            height: 201,
+            backgroundColor: "#fff",
+          }}
+        >
+          {this.state.refresh == true ? (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                alignContent: "center",
+                textAlign: "center",
+              }}
+            >
+              <ActivityIndicator
+                color="#5C0082"
+                animating={true}
+                size="large"
+              />
+            </View>
+          ) : (
+            <SliderCards
+              cards={this.state.cards.length > 0 ? this.state.cards : null}
+              refreshing={this.state.refresh}
+              call={()=>this.getInfo.bind(this)}
+              {...this.props}
+            />
+          )}
+        </View>
         <RecentOperations {...this.props} />
       </View>
     );

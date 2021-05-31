@@ -14,6 +14,8 @@ import { t } from "../../../../../functions/lang";
 import Textpopins from "../../../../../functions/screenfunctions/text";
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import { ScrollView } from "react-native";
+import Constants from "expo-constants";
 
 const { width, height } = Dimensions.get("window");
 export default function RecentOperations(props) {
@@ -29,9 +31,19 @@ export default function RecentOperations(props) {
 
   async function getInfo() {
     setRefresh(true);
+    var datas = [];
     await axios.get("actions/shops").then((e) => {
       if (e.data.length > 0) {
-        setList(e.data);
+        e.data.map((es) => {
+          if (es.payed && es.payed == true) {
+            datas.push(es);
+          }
+        });
+        if (datas.length > 0) {
+          setList(datas);
+        } else {
+          setList(null);
+        }
       }
     });
     setRefresh(false);
@@ -159,7 +171,7 @@ export default function RecentOperations(props) {
         </View>
       );
     } else {
-      if (list != null || list.count > 0) {
+      if (list != null) {
         return (
           <FlatList
             data={list}
@@ -167,9 +179,14 @@ export default function RecentOperations(props) {
             renderItem={renderItem}
             refreshing={refresh}
             onRefresh={onHandleRefresh}
+            style={{
+              marginBottom: Constants.statusBarHeight * 2,
+            }}
+            showsVerticalScrollIndicator
+            scrollEnabled
           />
         );
-      } else if (list == null || !list.count > 0) {
+      } else {
         return (
           <View
             style={{

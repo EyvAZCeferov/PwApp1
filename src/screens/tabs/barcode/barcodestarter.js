@@ -10,7 +10,7 @@ import {
 import Constants from "expo-constants";
 
 const { width, height } = Dimensions.get("screen");
-import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
 import Textpopins from "../../../functions/screenfunctions/text";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -18,31 +18,19 @@ import BarcodeMask from "react-native-barcode-mask";
 import { Camera } from "expo-camera";
 import { StatusBar } from "expo-status-bar";
 import RadioButtonRN from "radio-buttons-react-native";
-import { makeid } from "../../../functions/standart/helper";
+import { hideNumb, makeid } from "../../../functions/standart/helper";
 import DropdownAlert from "react-native-dropdownalert";
 import axios from "axios";
-import AsyncStorage from "@react-native-community/async-storage";
 
 const succesImage = require("../../../../assets/images/Alert/tick.png");
 
-export default class Bucketstarter extends React.Component {
+export default class BarcodeStarter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       allMarkets: [],
       filials: [],
-      cards: [
-        {
-          label: "4169 7414 0464 9764",
-          type: "Visa",
-          id: "aU6GnXRS9FCTy8H",
-        },
-        {
-          label: "6272 9273 3617 172",
-          type: "Unionpay",
-          id: "zz4nOZPRG98cS5V",
-        },
-      ],
+      cards: [],
       selectedMarket: null,
       selectedFilial: null,
       openQr: false,
@@ -79,10 +67,19 @@ export default class Bucketstarter extends React.Component {
       })
       .catch((error) => console.error(error));
 
+    var cards = [];
     await axios.get("actions/cards").then((e) => {
       if (e.data.length > 0) {
+        e.data.map((en) => {
+          var d = {
+            label: hideNumb(en.number) + "  -  " + en.price + " ₼",
+            type: en.cardType,
+            id: en.id,
+          };
+          cards.push(d);
+        });
         this.setState({
-          cards: e.data,
+          cards: cards,
         });
       }
     });
@@ -255,7 +252,7 @@ export default class Bucketstarter extends React.Component {
                   items={this.state.filials}
                   label={t("barcode.starter.selectfilial")}
                   placeholder={t("barcode.starter.selectfilial")}
-                  containerStyle={{ height: 80, width: width - 50 }}
+                  containerStyle={{ height: 90, width: width - 50 }}
                   dropDownMaxHeight={500}
                   searchable={true}
                   searchableStyle={styles.searchable}
@@ -285,13 +282,11 @@ export default class Bucketstarter extends React.Component {
                 />
               </View>
             ) : null}
-            {this.state.cards.length > 1 ? (
+            {this.state.cards.length > 0 ? (
               <RadioButtonRN
                 data={this.state.cards}
                 selectedBtn={(e) => this.setState({ selectedCard: e.id })}
-                icon={
-                  <AntDesign name="checkcircle" size={25} color="#5C0082" />
-                }
+                icon={<AntDesign name="creditcard" size={25} color="#5C0082" />}
                 animationTypes={["zoomIn", "pulse", "shake", "rotate"]}
                 deactiveColor="#5C0082"
                 duration={500}

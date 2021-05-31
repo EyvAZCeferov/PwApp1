@@ -7,10 +7,11 @@ import customStyle from "../../../../../../assets/Theme";
 import { t } from "../../../../../functions/lang";
 import { hideNumb } from "../../../../../functions/standart/helper";
 import Textpopins from "../../../../../functions/screenfunctions/text";
+import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
 export default function CardOne({ index, y, item }, props) {
-  const [cardCount, setCardCount] = React.useState(null);
+  const [user, setUser] = React.useState(null);
   const position = Animated.subtract(index * 200, y);
   const isDissappering = -180;
   const isTop = 0;
@@ -36,15 +37,6 @@ export default function CardOne({ index, y, item }, props) {
     outputRange: [0, 1, 1, 0],
   });
 
-  function getCount() {
-    setCardCount(props.cardcount);
-    renderCards();
-  }
-
-  React.useEffect(() => {
-    getCount();
-  }, []);
-
   const cardBgColors = [
     ["rgba(92,0,130,.80)", "rgba(175,0,69,.95)"],
     ["rgba(175,0,69,.95)", "rgba(92,0,130,.80)"],
@@ -66,9 +58,15 @@ export default function CardOne({ index, y, item }, props) {
     ["rgb(2,123,121)", "rgba(2,123,121,0.85)"],
   ];
 
+  React.useEffect(async () => {
+    await axios.get("auth/me").then((e) => {
+      setUser(e.data);
+    });
+  }, []);
+
   function bounces() {
     var elements = [];
-    for (let i = 0; i < cardCount; i++) {
+    for (let i = 0; i < props.cardCount; i++) {
       const clear =
         index == i
           ? {
@@ -132,11 +130,7 @@ export default function CardOne({ index, y, item }, props) {
               />
               <Text
                 style={styles.priceText}
-                children={
-                  item.price
-                    ? item.price + " ₼"
-                    : 0 + " ₼"
-                }
+                children={item.price ? item.price + " ₼" : 0 + " ₼"}
               />
             </Left>
             <Right style={styles.right}>
@@ -145,10 +139,9 @@ export default function CardOne({ index, y, item }, props) {
           </View>
           <View style={styles.centerCardNum}>
             <View>
-              <Textpopins
-                style={styles.cardNumbText}
-                children={item.number}
-              />
+              <Textpopins style={styles.cardNumbText}>
+                {hideNumb(151615645646)}
+              </Textpopins>
             </View>
           </View>
           <View style={styles.cardInfos}>
@@ -157,7 +150,13 @@ export default function CardOne({ index, y, item }, props) {
                 <Col style={customStyle.padding5}>
                   <Text
                     style={styles.gridInfoNameSurnameDynamic}
-                    children="John Doe"
+                    children={
+                      item.type == "pin"
+                        ? user
+                          ? user.name
+                          : t("loginregister.programlock.namesurname")
+                        : t("loginregister.programlock.namesurname")
+                    }
                   />
                   <Text
                     style={[
@@ -168,10 +167,7 @@ export default function CardOne({ index, y, item }, props) {
                   />
                 </Col>
                 <Col style={styles.gridInfoMonthYear}>
-                  <Text
-                    style={styles.monthYearText}
-                    children={item.expiry}
-                  />
+                  <Text style={styles.monthYearText} children={item.expiry} />
                   <Text
                     style={[styles.monthYearText, styles.monthYearUnderText]}
                     children={t("home.slidercards.expiry")}
@@ -200,7 +196,7 @@ export default function CardOne({ index, y, item }, props) {
     );
   }
 
-  return <View>{renderCards()}</View>;
+  return renderCards();
 }
 
 const styles = StyleSheet.create({

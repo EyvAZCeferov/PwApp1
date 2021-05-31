@@ -9,10 +9,11 @@ import {
   Dimensions,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import Constants from "expo-constants";
 import Header from "./components/BucketHeader";
-const { width } = Dimensions.get("screen");
+const { width, height } = Dimensions.get("screen");
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
 import { connect } from "react-redux";
@@ -20,7 +21,7 @@ import Textpopins from "../../../functions/screenfunctions/text";
 import { Button } from "native-base";
 import Filter from "./components/filter";
 import axios from "axios";
-import { convertaz } from "../../../functions/standart/helper";
+import { convertaz, get_image } from "../../../functions/standart/helper";
 
 class BucketHome extends React.Component {
   constructor(props) {
@@ -28,53 +29,73 @@ class BucketHome extends React.Component {
     this.state = {
       datas: null,
       location_key: null,
-      customer: null,
-      checkid: null,
       activeFilter: false,
       brands: null,
       refresh: true,
+      customer: 0,
+      active: false,
+      loadingExtraData: false,
+      page: 1,
     };
   }
 
   componentDidMount() {
     this.setState({ refresh: true });
-    let checkid = this.props.route.params;
-    this.setState({
-      checkid: checkid,
-    });
     this.getInfo();
   }
 
   async getInfo() {
-    fetch("https://admin.paygo.az/api/actions/shops/" + this.state.checkid)
-      .then((res) => res.json())
+    await axios
+      .get("actions/shops/" + this.props.route.params.checkid)
       .then((e) => {
         this.setState({
-          location_key: e.info.location_key,
-          customer: e.info.selectedMarket,
+          location_key: e.data.info["location_key"],
+          customer: e.data.customer,
         });
       })
       .catch((e) => {
         console.log(e);
       });
-
     var cat = [];
-    fetch("https://admin.paygo.az/api/customers/products/1")
-      .then((response) => response.json())
-      .then((json) => {
-        cat.push(json[1].home_cat);
-        cat.push(json[1].child_cat1);
-        cat.push(json[1].child_cat2);
-        cat.push(json[1].child_cat3);
+
+    await axios
+      .get(
+        "customers/products/" + this.state.customer + "?page=" + this.state.page
+      )
+      .then((e) => {
+        var datas =
+          this.state.page === 1
+            ? e.data.data
+            : [...this.state.datas, ...e.data.data];
+        // cat.push(e.data[1].home_cat);
+        // cat.push(e.data[1].child_cat1);
+        // cat.push(e.data[1].child_cat2);
+        // cat.push(e.data[1].child_cat3);
         this.setState({
-          datas: json,
+          datas: datas,
           brands: cat,
         });
       })
-      .catch((error) => console.error(error))
       .finally(() => {
         this.setState({ refresh: false });
       });
+  }
+
+  LoadMoreRandomData = () => {
+    console.log(this.state.page);
+    this.setState(
+      {
+        refresh: true,
+        page: this.state.page + 1,
+      },
+      () => this.getInfo()
+    );
+  };
+
+  addProduct(item) {
+    var data = item;
+    data.qyt = 1;
+    this.props.addtoCard(data);
   }
 
   renderHorizontalList() {
@@ -109,9 +130,9 @@ class BucketHome extends React.Component {
       >
         <Image
           source={{
-            uri:
-              item.image ??
-              "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
+            uri: item.image
+              ? get_image(item.image)
+              : "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
           }}
           style={{
             width: width / 2.3,
@@ -127,7 +148,7 @@ class BucketHome extends React.Component {
         </Text>
         <View style={styles.actions}>
           <TouchableOpacity
-            onPress={() => this.props.addtoCard(item)}
+            onPress={() => this.addProduct(item)}
             style={styles.addToCart}
           >
             {this.props.bucketitems.find((element) => element.id == item.id) ? (
@@ -163,6 +184,48 @@ class BucketHome extends React.Component {
     );
   }
 
+  renderFooter = () => {
+    return (
+      //Footer View with Load More button
+      <View
+        style={[
+          styles.center,
+          {
+            flex: 1,
+            marginTop: Constants.statusBarHeight,
+            marginLeft: -Constants.statusBarHeight,
+          },
+        ]}
+      >
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={this.LoadMoreRandomData}
+          //On Click of button load more data
+          style={[
+            styles.center,
+            {
+              backgroundColor: "#5C0082",
+              flex: 1,
+              width,
+            },
+          ]}
+        >
+          <Textpopins
+            style={{
+              fontSize: 20,
+              color: "#fff",
+            }}
+          >
+            Load More
+          </Textpopins>
+          {this.state.refresh ? (
+            <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
+          ) : null}
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -170,7 +233,8 @@ class BucketHome extends React.Component {
           <Header
             button
             title={t("bucket.header.tabtitle")}
-            routeParams={this.state.routeParams}
+            checkid={this.props.route.params.checkid}
+            {...this.props}
           />
         </View>
         <View style={[styles.content, { flex: 0.9 }]}>
@@ -180,7 +244,7 @@ class BucketHome extends React.Component {
               alwaysBounceVertical={true}
               horizontal={true}
             >
-              {this.renderHorizontalList()}
+              {/* {this.renderHorizontalList()} */}
             </ScrollView>
           </View>
           <Button
@@ -200,14 +264,37 @@ class BucketHome extends React.Component {
             <Feather name="filter" size={24} color="#fff" />
           </Button>
           <View style={styles.footer}>
-            <ScrollView style={styles.productLists} vertical={true}>
-              <FlatList
-                data={this.state.datas}
-                numColumns={2}
-                renderItem={this.renderFlatList.bind(this)}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </ScrollView>
+            {this.state.refresh ? (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                <ActivityIndicator
+                  color="#5C0082"
+                  animating={true}
+                  size="large"
+                />
+              </View>
+            ) : (
+              <ScrollView style={styles.productLists} vertical={true}>
+                <FlatList
+                  data={this.state.datas}
+                  numColumns={2}
+                  renderItem={this.renderFlatList.bind(this)}
+                  keyExtractor={(item, index) => index.toString()}
+                  onEndReachedThreshold={0}
+                  onEndReached={this.LoadMoreRandomData}
+                  ListFooterComponent={this.renderFooter}
+                  enableEmptySections={true}
+                />
+              </ScrollView>
+            )}
           </View>
           {this.state.activeFilter ? (
             <Filter
@@ -226,7 +313,6 @@ class BucketHome extends React.Component {
     );
   }
 }
-
 const mapStateToProps = (state) => {
   return {
     wishitems: state.wishitems,
@@ -311,6 +397,12 @@ const styles = StyleSheet.create({
     left: 3,
     flexDirection: "column",
     flex: 1,
+  },
+  center: {
+    textAlign: "center",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
   },
   addToCart: {
     paddingHorizontal: Constants.statusBarHeight / 3,
