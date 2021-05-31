@@ -79,33 +79,9 @@ function CartList(props) {
   }
 
   async function next() {
-    if (props.bucketitems.length > 0) {
-      props.bucketitems.map(async (e) => {
-        var formdata = new FormData();
-        var price = pric_e(e.qyt, e.price);
-        formdata.append("barcode", convertaz(e.barcode));
-        formdata.append("pay_id", props.route.params.checkid);
-        formdata.append("product_name", convertaz(e.name));
-        formdata.append("product_qyt", e.qyt);
-        formdata.append("price", price);
-        formdata.append("product_edv", true);
-        await axios.post(
-          "actions/products/" + props.route.params.checkid + "/add_pay_item",
-          formdata
-        );
-      });
-      var formData = new FormData();
-      formData.append("payed", true);
-      await axios
-        .put("actions/shops/" + props.route.params.checkid, formData)
-        .then((e) => {
-          props.navigation.navigate("PayThanks", {
-            checkid: props.route.params.checkid,
-          });
-        });
-    } else {
-      alert("Məhsul yoxdur");
-    }
+    props.navigation.navigate("BeforeBuy", {
+      checkid: props.route.params.checkid,
+    });
   }
 
   function renderBucket({ item, index }) {
@@ -214,7 +190,7 @@ function CartList(props) {
             ]}
             onPress={() =>
               props.navigation.navigate("BeforeBuy", {
-                checkid: checkid,
+                checkid: props.route.params.checkid,
               })
             }
           >
@@ -312,30 +288,31 @@ function CartList(props) {
             ₼
           </Textpopins>
         </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Textpopins
+        {card != null ? (
+          <View
             style={{
-              color: "rgba(255,255,255,.7)",
-              fontSize: 20,
+              flexDirection: "row",
+              justifyContent: "space-between",
             }}
           >
-            {t("barcode.paying.balance")}
-          </Textpopins>
-          <Textpopins
-            style={{
-              color: "rgba(255,255,255,.7)",
-              fontSize: 20,
-            }}
-          >
-            {card ? card.price : 0} ₼
-          </Textpopins>
-        </View>
+            <Textpopins
+              style={{
+                color: "rgba(255,255,255,.7)",
+                fontSize: 20,
+              }}
+            >
+              {t("barcode.paying.balance")}
+            </Textpopins>
+            <Textpopins
+              style={{
+                color: "rgba(255,255,255,.7)",
+                fontSize: 20,
+              }}
+            >
+              {card != null ? card.price : 0} ₼
+            </Textpopins>
+          </View>
+        ) : null}
       </View>
     );
   }
@@ -351,7 +328,16 @@ function CartList(props) {
       </View>
 
       <View style={styles.content}>{renderContent()}</View>
-      <View style={styles.footer}>{renderFooter()}</View>
+      <View
+        style={[
+          styles.footer,
+          {
+            flex: card != null ? 0.15 : 0.10,
+          },
+        ]}
+      >
+        {renderFooter()}
+      </View>
     </SafeAreaView>
   );
 }

@@ -26,9 +26,6 @@ export default class Home extends React.Component {
 
   componentDidMount() {
     this.getInfo();
-    setInterval(() => {
-      this.renderContent.bind(this);
-    });
   }
 
   async getInfo() {
@@ -75,7 +72,7 @@ export default class Home extends React.Component {
             <SliderCards
               cards={this.state.cards.length > 0 ? this.state.cards : null}
               refreshing={this.state.refresh}
-              call={()=>this.getInfo.bind(this)}
+              call={() => this.getInfo.bind(this)}
               {...this.props}
             />
           )}

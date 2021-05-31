@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Body, Button, Left, ListItem, Right } from "native-base";
 import { t } from "../../../../../functions/lang";
 import Textpopins from "../../../../../functions/screenfunctions/text";
-import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Constants from "expo-constants";
@@ -57,24 +57,11 @@ export default function RecentOperations(props) {
           return <FontAwesome name="barcode" size={30} color="#AF0045" />;
           break;
         case "bucket":
-          return <FontAwesome name="bucket" size={30} color="#AF0045" />;
+          return <Entypo name="shopping-bag" size={30} color="#AF0045" />;
           break;
         default:
           return <FontAwesome name="shopping" size={30} color="#AF0045" />;
       }
-    }
-
-    function priceCollector(id) {
-      let allPrice = 0;
-      axios.get("/actions/shops/" + id + "/products").then((e) => {
-        if (e.data.length > 0 || e.data != null) {
-          e.data.map((el) => {
-            allPrice = parseFloat(allPrice) + parseFloat(el.price);
-          });
-          return allPrice;
-        }
-      });
-      return allPrice;
     }
 
     function convertStampDate(unixtimestamp) {
@@ -121,6 +108,15 @@ export default function RecentOperations(props) {
       return fulldate;
     }
 
+    function priceCollector(items) {
+      var price = 0;
+      items.map((e) => {
+        var p = parseFloat(e.price * e.qyt);
+        price = parseFloat(price) + parseFloat(p);
+      });
+      return price;
+    }
+
     return (
       <ListItem
         thumbnail
@@ -142,7 +138,7 @@ export default function RecentOperations(props) {
         </Body>
         <Right>
           <Button transparent>
-            <Textpopins children={priceCollector(item.id) + " AZN"} />
+            <Textpopins children={priceCollector(item.pay_items) + " AZN"} />
           </Button>
         </Right>
       </ListItem>

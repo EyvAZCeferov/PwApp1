@@ -288,8 +288,8 @@ class BucketHome extends React.Component {
                   numColumns={2}
                   renderItem={this.renderFlatList.bind(this)}
                   keyExtractor={(item, index) => index.toString()}
-                  onEndReachedThreshold={0}
-                  onEndReached={this.LoadMoreRandomData}
+                  onEndReachedThreshold={0.5}
+                  onEndReached={() => this.LoadMoreRandomData()}
                   ListFooterComponent={this.renderFooter}
                   enableEmptySections={true}
                 />

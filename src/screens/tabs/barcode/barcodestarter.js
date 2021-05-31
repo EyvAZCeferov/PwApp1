@@ -119,9 +119,15 @@ export default class BarcodeStarter extends React.Component {
     }
   }
 
-  qrCodeScanned(item) {
+  async qrCodeScanned(item) {
     this.setState({ openQr: false });
-    this.setState({ selectedMarket: item.barcode });
+    await axios.get(String(item.data)).then((e) => {
+      this.setState({
+        selectedMarket: e.data.customer_id,
+        selectedFilial: e.data.id,
+      });
+    });
+    this.render()
   }
 
   change_customer(text) {
@@ -241,6 +247,7 @@ export default class BarcodeStarter extends React.Component {
               autoScrollToDefaultValue={Constants.statusBarHeight}
               min={15}
               max={100}
+              value={this.state.selectedMarket}
             />
           </View>
           <View style={styles.footer}>
@@ -279,6 +286,7 @@ export default class BarcodeStarter extends React.Component {
                   autoScrollToDefaultValue={Constants.statusBarHeight}
                   min={15}
                   max={100}
+                  value={this.state.selectedFilial}
                 />
               </View>
             ) : null}

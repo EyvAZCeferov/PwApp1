@@ -225,13 +225,19 @@ export default class OneCheck extends React.Component {
             <View style={{ flexDirection: "row" }}>
               <Textpopins children={t("check.tarix") + ": "} />
               <Textpopins
-                children={this.convertStampDate(new Date(this.state.check.created_at), "date")}
+                children={this.convertStampDate(
+                  new Date(this.state.check.created_at),
+                  "date"
+                )}
               />
             </View>
             <View style={{ flexDirection: "row" }}>
               <Textpopins children={t("check.saat") + ": "} />
               <Textpopins
-                children={this.convertStampDate(new Date(this.state.check.created_at), "hour")}
+                children={this.convertStampDate(
+                  new Date(this.state.check.created_at),
+                  "hour"
+                )}
               />
             </View>
           </View>
@@ -393,8 +399,8 @@ export default class OneCheck extends React.Component {
         }}
       >
         <Textpopins style={{ width: "35%" }} children={item.name} />
-        <Textpopins children={item.qty} />
-        <Textpopins children={item.price} />
+        <Textpopins children={item.qyt} />
+        <Textpopins children={countSum(item) / item.qyt} />
         <Textpopins children={countSum(item)} />
       </View>
     );
