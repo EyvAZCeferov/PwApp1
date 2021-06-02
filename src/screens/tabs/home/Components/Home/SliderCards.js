@@ -22,6 +22,7 @@ export default function SliderCards(props) {
       <CardOne
         {...{ index, y, item }}
         cardcount={props ? props.cards.length : 1}
+        user={props ? props.user : null}
       />
     );
   }

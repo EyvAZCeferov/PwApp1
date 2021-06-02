@@ -2,11 +2,11 @@
 const ICONS={
     icons:{
         home:  "home-outline",
-        barcode: "barcode-outline",
+        barcode: "scan",
         bucket: 'cart-outline',
         campaigns: 'albums-outline',
         homeFOCUSED: "home",
-        barcodeFOCUSED: "scan",
+        barcodeFOCUSED: "barcode",
         bucketFOCUSED: 'cart',
         campaignsFOCUSED: 'albums-sharp',
     }

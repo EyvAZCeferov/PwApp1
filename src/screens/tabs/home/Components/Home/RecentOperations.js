@@ -227,7 +227,7 @@ export default function RecentOperations(props) {
         <View
           style={{
             borderTopColor: "#AF0045",
-            borderTopWidth: 4,
+            borderTopWidth: 1,
             maxHeight: 60,
             minHeight: 45,
             width: width,

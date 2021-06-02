@@ -10,8 +10,7 @@ import Textpopins from "../../../../../functions/screenfunctions/text";
 import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
-export default function CardOne({ index, y, item }, props) {
-  const [user, setUser] = React.useState(null);
+export default function CardOne({ index, y, item, cardcount, user }) {
   const position = Animated.subtract(index * 200, y);
   const isDissappering = -180;
   const isTop = 0;
@@ -58,22 +57,16 @@ export default function CardOne({ index, y, item }, props) {
     ["rgb(2,123,121)", "rgba(2,123,121,0.85)"],
   ];
 
-  React.useEffect(async () => {
-    await axios.get("auth/me").then((e) => {
-      setUser(e.data);
-    });
-  }, []);
-
   function bounces() {
     var elements = [];
-    for (let i = 0; i < props.cardCount; i++) {
+    for (let i = 0; i < cardcount; i++) {
       const clear =
         index == i
           ? {
               width: 18,
               height: 8,
               borderRadius: 4,
-              backgroundColor: cardBgColors[i][0],
+              backgroundColor: cardBgColors[i][1],
             }
           : { backgroundColor: cardBgColors[i][0] };
       elements.push(<View key={i} style={[styles.cardCount, clear]} />);
@@ -140,7 +133,7 @@ export default function CardOne({ index, y, item }, props) {
           <View style={styles.centerCardNum}>
             <View>
               <Textpopins style={styles.cardNumbText}>
-                {hideNumb(151615645646)}
+                {hideNumb(item.number)}
               </Textpopins>
             </View>
           </View>

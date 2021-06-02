@@ -1,32 +1,11 @@
 import React, { useRef } from "react";
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import { View, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { Transition, Transitioning } from "react-native-reanimated";
 import ICONS from "./src/ICONS";
 import { Ionicons } from "@expo/vector-icons";
 import Textpopins from "../text";
 
 const { width } = Dimensions.get("window");
-
-const bgColors = {
-  home: "#ffe1c5",
-  barcode: "#e5c1e5",
-  bucket: "#d7d8f8",
-  campaigns: "#bce3fa",
-  info: "#f2594a",
-};
-
-const textColors = {
-  home: "#c56b14",
-  barcode: "#f37ff3",
-  bucket: "#4b458c",
-  campaigns: "#2d9cdb",
-  info: "#4a5de2",
-};
 
 export default function TabComponent({
   labid,
@@ -60,13 +39,15 @@ export default function TabComponent({
         labid={labid}
         ref={ref}
         transition={transition}
-        style={[
-          styles.background,
-          { backgroundColor: focused ? bgColors[labid] : "white" },
-        ]}
+        style={[styles.background]}
       >
         <View style={[styles.cont, { justifyContent: "center" }]}>
-          <Ionicons name={icon} size={22} color="#5C0082" />
+          <Ionicons
+            name={icon}
+            size={focused ? 25 : 21}
+            color="#5C0082"
+            style={focused ? { fontWeight: "bold" } : null}
+          />
           {!focused ? (
             <Textpopins
               style={[
@@ -87,7 +68,6 @@ const styles = StyleSheet.create({
   background: {
     height: "100%",
     justifyContent: "center",
-    borderRadius: 30,
     alignContent: "center",
     alignItems: "center",
     textAlign: "center",

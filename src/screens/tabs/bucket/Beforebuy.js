@@ -59,15 +59,7 @@ class Beforebuy extends React.Component {
   }
 
   pric_e(qyt, price) {
-    if (this.state.location_key) {
-      if (qyt * price[this.state.location_key] == 0) {
-        return qyt * price["price"];
-      } else {
-        return qyt * price[this.state.location_key];
-      }
-    } else {
-      return qyt * price["price"];
-    }
+    return qyt * price;
   }
 
   componentDidMount() {
@@ -87,7 +79,9 @@ class Beforebuy extends React.Component {
         formdata.append("price", price);
         formdata.append("product_edv", true);
         await axios.post(
-          "actions/products/" + this.props.route.params.checkid + "/add_pay_item",
+          "actions/products/" +
+            this.props.route.params.checkid +
+            "/add_pay_item",
           formdata
         );
       });

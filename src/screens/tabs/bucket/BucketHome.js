@@ -168,16 +168,7 @@ class BucketHome extends React.Component {
             )}
           </TouchableOpacity>
           <TouchableOpacity style={styles.addToCart}>
-            <Textpopins>
-              {
-                item.price[
-                  this.state.location_key > 0.0
-                    ? this.state.location_key
-                    : "price"
-                ]
-              }
-              ₼
-            </Textpopins>
+            <Textpopins>{item.price}₼</Textpopins>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>

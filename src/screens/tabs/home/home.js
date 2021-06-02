@@ -21,6 +21,7 @@ export default class Home extends React.Component {
     this.state = {
       cards: null,
       refresh: true,
+      user: null,
     };
   }
 
@@ -36,6 +37,11 @@ export default class Home extends React.Component {
       this.setState({
         cards: e.data,
         refresh: false,
+      });
+    });
+    await axios.get("auth/me").then((e) => {
+      this.setState({
+        user: e.data,
       });
     });
     this.renderContent.bind(this);
@@ -71,6 +77,7 @@ export default class Home extends React.Component {
           ) : (
             <SliderCards
               cards={this.state.cards.length > 0 ? this.state.cards : null}
+              user={this.state.user}
               refreshing={this.state.refresh}
               call={() => this.getInfo.bind(this)}
               {...this.props}
@@ -115,7 +122,7 @@ const styles = StyleSheet.create({
     width: width,
     paddingBottom: 2,
     borderBottomColor: "#AF0045",
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     marginTop: Constants.statusBarHeight,
   },
   icon: {

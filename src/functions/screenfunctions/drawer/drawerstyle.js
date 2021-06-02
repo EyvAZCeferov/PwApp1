@@ -14,12 +14,14 @@ import {
   Entypo,
   MaterialCommunityIcons,
   Foundation,
+  Ionicons,
   FontAwesome,
+  Feather,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-community/async-storage";
-import { CommonActions } from "@react-navigation/native";
 import { ProgramLockContext } from "../../../functions/Hooks/Authentication/Lock/ProgramLockContext";
-
+import { get_image } from "../../../functions/standart/helper";
 const icon = require("../../../../assets/icon-ios.png");
 import { t } from "../../lang";
 
@@ -42,7 +44,13 @@ export default function DrawerStyle(props) {
         <ListItem style={{ borderColor: "transparent", borderWidth: 0 }}>
           <Left>
             <Thumbnail
-              source={props.usdata ? props.usdata.image ?? icon : icon}
+              source={
+                props.usdata
+                  ? props.usdata.image
+                    ? get_image(props.usdata.image)
+                    : icon
+                  : icon
+              }
               style={{
                 height: 80,
                 width: 80,
@@ -109,12 +117,7 @@ export default function DrawerStyle(props) {
           onPress={() => props.navigation.navigate("Bonuses")}
         >
           <Left>
-            <Entypo
-              name="price-ribbon"
-              size={24}
-              style={{ fontWeight: "bold" }}
-              color="#5C0082"
-            />
+            <Ionicons name="pricetag-outline" size={24} color="#5C0082" />
           </Left>
           <Body>
             <Textpopins style={styles.texts}>{t("drawer.bonuses")}</Textpopins>
@@ -127,12 +130,7 @@ export default function DrawerStyle(props) {
           onPress={() => props.navigation.navigate("Maps")}
         >
           <Left>
-            <MaterialCommunityIcons
-              name="map"
-              size={24}
-              style={{ fontWeight: "bold" }}
-              color="#5C0082"
-            />
+            <Feather name="map-pin" size={24} color="#5C0082" />
           </Left>
           <Body>
             <Textpopins style={styles.texts}>{t("drawer.map")}</Textpopins>
@@ -145,12 +143,7 @@ export default function DrawerStyle(props) {
           onPress={() => props.navigation.navigate("History")}
         >
           <Left>
-            <FontAwesome
-              name="history"
-              size={24}
-              style={{ fontWeight: "bold" }}
-              color="#5C0082"
-            />
+            <MaterialIcons name="history" size={24} color="#5C0082" />
           </Left>
           <Body>
             <Textpopins style={styles.texts}>{t("drawer.history")}</Textpopins>
@@ -163,12 +156,7 @@ export default function DrawerStyle(props) {
           onPress={() => props.navigation.navigate("Contactus")}
         >
           <Left>
-            <Foundation
-              name="telephone"
-              size={24}
-              style={{ fontWeight: "bold" }}
-              color="#5C0082"
-            />
+            <AntDesign name="contacts" size={24} color="#5C0082" />
           </Left>
           <Body>
             <Textpopins style={styles.texts}>

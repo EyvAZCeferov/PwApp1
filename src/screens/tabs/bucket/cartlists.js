@@ -67,15 +67,7 @@ function CartList(props) {
   }
 
   function pric_e(qyt, price) {
-    if (location_key) {
-      if (qyt * price[location_key] == 0) {
-        return qyt * price["price"];
-      } else {
-        return qyt * price[location_key];
-      }
-    } else {
-      return qyt * price["price"];
-    }
+    return qyt * price;
   }
 
   async function next() {
@@ -332,7 +324,7 @@ function CartList(props) {
         style={[
           styles.footer,
           {
-            flex: card != null ? 0.15 : 0.10,
+            flex: card != null ? 0.15 : 0.1,
           },
         ]}
       >

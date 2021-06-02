@@ -40,7 +40,6 @@ class BarcodeHome extends React.Component {
       hasPermission: null,
       card: null,
       price: 0,
-      location_key: null,
       customer: 0,
       active: false,
     };
@@ -52,7 +51,6 @@ class BarcodeHome extends React.Component {
       .get("actions/shops/" + this.props.route.params.checkid)
       .then((e) => {
         this.setState({
-          location_key: e.data.info["location_key"],
           customer: e.data.customer,
         });
         cardid = e.data.pay_card ?? null;
@@ -114,15 +112,7 @@ class BarcodeHome extends React.Component {
   }
 
   price(qyt, price) {
-    if (this.state.location_key) {
-      if (qyt * price[this.state.location_key] == 0) {
-        return qyt * price["price"];
-      } else {
-        return qyt * price[this.state.location_key];
-      }
-    } else {
-      return qyt * price["price"];
-    }
+    return qyt * price;
   }
 
   renderItems({ item, index }) {
@@ -138,7 +128,7 @@ class BarcodeHome extends React.Component {
         }}
         onPress={() =>
           props.navigation.navigate("ProductInfo", {
-            customer:this.state.customer,
+            customer: this.state.customer,
             barcode: item.barcode,
           })
         }
