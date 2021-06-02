@@ -34,8 +34,8 @@ import {
 import Textpopins from "../../../functions/screenfunctions/text";
 const { width, height } = Dimensions.get("window");
 import { t } from "../../../functions/lang";
+import AsyncStorage from "@react-native-community/async-storage";
 
-const pinicon = require("../../../../assets/images/Pin/pin.png");
 import { hideNumb } from "../../../functions/standart/helper";
 import { StatusBar } from "expo-status-bar";
 import axios from "axios";
@@ -58,7 +58,6 @@ export default class Bonuses extends React.Component {
     });
     await axios.get("actions/cards").then((e) => {
       if (e.data != "Trying to get property 'id' of non-object") {
-        console.log(e.data)
         this.setState({
           cards: e.data,
           loading: false,
@@ -106,86 +105,74 @@ export default class Bonuses extends React.Component {
       switch (item.cardType) {
         case "pin":
           return <AntDesign name="pushpino" size={24} color="black" />;
+          break;
         case "visa":
-          return <FontAwesome name="cc-visa" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-visa" size={30} color="black" />;
           break;
         case "master-card":
-          return <FontAwesome name="cc-mastercard" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-mastercard" size={30} color="black" />;
           break;
         case "american-express":
-          return <FontAwesome name="cc-amex" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-amex" size={30} color="black" />;
           break;
         case "discover":
-          return <FontAwesome name="cc-discover" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-discover" size={30} color="black" />;
           break;
         case "jcb":
-          return <FontAwesome name="cc-jcb" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-jcb" size={30} color="black" />;
           break;
         case "diners-club-north-america":
-          return (
-            <FontAwesome name="cc-diners-club" size={30} color="#7c9d32" />
-          );
+          return <FontAwesome name="cc-diners-club" size={30} color="black" />;
           break;
         case "diners-club":
-          return (
-            <FontAwesome name="cc-diners-club" size={30} color="#7c9d32" />
-          );
+          return <FontAwesome name="cc-diners-club" size={30} color="black" />;
           break;
         case "diners-club-carte-blanche":
-          return (
-            <FontAwesome name="cc-diners-club" size={30} color="#7c9d32" />
-          );
+          return <FontAwesome name="cc-diners-club" size={30} color="black" />;
           break;
         case "diners-club-international":
-          return (
-            <FontAwesome name="cc-diners-club" size={30} color="#7c9d32" />
-          );
+          return <FontAwesome name="cc-diners-club" size={30} color="black" />;
           break;
         case "maestro":
-          return (
-            <FontAwesome name="credit-card-alt" size={30} color="#7c9d32" />
-          );
+          return <FontAwesome name="credit-card-alt" size={30} color="black" />;
           break;
         case "visa-electron":
-          return <FontAwesome5 name="cc-visa" size={30} color="#7c9d32" />;
+          return <FontAwesome5 name="cc-visa" size={30} color="black" />;
           break;
         default:
-          return <FontAwesome name="credit-card" size={30} color="#7c9d32" />;
+          return <FontAwesome name="credit-card" size={30} color="black" />;
       }
     }
 
-    return (
-      <ListItem
-        thumbnail
-        onPress={
-          item.type == "pin"
-            ? this.props.navigation.navigate("Pininfo", {
-                pinid: item.id,
-              })
-            : null
-        }
-      >
-        <Left>{cardTypeFunc()}</Left>
-        <Body>
-          <Text style={styles.cardNumbText} children={hideNumb(item.number)} />
-          <Text children={item.price + " Azn"} />
-        </Body>
-        <Right>
-          {item.type == "pin" ? (
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate("Pininfo")}
-            >
-              <EvilIcons name="eye" size={30} color="#2196f3" />
-            </Button>
-          ) : (
-            <Button transparent onPress={() => deleteItem(item.id)}>
-              <EvilIcons name="trash" size={30} color="#BF360C" />
-            </Button>
-          )}
-        </Right>
-      </ListItem>
-    );
+    if (item.type != "pay")
+      return (
+        <ListItem thumbnail>
+          <Left>{cardTypeFunc()}</Left>
+          <Body>
+            <Text
+              style={styles.cardNumbText}
+              children={hideNumb(item.number)}
+            />
+            <Text children={item.price + " Azn"} />
+          </Body>
+          <Right>
+            {item.type == "pin" ? (
+              <Button
+                transparent
+                onPress={() =>
+                  this.props.navigation.navigate("Pininfo", { pinid: item.id })
+                }
+              >
+                <EvilIcons name="eye" size={30} color="#2196f3" />
+              </Button>
+            ) : (
+              <Button transparent onPress={() => deleteItem(item.id)}>
+                <EvilIcons name="trash" size={30} color="#BF360C" />
+              </Button>
+            )}
+          </Right>
+        </ListItem>
+      );
   }
 
   async handleRefresh() {
@@ -199,20 +186,29 @@ export default class Bonuses extends React.Component {
     );
   }
 
-  addCard = async () => {
-    this.setState({ active: false });
+  async addCard() {
     var data = new FormData();
-    data.append("card", this.state.newcard);
+    data.append("number", this.state.newcard.number);
+    data.append("expiry", this.state.newcard.expiry);
+    data.append("cvc", this.state.newcard.cvc);
+    data.append("cardType", this.state.newcard.type);
+    data.append("number", this.state.newcard.number);
     data.append("type_in", "bonuse");
-    data.append("price", 0.0);
-    await axios.post("actions/cards", data).then((e) => {
-      console.log(e.data);
-      this.handleRefresh();
-    });
-  };
+    await axios
+      .post("actions/cards", data)
+      .then((e) => {
+        console.log(e.data);
+        this.handleRefresh();
+      })
+      .catch((e) => {
+        console.log(e.data);
+      });
+    this.setState({ active: false });
+  }
 
   _onChange = (data) => {
-    this.setState({ newcard: data.values });
+    var that = this;
+    that.setState({ newcard: data.values });
   };
 
   render() {
@@ -308,7 +304,7 @@ export default class Bonuses extends React.Component {
                         <LiteCreditCardInput
                           keyboardShouldPersistTaps="handled"
                           keyboardType="number-pad"
-                          onChange={this._onChange}
+                          onChange={this._onChange.bind(this)}
                         />
                       </View>
                     </View>
@@ -317,7 +313,7 @@ export default class Bonuses extends React.Component {
                 <CardItem footer>
                   <Button
                     style={styles.buttonStyle}
-                    onPress={this.addCard}
+                    onPress={() => this.addCard()}
                     success
                   >
                     <Textpopins

@@ -176,17 +176,25 @@ export default class Cards extends React.Component {
     );
   }
 
-  addCard = async () => {
-    this.setState({ active: false });
+  async addCard() {
     var data = new FormData();
-    data.append("card", this.state.newcard);
+    data.append("number",this.state.newcard.number);
+    data.append("expiry",this.state.newcard.expiry);
+    data.append("cvc",this.state.newcard.cvc);
+    data.append("cardType",this.state.newcard.type);
+    data.append("number",this.state.newcard.number);
     data.append("type_in", "pay");
-    data.append("price", 0.0);
-    await axios.post("actions/cards", data).then((e) => {
-      console.log(e.data);
-      this.handleRefresh();
-    });
-  };
+    await axios
+      .post("actions/cards", data)
+      .then((e) => {
+        console.log(e.data);
+        this.handleRefresh();
+      })
+      .catch((e) => {
+        console.log(e.data);
+      });
+    this.setState({ active: false });
+  }
 
   _onChange = (data) => {
     this.setState({ newcard: data.values });
@@ -294,7 +302,7 @@ export default class Cards extends React.Component {
                 <CardItem footer>
                   <Button
                     style={styles.buttonStyle}
-                    onPress={this.addCard}
+                    onPress={() => this.addCard()}
                     success
                   >
                     <Textpopins

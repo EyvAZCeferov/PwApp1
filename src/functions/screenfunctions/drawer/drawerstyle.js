@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 5,
     borderBottomColor: "#5C0082",
-    borderBottomWidth: 1.5,
+    borderBottomWidth: 1,
   },
   texts: {
     fontSize: 16,

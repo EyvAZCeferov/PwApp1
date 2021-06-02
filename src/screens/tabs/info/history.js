@@ -107,24 +107,17 @@ export default class History extends React.Component {
           }
         });
     } else {
-      firebase
-        .database()
-        .ref("users/K3YfovctoSaJiS6xeQxvXKYIQMi1/checks")
-        .on("value", (data) => {
-          data.forEach((data) => {
-            checks.push(data.val());
+      await axios.get("actions/shops").then((e) => {
+        if (e.data.length > 0) {
+          this.setState({
+            checks: e.data,
           });
-          checkCount = data.numChildren();
-          if (checkCount > 0) {
-            this.setState({
-              checks,
-            });
-          } else {
-            this.setState({
-              checks: null,
-            });
-          }
-        });
+        } else {
+          this.setState({
+            checks: null,
+          });
+        }
+      });
     }
     this.setState({ refresh: false });
     this.renderContentArena();
@@ -196,13 +189,13 @@ export default class History extends React.Component {
     function marketTypeFunc(item) {
       switch (item.market) {
         case "Bazar Store":
-          return <FontAwesome name="cc-visa" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-visa" size={30} color="#AF0045" />;
           break;
         case "Araz":
-          return <FontAwesome name="cc-mastercard" size={30} color="#7c9d32" />;
+          return <FontAwesome name="cc-mastercard" size={30} color="#AF0045" />;
           break;
         default:
-          return <FontAwesome name="credit-card" size={30} color="#7c9d32" />;
+          return <FontAwesome name="credit-card" size={30} color="#AF0045" />;
       }
     }
 
@@ -306,7 +299,7 @@ export default class History extends React.Component {
                   })
                 }
               >
-                <AntDesign name="eyeo" size={24} color="#7c9d32" />
+                <AntDesign name="eyeo" size={24} color="#AF0045" />
               </Button>
             </Right>
           </ListItem>
@@ -326,7 +319,7 @@ export default class History extends React.Component {
             justifyContent: "center",
           }}
         >
-          <ActivityIndicator size="large" color="#7c9d32" />
+          <ActivityIndicator size="large" color="#AF0045" />
         </View>
       );
     } else {
@@ -367,7 +360,7 @@ export default class History extends React.Component {
           <Picker.Item
             label={market.name}
             value={market.name}
-            color="#7c9d32"
+            color="#AF0045"
           />
         );
       });
@@ -400,13 +393,13 @@ export default class History extends React.Component {
           >
             <View style={styles.contentHeader}>
               <View style={styles.contentHeaderColumn}>
-                <MaterialIcons name="date-range" size={24} color="#7c9d32" />
+                <MaterialIcons name="date-range" size={24} color="#AF0045" />
                 <DatePicker
                   androidMode="calendar"
                   locale="az"
                   placeHolderText={t("history.starttime")}
-                  placeHolderTextStyle={{ color: "#7c9d32" }}
-                  textStyle={{ color: "#7c9d32", fontSize: 20 }}
+                  placeHolderTextStyle={{ color: "#AF0045" }}
+                  textStyle={{ color: "#AF0045", fontSize: 20 }}
                   animationType="fade"
                   modalTransparent={true}
                   disabled={this.state.disableFirst}
@@ -417,13 +410,13 @@ export default class History extends React.Component {
                 />
               </View>
               <View style={styles.contentHeaderColumn}>
-                <MaterialIcons name="date-range" size={24} color="#7c9d32" />
+                <MaterialIcons name="date-range" size={24} color="#AF0045" />
                 <DatePicker
                   androidMode="calendar"
                   locale="az"
                   placeHolderText={t("history.endtime")}
-                  placeHolderTextStyle={{ color: "#7c9d32" }}
-                  textStyle={{ color: "#7c9d32", fontSize: 20 }}
+                  placeHolderTextStyle={{ color: "#AF0045" }}
+                  textStyle={{ color: "#AF0045", fontSize: 20 }}
                   animationType="fade"
                   modalTransparent={true}
                   disabled={this.state.disableLast}
@@ -436,9 +429,9 @@ export default class History extends React.Component {
               <View style={styles.contentHeaderColumn}>
                 <Picker
                   mode="dialog"
-                  placeholderStyle={{ color: "#7c9d32" }}
+                  placeholderStyle={{ color: "#AF0045" }}
                   style={{
-                    color: "#7c9d32",
+                    color: "#AF0045",
                     width: 150,
                     height: 50,
                   }}
@@ -450,7 +443,7 @@ export default class History extends React.Component {
                 >
                   <Picker.Item
                     label={t("history.marketName")}
-                    color="#7c9d32"
+                    color="#AF0045"
                     value={null}
                   />
                   {this.renderMarkets()}

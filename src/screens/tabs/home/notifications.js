@@ -27,6 +27,8 @@ import * as Permissions from "expo-permissions";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import Textpopins from "../../../functions/screenfunctions/text";
+import axios from "axios";
+import FormData from "form-data";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -72,18 +74,23 @@ export default function Notification(props) {
   const [modal, setModal] = React.useState(false);
 
   async function getNotifyPerform() {
+    await axios.get("auth/me").then(async (e) => {
+      console.log(e.data.notify_token);
+    });
     registerForPushNotificationsAsync().then((token) =>
       setTokenFunction(token)
     );
 
-    function setTokenFunction(token) {
-      // var user = firebase.auth().currentUser;
-      console.log(token)
-      alert(token)
-      firebase
-        .database()
-        .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/userInfos/push_id")
-        .set(token);
+    async function setTokenFunction(token) {
+      await axios.get("auth/me").then(async (e) => {
+        if (e.data.notify_token == null) {
+          var formdata = new FormData();
+          formdata.append("token", token);
+          await axios.post("auth/set_notify_token", formdata).then((e) => {
+            alert("Token Setted");
+          });
+        }
+      });
       setToken(token);
     }
   }
@@ -121,7 +128,6 @@ export default function Notification(props) {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-
     }
 
     if (Platform.OS === "android") {
@@ -132,11 +138,11 @@ export default function Notification(props) {
         lightColor: "#5C0082",
         enableLights: true,
         showBadge: true,
-        sound: SVGComponentTransferFunctionElement,
+        sound: "default",
       });
     }
     return token;
-    console.log(token)
+    console.log(token);
   }
 
   React.useEffect(() => {

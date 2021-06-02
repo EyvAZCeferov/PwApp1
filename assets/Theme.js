@@ -18,7 +18,7 @@ const customStyle = StyleSheet.create({
   },
   title:{
     fontSize:35,
-    color:"#7c9d32",
+    color:"#5C0082",
     fontWeight:"bold",
     textAlign:"center",
     width:width,
@@ -28,13 +28,13 @@ const customStyle = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#7c9d32',
+    backgroundColor: '#5C0082',
   },
   loginheader: {
     padding: 0,
     margin: 0,
     height: 80,
-    backgroundColor: '#7CB342',
+    backgroundColor: '#5C0082',
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
@@ -42,7 +42,7 @@ const customStyle = StyleSheet.create({
   centerPageName: {
     fontWeight: 'bold',
     fontSize: 36,
-    color: '#2E7D32',
+    color: '#5C0082',
     marginVertical: 20,
     textAlign: 'center',
     justifyContent: 'center',

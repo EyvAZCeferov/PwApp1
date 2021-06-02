@@ -6,7 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  Text,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Thumbnail, List, ListItem } from "native-base";
@@ -15,6 +14,7 @@ import { AntDesign } from "@expo/vector-icons";
 import Textpopins from "../../../functions/screenfunctions/text";
 import axios from "axios";
 const { width, height } = Dimensions.get("window");
+import { get_image } from "../../../functions/standart/helper";
 
 const pinIcon = require("../../../../assets/images/Pin/pin.png");
 
@@ -29,24 +29,32 @@ export default class Pininfo extends React.Component {
     };
   }
 
-  async getInfo() {
-    await axios.get("auth/me").then((e) => {
+  componentDidMount() {
+    this.setState({ refresh: true });
+    this.getInfo();
+  }
+
+  getInfo() {
+    axios.get("auth/me").then((e) => {
       this.setState({
         userData: e.data,
       });
     });
-    await axios
+    axios
       .get("actions/cards/" + this.props.route.params.pinid)
       .then((e) => {
         this.setState({
           pinData: e.data,
         });
+      })
+      .finally(() => {
+        this.setState({
+          refresh: false,
+        });
       });
   }
 
   renderFlatListDatas({ item, index }) {
-    var that = this;
-
     function convertStampDate(unixtimestamp) {
       var months_arr = [
         "Yanvar",
@@ -86,7 +94,7 @@ export default class Pininfo extends React.Component {
     return (
       <ListItem
         onPress={() =>
-          that.props.navigation.navigate("OtherPages", {
+          this.props.navigation.navigate("OtherPages", {
             screen: "OneCheck",
             params: {
               checkid: item.checkId,
@@ -123,6 +131,7 @@ export default class Pininfo extends React.Component {
   onHandleRefresh() {
     var that = this;
     that.setState({ refresh: true });
+    that.getInfo();
   }
 
   renderFlatList() {
@@ -159,7 +168,13 @@ export default class Pininfo extends React.Component {
     } else {
       return (
         <Thumbnail
-          source={usDatas.image ? { uri: usDatas.image } : pinIcon}
+          source={
+            usDatas
+              ? usDatas.image
+                ? get_image(usDatas.image)
+                : pinIcon
+              : pinIcon
+          }
           large
           circular
         />
@@ -167,129 +182,67 @@ export default class Pininfo extends React.Component {
     }
   }
 
-  renderContent(usDatas) {
+  renderContent() {
     if (this.state.refresh) {
       return (
         <View style={[styles.container, styles.alignCenter]}>
+          <StatusBar backgroundColor="#5C0082" style="light" />
           <ActivityIndicator size="large" color="#5C0082" />
         </View>
       );
     } else {
-      if (usDatas != null) {
-        return (
-          <View style={styles.container}>
-            <StatusBar backgroundColor="#5C0082" style="light" />
-            <View style={styles.header}>
+      return (
+        <View style={styles.container}>
+          <StatusBar backgroundColor="#5C0082" style="light" />
+          <View style={styles.header}>
+            <View
+              style={[styles.alignCenter, { height: "100%", paddingTop: 20 }]}
+            >
               <View
-                style={[styles.alignCenter, { height: "100%", paddingTop: 20 }]}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: width,
+                }}
               >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: width,
-                  }}
+                <TouchableOpacity
+                  style={{ paddingLeft: width / 23 }}
+                  onPress={() => this.props.navigation.goBack()}
                 >
-                  <TouchableOpacity
-                    style={{ paddingLeft: width / 23 }}
-                    onPress={() => this.props.navigation.goBack()}
-                  >
-                    <AntDesign name="left" size={25} color="#fff" />
-                  </TouchableOpacity>
-                  {this.renderImage(usDatas)}
-                  <View style={{ width: width / 9 }} />
-                </View>
+                  <AntDesign name="left" size={25} color="#fff" />
+                </TouchableOpacity>
+                {this.renderImage(this.state.userData)}
+                <View style={{ width: width / 9 }} />
+              </View>
+              <Textpopins
+                children={this.state.userData ? this.state.userData.name : null}
+                style={{
+                  fontWeight: "bold",
+                  marginVertical: 15,
+                  color: "#fff",
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  width: "100%",
+                }}
+              >
                 <Textpopins
-                  children={usDatas.phone}
-                  style={{ fontWeight: "bold", marginVertical: 15 }}
-                  textColor={"#fff"}
+                  style={{ fontWeight: "bold", color: "#fff" }}
+                  children={t("pin.pincount")}
                 />
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    width: "100%",
-                  }}
-                >
-                  <Textpopins
-                    textColor={"#fff"}
-                    style={{ fontWeight: "bold" }}
-                    children={t("pin.pincount")}
-                  />
-                  <Textpopins
-                    textColor={"#fff"}
-                    style={{ fontSize: 22 }}
-                    children={this.state.pinData.price}
-                  />
-                </View>
+                <Textpopins
+                  style={{ fontSize: 22, color: "#fff" }}
+                  children={this.state.pinData ? this.state.pinData.price : 0.0}
+                />
               </View>
             </View>
-            <View style={styles.content}>{this.renderFlatList()}</View>
           </View>
-        );
-      } else {
-        return (
-          <View style={styles.container}>
-            <StatusBar backgroundColor="#5C0082" style="light" />
-            <View style={styles.header}>
-              <View
-                style={[styles.alignCenter, { height: "100%", paddingTop: 20 }]}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: width,
-                  }}
-                >
-                  <TouchableOpacity
-                    style={{ paddingLeft: width / 23 }}
-                    onPress={() => this.props.navigation.goBack()}
-                  >
-                    <AntDesign name="left" size={25} color="#fff" />
-                  </TouchableOpacity>
-                  {this.renderImage(this.state.userData)}
-                  <View style={{ width: width / 9 }} />
-                </View>
-                <Textpopins
-                  children={
-                    this.state.userData
-                      ? this.state.userData.phone
-                      : t("loginregister.programlock.namesurname")
-                  }
-                  style={{
-                    fontWeight: "bold",
-                    marginVertical: 15,
-                    textAlign: "center",
-                    color: "#fff",
-                  }}
-                  textColor={"#fff"}
-                />
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    width: "100%",
-                    textAlign: "center",
-                  }}
-                >
-                  <Text
-                    textColor={"#fff"}
-                    style={{ fontWeight: "bold", fontSize: 20, color: "#fff" }}
-                    children={t("pin.pincount")}
-                  />
-                  <Text
-                    textColor={"#fff"}
-                    style={{ fontWeight: "bold", fontSize: 20, color: "#fff" }}
-                    children={this.state.pinData.price}
-                  />
-                </View>
-              </View>
-            </View>
-            <View style={styles.content}>{this.renderFlatList()}</View>
-          </View>
-        );
-      }
+          <View style={styles.content}>{this.renderFlatList()}</View>
+        </View>
+      );
     }
   }
 

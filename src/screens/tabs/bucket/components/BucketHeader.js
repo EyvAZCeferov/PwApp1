@@ -37,7 +37,7 @@ function BucketHeader(props) {
           />
         )}
         <Textpopins style={styles.text}>{props.title}</Textpopins>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <TouchableOpacity
             style={styles.button}
             onPress={() =>

@@ -69,7 +69,7 @@ export default class Home extends React.Component {
               }}
             >
               <ActivityIndicator
-                color="#5C0082"
+                color="#AF0045"
                 animating={true}
                 size="large"
               />

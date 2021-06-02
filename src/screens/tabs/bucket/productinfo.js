@@ -28,7 +28,6 @@ class ProductInfo extends React.Component {
       refresh: true,
       product: null,
       customer: null,
-      location_key: null,
     };
   }
 
@@ -36,15 +35,6 @@ class ProductInfo extends React.Component {
     this.setState({ refresh: true });
     const params = this.props.route.params;
     const { customer, barcode } = params;
-
-    fetch("https://admin.paygo.az/api/actions/shops/")
-      .then((res) => res.json())
-      .then((json) => {
-        this.setState({
-          location_key: json.info.location_key,
-        });
-      })
-      .catch((e) => console.log(e));
     fetch(
       "https://admin.paygo.az/api/customers/product/" + customer + "/" + barcode
     )
@@ -121,11 +111,7 @@ class ProductInfo extends React.Component {
               )}
             </TouchableOpacity>
             <TouchableOpacity style={styles.addToCart}>
-              <Textpopins>
-                {this.state.product.price[this.state.location_key] ??
-                  this.state.product.price["price"]}
-                ₼
-              </Textpopins>
+              <Textpopins>{this.state.product.price}₼</Textpopins>
             </TouchableOpacity>
           </View>
         </ImageBackground>
