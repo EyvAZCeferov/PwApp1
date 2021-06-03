@@ -78,6 +78,7 @@ function CartList(props) {
   }
 
   function renderBucket({ item, index }) {
+    console.log(item)
     return (
       <ListItem
         key={index}
@@ -117,7 +118,7 @@ function CartList(props) {
           <Textpopins>
             {Math.fround(pric_e(item.qyt, item.price))
               .toString()
-              .substring(0, 5)}{" "}
+              .substring(0, 5)}
             ₼
           </Textpopins>
         </Body>

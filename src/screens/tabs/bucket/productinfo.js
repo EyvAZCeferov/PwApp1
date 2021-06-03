@@ -5,7 +5,6 @@ import {
   Dimensions,
   ActivityIndicator,
   ImageBackground,
-  Text,
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
@@ -17,7 +16,7 @@ import { AntDesign } from "@expo/vector-icons";
 import Textpopins from "../../../functions/screenfunctions/text";
 import Header from "./components/BucketHeader";
 import * as Localization from "expo-localization";
-
+import axios from "axios";
 const { width, height } = Dimensions.get("window");
 import Constants from "expo-constants";
 
@@ -31,37 +30,24 @@ class ProductInfo extends React.Component {
     };
   }
 
-  getInfo() {
+  async getInfo() {
     this.setState({ refresh: true });
     const params = this.props.route.params;
     const { customer, barcode } = params;
-    fetch(
-      "https://admin.paygo.az/api/customers/product/" + customer + "/" + barcode
-    )
-      .then((response) => response.json())
-      .then((json) => {
+    await axios
+      .get("customers/product/" + customer + "/" + barcode)
+      .then((e) => {
         this.setState({
-          product: json,
+          product: e.data,
         });
       })
-      .catch((error) => console.error(error))
-      .finally(() => {
+      .finally((e) => {
         this.setState({ refresh: false });
       });
   }
 
   componentDidMount() {
     this.getInfo();
-  }
-
-  name(item) {
-    if (Localization.locale == "en" || Localization.locale === "en") {
-      return item["en_name"];
-    } else if (Localization.locale == "ru" || Localization.locale === "ru") {
-      return item["ru_name"];
-    } else if (Localization.locale == "az" || Localization.locale === "az") {
-      return item["az_name"];
-    }
   }
 
   content() {
@@ -128,7 +114,7 @@ class ProductInfo extends React.Component {
             color: "#5C0082",
           }}
         >
-          {product.name["az_name"]}
+          {product.name}
         </Textpopins>
         <Textpopins
           style={{
@@ -162,10 +148,7 @@ class ProductInfo extends React.Component {
         return (
           <View style={styles.container}>
             <View style={styles.header}>
-              <Header
-                button={true}
-                title={this.name(this.state.product.name)}
-              />
+              <Header button={true} title={this.state.product.name} />
             </View>
             <View style={styles.content}>
               <View style={styles.top}>{header(this.state.product.image)}</View>
@@ -179,7 +162,7 @@ class ProductInfo extends React.Component {
         return (
           <View style={styles.container}>
             <View style={styles.header}>
-              {/* <Header button={true} title={t("actions.noResult")} /> */}
+              <Header button={true} title={t("actions.noResult")} />
             </View>
             <View style={[styles.content, styles.center]}>
               <Textpopins

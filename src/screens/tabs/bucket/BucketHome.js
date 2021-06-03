@@ -90,6 +90,7 @@ class BucketHome extends React.Component {
   addProduct(item) {
     var data = item;
     data.qyt = 1;
+    console.log(data)
     this.props.addtoCard(data);
   }
 
