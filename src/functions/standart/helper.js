@@ -1,23 +1,11 @@
 import utf8 from "utf8";
-export function setting(token, field) {
+import axios from "axios";
+
+export async function setting(field) {
   try {
-    const settings = null;
-    fetch("http://localhost:8000/api/settings", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + token,
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => (settings = json.data))
-      .catch((error) => console.error(error));
-    if (settings.field) {
-      return settings.field;
-    } else {
-      return false;
-    }
+    await axios.get("paygo/settings").then((e) => {
+      return e.data;
+    });
   } catch (e) {
     console.log(e);
   }

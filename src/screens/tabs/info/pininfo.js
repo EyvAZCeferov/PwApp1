@@ -170,8 +170,8 @@ export default class Pininfo extends React.Component {
         <Thumbnail
           source={
             usDatas
-              ? usDatas.image
-                ? get_image(usDatas.image)
+              ? usDatas.image != null
+                ? { uri: usDatas.image }
                 : pinIcon
               : pinIcon
           }

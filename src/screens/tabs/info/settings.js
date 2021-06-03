@@ -280,7 +280,7 @@ export default class Settings extends React.Component {
                                 />
                             </ListItem>
                             <ListItem style={styles.listitemDivider} itemDivider>
-                                <Entypo name="language" size={24} color="#6d7587"/>
+                                <Entypo name="language" size={24} color="#000"/>
                                 <Picker
                                     enabled
                                     mode="dropdown"
@@ -308,7 +308,7 @@ export default class Settings extends React.Component {
                                     <MaterialCommunityIcons
                                         name="form-textbox-password"
                                         size={24}
-                                        color="#6d7587"
+                                        color="#000"
                                     />
                                 </Left>
                                 <Body style={styles.body}>
@@ -321,7 +321,7 @@ export default class Settings extends React.Component {
                             {this.state.hasFingerPrintHardware ? (
                                 <ListItem style={styles.listitem} icon>
                                     <Left style={styles.left}>
-                                        <Entypo name="fingerprint" size={24} color="#6d7587"/>
+                                        <Entypo name="fingerprint" size={24} color="#000"/>
                                     </Left>
                                     <Body style={styles.body}>
                                         <Text
@@ -335,7 +335,7 @@ export default class Settings extends React.Component {
                             {this.state.facerecognition ? (
                                 <ListItem style={styles.listitem} icon>
                                     <Left style={styles.left}>
-                                        <MaterialCommunityIcons name="face-recognition" size={24} color="#6d7587"/>
+                                        <MaterialCommunityIcons name="face-recognition" size={24} color="#000"/>
                                     </Left>
                                     <Body style={styles.body}>
                                         <Text
@@ -358,7 +358,7 @@ export default class Settings extends React.Component {
                                 onPress={() => this.props.navigation.navigate("Termofuse")}
                             >
                                 <Left style={styles.left}>
-                                    <Foundation name="page-doc" size={24} color="#6d7587"/>
+                                    <Foundation name="page-doc" size={24} color="#000"/>
                                 </Left>
                                 <Body style={styles.body}>
                                     <Text
@@ -376,7 +376,7 @@ export default class Settings extends React.Component {
                                     <MaterialCommunityIcons
                                         name="account-edit"
                                         size={24}
-                                        color="#6d7587"
+                                        color="#000"
                                     />
                                 </Left>
                                 <Body style={styles.body}>
@@ -397,7 +397,7 @@ export default class Settings extends React.Component {
                                     <MaterialCommunityIcons
                                         name="cloud-print-outline"
                                         size={24}
-                                        color="#6d7587"
+                                        color="#000"
                                     />
                                 </Left>
                                 <Body style={styles.body}>
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
     },
     listitemDividerText: {
         fontSize: 14,
-        color: "#6d7587",
+        color: "#000",
         fontWeight: "500",
     },
     left: {

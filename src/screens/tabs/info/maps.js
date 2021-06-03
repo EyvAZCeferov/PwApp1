@@ -19,7 +19,7 @@ import { Body, Left, ListItem, Right, Thumbnail } from "native-base";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
 import { get_image } from "../../../functions/standart/helper";
-
+import axios from "axios";
 const { width } = Dimensions.get("screen");
 
 export default class Map extends React.Component {
@@ -31,6 +31,7 @@ export default class Map extends React.Component {
       markers: null,
       markerCount: 0,
       refresh: true,
+      user: null,
     };
   }
 
@@ -45,7 +46,7 @@ export default class Map extends React.Component {
         this.setState({
           latitude: latitude,
           longitude: longitude,
-          ready: true,
+          refresh: false,
         }),
       (error) => console.log("Error:", error)
     );
@@ -53,16 +54,18 @@ export default class Map extends React.Component {
 
   getInfo() {
     this.setState({ refresh: true });
-    fetch("paygo/maps")
-      .then((response) => response.json())
-      .then((json) => {
+    axios.get("auth/me").then((e) => {
+      this.setState({ user: e.data });
+    });
+
+    axios
+      .get("paygo/maps")
+      .then((e) => {
         this.setState({
-          markers: json,
-          markerCount: json.length,
-          refresh: false,
+          markers: e.data,
+          markerCount: e.data.length,
         });
       })
-      .catch((error) => console.error(error))
       .finally(() => {
         this.setState({ refresh: false });
       });
@@ -88,7 +91,7 @@ export default class Map extends React.Component {
         >
           <Callout>
             <TouchableOpacity>
-              <Text style={{ color: "#7c9d32", fontSize: 15, marginTop: 2 }}>
+              <Text style={{ color: "#AF0045", fontSize: 15, marginTop: 2 }}>
                 {element.name["az_name"]}
               </Text>
             </TouchableOpacity>
@@ -115,8 +118,8 @@ export default class Map extends React.Component {
     return (
       <MapViewDirections
         origin={{
-          latitude: this.state.latitude,
-          longitude: this.state.longitude,
+          latitude: latitude,
+          longitude: longitude,
         }}
         destination={item.geometry}
         apikey="AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
@@ -127,6 +130,64 @@ export default class Map extends React.Component {
   }
 
   renderList({ item, index }) {
+    var that = this;
+
+    function getKilom(latis, longis, valToDeg = true, resultAsMiles = true) {
+      let C_RADIUS_EARTH_KM = 6371.1;
+      let C_RADIUS_EARTH_MI = 3958.82;
+      let C_PI = 3.141;
+      let X = 1;
+      if (valToDeg) {
+        X = 1;
+      } else {
+        X = 24;
+      }
+
+      // convert to decimal degrees
+      let Lat1 = that.state.latitude * X;
+      let Long1 = that.state.longitude * X;
+      let Lat2 = latis * X;
+      let Long2 = longis * X;
+
+      Lat1 = (Lat1 / 180) * C_PI;
+      Lat2 = (Lat2 / 180) * C_PI;
+      Long1 = (Long1 / 180) * C_PI;
+      Long2 = (Long2 / 180) * C_PI;
+      let Delta = null;
+      if (Lat1 > Lat2 || Long1 > Long2) {
+        Delta =
+          2 *
+          Math.asin(
+            Math.sqrt(
+              Math.pow(Math.sin((Lat1 - Lat2) / 2), 2) +
+                Math.cos(Lat1) *
+                  Math.cos(Lat2) *
+                  Math.pow(Math.sin((Long1 - Long2) / 2), 2)
+            )
+          );
+      } else {
+        Delta =
+          2 *
+          Math.asin(
+            Math.sqrt(
+              Math.pow(Math.sin((Lat2 - Lat1) / 2), 2) +
+                Math.cos(Lat1) *
+                  Math.cos(Lat2) *
+                  Math.pow(Math.sin((Long2 - Long1) / 2), 2)
+            )
+          );
+      }
+      let lastLoc = "";
+      if (resultAsMiles) {
+        lastLoc = Delta * C_RADIUS_EARTH_MI;
+      } else {
+        lastLoc = Delta * C_RADIUS_EARTH_KM;
+      }
+      let loc = lastLoc.toString();
+      let mOrKm = resultAsMiles ? "M" : "KM";
+      return loc.substr(0, 5) + " " + mOrKm;
+    }
+
     return (
       <ListItem
         key={index}
@@ -134,13 +195,18 @@ export default class Map extends React.Component {
         onPress={() => this.toLoc(item)}
       >
         <Left style={{ flex: 0.2 }}>
-          <Thumbnail source={{ uri: get_image(item.images[0]) }} />
+          <Thumbnail
+            source={{ uri: get_image(item.images[0]) }}
+            style={{
+              marginRight: Constants.statusBarHeight,
+            }}
+          />
         </Left>
-        <Body style={{ flex: 0.7 }}>
+        <Body style={{ flex: 0.8 }}>
           <Textpopins
             style={{
-              fontSize: 14,
-              color: "rgba(0,0,0,.8)",
+              fontSize: 13,
+              color: "rgb(0,0,0)",
             }}
           >
             {item.name["az_name"]}
@@ -157,11 +223,16 @@ export default class Map extends React.Component {
         <Right style={{ flex: 0.2 }}>
           <Textpopins
             style={{
-              fontSize: 15,
-              color: "rgba(124,157,50,.8)",
+              fontSize: 13,
+              color: "#5C0082",
             }}
           >
-            51516 m
+            {getKilom(
+              item.geometry.latitude,
+              item.geometry.longitude,
+              true,
+              false
+            )}
           </Textpopins>
         </Right>
       </ListItem>
@@ -193,10 +264,16 @@ export default class Map extends React.Component {
               zoomEnabled={true}
               zoomControlEnabled={true}
               zoomTapEnabled={true}
-              maxZoomLevel={200}
-              minZoomLevel={15}
+              maxZoomLevel={50}
+              minZoomLevel={5}
               showsScale={true}
-              userLocationAnnotationTitle={"Eyvaz"}
+              userLocationAnnotationTitle={
+                this.state.user
+                  ? this.state.user.name != null
+                    ? this.state.user.name
+                    : t("loginregister.programlock.namesurname")
+                  : t("loginregister.programlock.namesurname")
+              }
               showsUserLocation={true}
               loadingEnabled={true}
               scrollEnabled={true}
@@ -229,7 +306,6 @@ export default class Map extends React.Component {
                 },
               ]}
             >
-              {/*<Input style={styles.input} placeholder="Search"/>*/}
               <GooglePlacesAutocomplete
                 placeholder={t("bucket.header.search")}
                 onPress={(data, details = null) => {

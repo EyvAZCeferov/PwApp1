@@ -8,9 +8,10 @@ import HTMLView from "react-native-htmlview";
 import { t } from "../../../functions/lang";
 import { StatusBar } from "expo-status-bar";
 import * as Localization from "expo-localization";
-import Constants from "expo-constants";
+import HeaderDrawer from "./components/header";
 import axios from "axios";
 import { ActivityIndicator } from "react-native";
+import Constants from "expo-constants";
 const icon = require("../../../../assets/icon-ios.png");
 
 export default class Termofuse extends React.Component {
@@ -46,48 +47,27 @@ export default class Termofuse extends React.Component {
       return e.ru_description;
     } else if (Localization.locale == "az" || Localization.locale === "az") {
       return e.az_description;
+    } else {
+      return e.az_description;
     }
   }
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <StatusBar style="dark" backgroundColor="#fff" />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-around",
-            backgroundColor: "#fff",
-            alignItems: "center",
-            alignContent: "center",
-            textAlign: "center",
-            marginTop: Constants.statusBarHeight,
-            borderBottomColor: "#5C0082",
-            borderBottomWidth: 2,
-            paddingBottom: 1,
-          }}
-        >
-          <Button transparent onPress={() => this.props.navigation.goBack()}>
-            <AntDesign name="left" size={24} color="#5C0082" />
-          </Button>
-
-          <Text
-            style={styles.headerTitle}
-            children={t("settings.listitems.termofuse")}
-          />
-          {/* <View style={{ width: "10%" }} /> */}
-        </View>
-
-        <ScrollView style={{ marginBottom: 50 }}>
+        <HeaderDrawer
+          {...this.props}
+          name={t("settings.listitems.termofuse")}
+        />
+        <ScrollView style={{ marginBottom: Constants.statusBarHeight / 4 }}>
           <View style={styles.justify}>
             <Thumbnail source={icon} style={styles.icon} />
-
             {this.state.refresh ? (
               <ActivityIndicator size="large" color="#5C0082" />
             ) : (
               <HTMLView
-                // value={this.langConvert(this.state.datas)}
-                value={this.state.datas.az_description}
+                value={this.langConvert(this.state.datas)}
                 stylesheet={styles.textColor}
                 addLineBreaks={true}
               />
@@ -100,17 +80,19 @@ export default class Termofuse extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   justify: {
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
     textAlign: "center",
-    padding: 20,
+    paddingHorizontal: Constants.statusBarHeight / 2,
   },
   icon: {
-    marginVertical: 40,
-    width: width / 4,
-    height: height / 6,
+    width: width / 2,
+    height: height / 3,
   },
   headerTitle: {
     color: "#5C0082",
@@ -124,5 +106,6 @@ const styles = StyleSheet.create({
   textColor: {
     color: "#6d7587",
     fontFamily: "Poppins_400Regular",
+    fontSize: 25,
   },
 });

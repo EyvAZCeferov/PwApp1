@@ -157,7 +157,6 @@ const HomeStackScreen = ({ navigation, route }) => {
       <HomeStack.Screen name="Notifications" component={Notification} />
       <HomeStack.Screen name="Notification" component={NotificationOne} />
       <HomeStack.Screen name="Pininfo" component={Pininfo} />
-      <HomeStack.Screen name="Termofuse" component={Termofuse} />
       <HomeStack.Screen name="SetFinger" component={SetFinger} />
       <HomeStack.Screen name="SetFace" component={SetFace} />
       <HomeStack.Screen name="SetPass" component={SetPass} />
@@ -199,6 +198,7 @@ const HomeDrawerStackScreen = ({ navigation, route }) => {
       <HomeDrawerStack.Screen name="History" component={History} />
       <HomeDrawerStack.Screen name="Contactus" component={Contactus} />
       <HomeDrawerStack.Screen name="Settings" component={Settings} />
+      <HomeStack.Screen name="Termofuse" component={Termofuse} />
     </HomeDrawerStack.Navigator>
   );
 };
@@ -223,7 +223,6 @@ const BucketStack = createStackNavigator();
 const BucketStackScreen = ({ navigation, route }) => {
   if (route.state && route.state.index > 0) {
     navigation.setOptions({ tabBarVisible: false });
-    //    false
   } else {
     navigation.setOptions({ tabBarVisible: true });
   }

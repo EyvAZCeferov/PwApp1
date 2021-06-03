@@ -27,6 +27,9 @@ export default class Home extends React.Component {
 
   componentDidMount() {
     this.getInfo();
+    setInterval(() => {
+      this.getInfo();
+    }, 10000);
   }
 
   async getInfo() {

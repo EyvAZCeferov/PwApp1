@@ -21,6 +21,7 @@ import Textpopins from "./../../../functions/screenfunctions/text";
 import axios from "axios";
 import FormData from "form-data";
 const { width, height } = Dimensions.get("window");
+const icon = require("../../../../assets/icon-ios.png");
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -53,8 +54,10 @@ export default class Account extends React.Component {
   };
 
   async getInfo() {
+    this.setState({
+      isReady: false,
+    });
     await axios.get("auth/me").then((e) => {
-      console.log(e.data.image);
       this.setState({
         user: e.data,
         isReady: true,
@@ -87,7 +90,7 @@ export default class Account extends React.Component {
       });
 
       if (result.cancelled) {
-        alert("Error");
+        return false;
       }
 
       this.setState({ isReady: false });
@@ -108,15 +111,20 @@ export default class Account extends React.Component {
             .snapshot.ref.getDownloadURL()
             .then(function (downloadURL) {
               downpp = downloadURL;
+              this.setState({ isReady: false });
             });
         }
       );
-      var formData = new FormData();
-      formData.append("image", downpp);
-      console.log(formData);
-      await axios.post("auth/update_photo", formData).then((e) => {
-        this.getInfo();
+      ref.getDownloadURL().then(async (url) => {
+        this.setState({ isReady: false });
+        var formData = new FormData();
+        formData.append("image", url);
+        await axios.post("auth/update_photo", formData).then((e) => {
+          this.getInfo();
+        });
       });
+      this.setState({ isReady: false });
+      this.getInfo();
     } catch (e) {
       console.log(e.message);
     }
@@ -124,12 +132,11 @@ export default class Account extends React.Component {
   };
 
   renderImage() {
-    console.log(this.state.user.image);
     return (
       <Thumbnail
         style={styles.image}
         source={{
-          uri: this.state.user.image,
+          uri: this.state.user.image ?? icon,
         }}
       />
     );
@@ -148,12 +155,7 @@ export default class Account extends React.Component {
                   <View style={styles.imageArena}>
                     {this.state.user.image === null ||
                     this.state.user.image == null ? (
-                      <Thumbnail
-                        style={styles.image}
-                        source={{
-                          uri: "https://firebasestorage.googleapis.com/v0/b/storeapp1-ea810.appspot.com/o/WP%2F11111111111111111111111111111111111111111.png?alt=media&token=5f0aa05e-6eaf-4945-a5f4-c9b0f917892f",
-                        }}
-                      />
+                      <Thumbnail style={styles.image} source={icon} />
                     ) : (
                       this.renderImage()
                     )}
@@ -186,7 +188,7 @@ export default class Account extends React.Component {
                   <View style={styles.itemStyle}>
                     <Input
                       style={styles.inputstyle}
-                      keyboardType="numeric"
+                      keyboardType="phone-pad"
                       placeholder={t("form.labels.phonenumb")}
                       keyboardShouldPersistTaps="handled"
                       onChangeText={(text) => this.setState({ phone: text })}
@@ -205,7 +207,7 @@ export default class Account extends React.Component {
                   <View style={styles.itemStyle}>
                     <Input
                       style={styles.inputstyle}
-                      keyboardType="email"
+                      keyboardType="email-address"
                       keyboardShouldPersistTaps="handled"
                       placeholder={t("form.labels.email")}
                       onChangeText={(text) => this.setState({ email: text })}

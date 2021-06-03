@@ -157,11 +157,10 @@ export default class BarcodeStarter extends React.Component {
       var data = new FormData();
       data.append("shoptype", "barcode");
       data.append("ficsal", this.state.checkid);
-      if (this.state.selectedCard) {
-        data.append("selectedCard", this.state.selectedCard.value);
-      }
+      // data.append("selectedCard", this.state.selectedCard);
       data.append("selectedMarket", this.state.selectedMarket.value);
       data.append("selectedFilial", this.state.selectedFilial.value);
+      data.append("location_key", this.state.selectedFilial.location_key);
       // data.append("bonus_card", this.state.bonus_card);
 
       await axios

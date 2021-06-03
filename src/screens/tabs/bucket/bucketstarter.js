@@ -152,14 +152,11 @@ export default class BucketStarter extends React.Component {
       var data = new FormData();
       data.append("shoptype", "bucket");
       data.append("ficsal", this.state.checkid);
-      if (this.state.selectedCard) {
-        data.append("selectedCard", this.state.selectedCard.value);
-      }
+      data.append("selectedCard", this.state.selectedCard);
       data.append("selectedMarket", this.state.selectedMarket.value);
       data.append("selectedFilial", this.state.selectedFilial.value);
       data.append("location_key", this.state.selectedFilial.location_key);
       // data.append("bonus_card", this.state.bonus_card);
-
       await axios
         .post("actions/shops", data)
         .then((e) => {

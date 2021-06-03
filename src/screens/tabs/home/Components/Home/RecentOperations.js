@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Body, Button, Left, ListItem, Right } from "native-base";
 import { t } from "../../../../../functions/lang";
 import Textpopins from "../../../../../functions/screenfunctions/text";
-import { Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Entypo, FontAwesome, Ionicons, Fontisto } from "@expo/vector-icons";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Constants from "expo-constants";
@@ -31,19 +31,11 @@ export default function RecentOperations(props) {
 
   async function getInfo() {
     setRefresh(true);
-    var datas = [];
     await axios.get("actions/shops").then((e) => {
       if (e.data.length > 0) {
-        e.data.map((es) => {
-          if (es.payed && es.payed == true) {
-            datas.push(es);
-          }
-        });
-        if (datas.length > 0) {
-          setList(datas);
-        } else {
-          setList(null);
-        }
+        setList(e.data);
+      } else {
+        setList(null);
       }
     });
     setRefresh(false);
@@ -60,7 +52,7 @@ export default function RecentOperations(props) {
           return <Entypo name="shopping-bag" size={30} color="#AF0045" />;
           break;
         default:
-          return <FontAwesome name="shopping" size={30} color="#AF0045" />;
+          return <Fontisto name="shopping-store" size={30} color="#AF0045" />;
       }
     }
 

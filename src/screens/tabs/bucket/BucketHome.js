@@ -28,7 +28,6 @@ class BucketHome extends React.Component {
     super(props);
     this.state = {
       datas: null,
-      location_key: null,
       activeFilter: false,
       brands: null,
       refresh: true,
@@ -48,8 +47,8 @@ class BucketHome extends React.Component {
     await axios
       .get("actions/shops/" + this.props.route.params.checkid)
       .then((e) => {
+        console.log(e.data)
         this.setState({
-          location_key: e.data.info["location_key"],
           customer: e.data.customer,
         });
       })
@@ -67,10 +66,6 @@ class BucketHome extends React.Component {
           this.state.page === 1
             ? e.data.data
             : [...this.state.datas, ...e.data.data];
-        // cat.push(e.data[1].home_cat);
-        // cat.push(e.data[1].child_cat1);
-        // cat.push(e.data[1].child_cat2);
-        // cat.push(e.data[1].child_cat3);
         this.setState({
           datas: datas,
           brands: cat,
@@ -184,7 +179,6 @@ class BucketHome extends React.Component {
           {
             flex: 1,
             marginTop: Constants.statusBarHeight,
-            marginLeft: -Constants.statusBarHeight,
           },
         ]}
       >

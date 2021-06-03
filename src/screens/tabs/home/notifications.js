@@ -39,49 +39,20 @@ Notifications.setNotificationHandler({
 });
 
 export default function Notification(props) {
-  const [notifies, setNotifies] = React.useState([
-    {
-      image:
-        "https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png",
-      content: [{ title: "Baki Store", desc: "100 Azn lik Alisveris" }],
-      price: 50,
-      date: "20.07.2020",
-      id: 1,
-      read: true,
-    },
-    {
-      image:
-        "https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png",
-      content: [{ title: "BazarStore", desc: "20 Azn lik Alisveris" }],
-      price: 50,
-      date: "20.07.2020",
-      id: 2,
-      read: false,
-    },
-    {
-      image:
-        "https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png",
-      content: [{ title: "ArazStore", desc: "30 Azn lik Alisveris" }],
-      price: 50,
-      date: "20.07.2020",
-      id: 3,
-      read: false,
-    },
-  ]);
-  const [notification, setNotification] = React.useState(null);
+  const [notifies, setNotifies] = React.useState(null);
   const [refresh, setRefresh] = React.useState(true);
   const [token, setToken] = React.useState(null);
   const [modal, setModal] = React.useState(false);
 
   async function getNotifyPerform() {
-    await axios.get("auth/me").then(async (e) => {
-      console.log(e.data.notify_token);
-    });
     registerForPushNotificationsAsync().then((token) =>
       setTokenFunction(token)
     );
 
     async function setTokenFunction(token) {
+      await axios.get("auth/me").then(async (e) => {
+        console.log(e.data.notify_token);
+      });
       await axios.get("auth/me").then(async (e) => {
         if (e.data.notify_token == null) {
           var formdata = new FormData();
@@ -89,13 +60,21 @@ export default function Notification(props) {
           await axios.post("auth/set_notify_token", formdata).then((e) => {
             alert("Token Setted");
           });
+        } else if (e.data.notify_token.token == null) {
+          var formdata = new FormData();
+          formdata.append("token", token);
+          await axios.post("auth/set_notify_token", formdata).then((e) => {
+            alert("Token Setted");
+          });
         }
       });
+
+      console.log(token);
       setToken(token);
     }
   }
 
-  function getInfo() {
+  async function getInfo() {
     var datas = [];
     firebase
       .database()
@@ -104,7 +83,6 @@ export default function Notification(props) {
         data.forEach((data) => {
           datas.push(data.val());
         });
-        setNotification(datas);
         setRefresh(false);
         renderContent();
       });
@@ -139,10 +117,10 @@ export default function Notification(props) {
         enableLights: true,
         showBadge: true,
         sound: "default",
+        enableVibrate: true,
       });
     }
     return token;
-    console.log(token);
   }
 
   React.useEffect(() => {

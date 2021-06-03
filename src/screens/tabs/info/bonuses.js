@@ -197,7 +197,6 @@ export default class Bonuses extends React.Component {
     await axios
       .post("actions/cards", data)
       .then((e) => {
-        console.log(e.data);
         this.handleRefresh();
       })
       .catch((e) => {

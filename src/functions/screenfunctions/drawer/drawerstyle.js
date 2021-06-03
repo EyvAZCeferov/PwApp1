@@ -46,14 +46,15 @@ export default function DrawerStyle(props) {
             <Thumbnail
               source={
                 props.usdata
-                  ? props.usdata.image
-                    ? get_image(props.usdata.image)
+                  ? props.usdata.image != null
+                    ? { uri: props.usdata.image }
                     : icon
                   : icon
               }
               style={{
-                height: 80,
-                width: 80,
+                height: 70,
+                width: 70,
+                borderRadius: 70,
               }}
             />
           </Left>

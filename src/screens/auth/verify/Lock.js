@@ -172,14 +172,19 @@ export default class Lock extends React.Component {
             duration={1000}
             source={
               this.state.userData
-                ? this.state.userData.image
-                  ? this.state.userData.image
+                ? this.state.userData.image != null
+                  ? { uri: this.state.userData.image }
                   : icon
                 : icon
             }
             useNativeDriver={true}
             resizeMode="stretch"
-            style={styles.logo}
+            style={[
+              styles.logo,
+              {
+                marginTop: Constants.statusBarHeight,
+              },
+            ]}
           />
           <Animatable.Text
             animation="fadeIn"
@@ -190,7 +195,7 @@ export default class Lock extends React.Component {
               textAlign: "center",
               color: "#5C0082",
               fontSize: 20,
-              marginTop: -Constants.statusBarHeight * 2,
+              marginTop: Constants.statusBarHeight / 4,
             }}
           >
             {this.state.userData
@@ -286,9 +291,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: "45%",
-    height: "100%",
+    height: width / 5,
+    width: width / 5,
     backgroundColor: "transparent",
+    borderRadius: width / 5,
   },
   footerButton: {
     flexDirection: "column",

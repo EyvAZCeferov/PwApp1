@@ -127,7 +127,7 @@ export default function CardOne({ index, y, item, cardcount, user }) {
               />
             </Left>
             <Right style={styles.right}>
-              <Text style={styles.rightText} children={item.type} />
+              <Text style={styles.rightText} children={item.cardType} />
             </Right>
           </View>
           <View style={styles.centerCardNum}>

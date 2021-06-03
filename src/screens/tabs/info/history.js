@@ -5,37 +5,24 @@ import {
   StyleSheet,
   Dimensions,
   ActivityIndicator,
+  FlatList,
 } from "react-native";
-import {
-  Left,
-  Right,
-  Body,
-  Button,
-  List,
-  ListItem,
-  DatePicker,
-  Picker,
-} from "native-base";
+import { Left, Right, Body, Button, List, ListItem, Picker } from "native-base";
 import HeaderDrawer from "./components/header";
 import { AntDesign, FontAwesome, MaterialIcons } from "@expo/vector-icons";
-
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Constants from "expo-constants";
 const { width, height } = Dimensions.get("window");
 import { t } from "../../../functions/lang";
-import firebase from "../../../functions/firebase/firebaseConfig";
 import Textpopins from "../../../functions/screenfunctions/text";
-
-let allPrice = 0;
+import axios from "axios";
 
 export default class History extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       checks: null,
-      allMarkets: [
-        { name: "Araz", id: 1 },
-        { name: "Bazar Store", id: 2 },
-        { name: "Bravo", id: 3 },
-      ],
+      allMarkets: null,
       firstDate: null,
       lastDate: null,
       selectedMarket: null,
@@ -46,124 +33,50 @@ export default class History extends React.Component {
     };
   }
 
-  async getInfo(marketName = null, firstDate = null, lastDate) {
-    var checks = [];
-    var checkCount = 0;
-    if (marketName != null && firstDate == null && lastDate == null) {
-      await axios.get("actions/shops").then((e) => {
+  async getInfo(marketName = null, firstDate = null, lastDate = null) {
+    this.getcustomers();
+    await axios
+      .get(
+        "actions/shops/search/" + marketName + "/" + firstDate + "/" + lastDate
+      )
+      .then((e) => {
+        console.log(e.data);
         if (e.data.length > 0) {
+          console.log(e.data)
+          // this.setState({
+          //   checks: e.data,
+          // });
           this.setState({
-            checks: e.data,
+            checks: null,
           });
         } else {
+          
           this.setState({
             checks: null,
           });
         }
+        console.log(this.state.checks);
       });
-    } else if (marketName == null && firstDate != null && lastDate != null) {
-      firebase
-        .database()
-        .ref("users/K3YfovctoSaJiS6xeQxvXKYIQMi1/checks")
-        .orderByChild("date")
-        .startAt(firstDate)
-        .endAt(lastDate)
-        .limitToFirst(50)
-        .on("value", (data) => {
-          data.forEach((data) => {
-            checks.push(data.val());
-          });
-          checkCount = data.numChildren();
-          if (checkCount > 0) {
-            this.setState({
-              checks,
-            });
-          } else {
-            this.setState({
-              checks: null,
-            });
-          }
-        });
-    } else if (marketName == null && firstDate != null && lastDate == null) {
-      firebase
-        .database()
-        .ref("users/K3YfovctoSaJiS6xeQxvXKYIQMi1/checks")
-        .orderByChild("date")
-        .startAt(firstDate)
-        .limitToFirst(50)
-        .on("value", (data) => {
-          data.forEach((data) => {
-            checks.push(data.val());
-          });
-          checkCount = data.numChildren();
-          if (checkCount > 0) {
-            this.setState({
-              checks,
-            });
-          } else {
-            this.setState({
-              checks: null,
-            });
-          }
-        });
-    } else {
-      await axios.get("actions/shops").then((e) => {
-        if (e.data.length > 0) {
-          this.setState({
-            checks: e.data,
-          });
-        } else {
-          this.setState({
-            checks: null,
-          });
-        }
-      });
-    }
     this.setState({ refresh: false });
     this.renderContentArena();
+    this.dateTm();
+  }
+
+  async getcustomers() {
+    await axios.get("customers/customers").then((json) => {
+      this.setState({ allMarkets: json.data, refresh: false });
+    });
   }
 
   componentDidMount() {
     this.getInfo();
-    this.dateTm();
   }
 
   dateTm() {
-    const appointmentDate = new Date();
-    this.setState({ firstDate: appointmentDate });
-    this.setState({ lastDate: appointmentDate });
-  }
-
-  search(market = null) {
-    this.setState({ refresh: true });
-    if (market != null) {
-      this.getInfo(market, null, null);
-    } else {
-      if (
-        this.state.selectedMarket === null &&
-        this.state.firstDate != null &&
-        this.state.lastDate != null
-      ) {
-        var firstDate = new Date(this.state.firstDate).getTime() / 1;
-        var lastDate = new Date(this.state.lastDate).getTime() / 1;
-        this.getInfo(null, firstDate, lastDate);
-      } else if (
-        this.state.selectedMarket === null &&
-        this.state.firstDate != null &&
-        this.state.lastDate == null
-      ) {
-        var firstDate = new Date(this.state.firstDate).getTime() / 1;
-        this.getInfo(null, firstDate, null);
-      } else if (
-        this.state.selectedMarket != null &&
-        this.state.firstDate != null &&
-        this.state.lastDate != null
-      ) {
-        this.dropDownAlertRef.alertWithType("info", "Market Ve ya Tarix Secin");
-      } else {
-        this.getInfo(null, null, null);
-      }
-    }
+    const appointmentDate = Date.now();
+    this.setState({ firstDate: new Date(appointmentDate) });
+    this.setState({ lastDate: new Date(appointmentDate) });
+    console.log(this.state.firstDate);
   }
 
   valChang(val, type) {
@@ -173,7 +86,7 @@ export default class History extends React.Component {
         disableLast: !this.state.disableLast,
         selectedMarket: val,
       });
-      this.search(val);
+      this.getInfo();
     } else {
       this.setState({ disableMarket: !this.state.disableMarket });
       if (type === "first") {
@@ -181,13 +94,17 @@ export default class History extends React.Component {
       } else if (type == "last") {
         this.setState({ lastDate: val });
       }
-      this.search();
+      this.getInfo(
+        this.state.selectedMarket,
+        this.state.firstDate,
+        this.state.lastDate
+      );
     }
   }
 
-  renderList(props) {
+  renderList({ item, index }) {
     function marketTypeFunc(item) {
-      switch (item.market) {
+      switch (item.get_customer.name["az_name"]) {
         case "Bazar Store":
           return <FontAwesome name="cc-visa" size={30} color="#AF0045" />;
           break;
@@ -235,77 +152,56 @@ export default class History extends React.Component {
       return fulldate;
     }
 
-    function priceCollector(id) {
-      // var user = firebase.auth().currentUser;
-      // if (user) {
-      var datas = [];
-      firebase
-        .database()
-        .ref("users/K3YfovctoSaJiS6xeQxvXKYIQMi1/checks/" + id + "/products")
-        .on("value", (data) => {
-          if (data.numChildren() > 0 && data != null) {
-            data.forEach((data) => {
-              datas.push(data.val());
-            });
-          }
-        });
-      return datas;
-      // }
-    }
-
-    function sumPrice(checkId) {
-      if (checkId != null) {
-        allPrice = 0;
-        var checkProducts = priceCollector(checkId);
-        checkProducts.map((element) => {
-          allPrice = allPrice + parseFloat(element.price);
-        });
-      }
-      return Math.ceil(parseFloat(allPrice));
-    }
-
-    if (this.state.checks !== null) {
-      return this.state.checks.map((element, index) => {
-        return (
-          <ListItem style={styles.firstList} thumbnail key={index}>
-            <Left>{marketTypeFunc(element)}</Left>
-            <Body>
-              <Textpopins style={styles.listtitle} children={element.market} />
-              <View
-                style={{
-                  width: "80%",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  alignContent: "center",
-                }}
-              >
-                <Textpopins
-                  style={{ fontSize: 14 }}
-                  children={sumPrice(element.id) + " AZN "}
-                />
-                <Textpopins
-                  style={{ fontSize: 14 }}
-                  children={convertStampDate(element.date)}
-                />
-              </View>
-            </Body>
-            <Right>
-              <Button
-                transparent
-                onPress={() =>
-                  props.navigate("OneCheck", {
-                    checkid: element.id,
-                  })
-                }
-              >
-                <AntDesign name="eyeo" size={24} color="#AF0045" />
-              </Button>
-            </Right>
-          </ListItem>
-        );
+    function priceCollector(items) {
+      var price = 0;
+      items.map((e) => {
+        var p = parseFloat(e.price * e.qyt);
+        price = parseFloat(price) + parseFloat(p);
       });
+      return price;
     }
+
+    return (
+      <ListItem style={styles.firstList} thumbnail key={index}>
+        <Left>{marketTypeFunc(item)}</Left>
+        <Body>
+          <Textpopins
+            style={styles.listtitle}
+            children={item.get_customer.name["az_name"]}
+          />
+          <View
+            style={{
+              width: "80%",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              alignContent: "center",
+            }}
+          >
+            <Textpopins
+              style={{ fontSize: 14 }}
+              children={priceCollector(item.pay_items) + " AZN "}
+            />
+            <Textpopins
+              style={{ fontSize: 14 }}
+              children={convertStampDate(new Date(item.created_at))}
+            />
+          </View>
+        </Body>
+        <Right>
+          <Button
+            transparent
+            onPress={() => {
+              props.navigation.navigate("OneCheck", {
+                checkid: item.id,
+              });
+            }}
+          >
+            <AntDesign name="eyeo" size={24} color="#AF0045" />
+          </Button>
+        </Right>
+      </ListItem>
+    );
   }
 
   renderContentArena() {
@@ -328,7 +224,18 @@ export default class History extends React.Component {
           <View style={{ height: height - height / 8, width: width }}>
             <ScrollView>
               <List style={styles.w100}>
-                {this.renderList(this.props.navigation)}
+                <FlatList
+                  data={this.state.checks}
+                  keyExtractor={(index, item) => index.toString()}
+                  renderItem={this.renderList.bind(this)}
+                  refreshing={this.state.refresh}
+                  onRefresh={this.getInfo}
+                  style={{
+                    marginBottom: Constants.statusBarHeight * 2,
+                  }}
+                  showsVerticalScrollIndicator
+                  scrollEnabled
+                />
               </List>
             </ScrollView>
           </View>
@@ -394,24 +301,18 @@ export default class History extends React.Component {
             <View style={styles.contentHeader}>
               <View style={styles.contentHeaderColumn}>
                 <MaterialIcons name="date-range" size={24} color="#AF0045" />
-                <DatePicker
-                  androidMode="calendar"
-                  locale="az"
-                  placeHolderText={t("history.starttime")}
-                  placeHolderTextStyle={{ color: "#AF0045" }}
-                  textStyle={{ color: "#AF0045", fontSize: 20 }}
-                  animationType="fade"
-                  modalTransparent={true}
-                  disabled={this.state.disableFirst}
-                  onDateChange={(firstDate) =>
-                    this.valChang(firstDate, "first")
-                  }
+                {/* <DateTimePicker
+                  testID="dateTimePicker"
                   value={this.state.firstDate}
-                />
+                  mode="date"
+                  is24Hour={true}
+                  display="compact"
+                  onChange={(lastDate) => this.valChang(lastDate, "first")}
+                /> */}
               </View>
               <View style={styles.contentHeaderColumn}>
                 <MaterialIcons name="date-range" size={24} color="#AF0045" />
-                <DatePicker
+                {/* <DatePicker
                   androidMode="calendar"
                   locale="az"
                   placeHolderText={t("history.endtime")}
@@ -422,7 +323,7 @@ export default class History extends React.Component {
                   disabled={this.state.disableLast}
                   onDateChange={(lastDate) => this.valChang(lastDate, "last")}
                   value={this.state.lastDate}
-                />
+                /> */}
               </View>
             </View>
             <View style={styles.contentHeader}>
