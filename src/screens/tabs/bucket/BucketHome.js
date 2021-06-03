@@ -136,7 +136,7 @@ class BucketHome extends React.Component {
           }}
         />
         <Text style={[styles.productTitle, { color: "#5C0082" }]}>
-          {convertaz(item.name)}
+          {item.name}
         </Text>
         <Text style={styles.productDescription}>
           {convertaz(item.home_cat)}
@@ -157,9 +157,9 @@ class BucketHome extends React.Component {
             onPress={() => this.props.addWishList(item)}
           >
             {this.props.wishitems.find((element) => element.id == item.id) ? (
-              <AntDesign name="heart" size={24} color="black" />
+              <AntDesign name="heart" size={23} color="black" />
             ) : (
-              <AntDesign name="hearto" size={24} color="black" />
+              <AntDesign name="hearto" size={23} color="black" />
             )}
           </TouchableOpacity>
           <TouchableOpacity style={styles.addToCart}>

@@ -5,6 +5,7 @@ import {
   Dimensions,
   FlatList,
   SafeAreaView,
+  Image,
 } from "react-native";
 import { t } from "../../../functions/lang";
 import {
@@ -83,7 +84,7 @@ function CartList(props) {
         style={{
           width: width,
           height: 90,
-          marginLeft: -Constants.statusBarHeight,
+          marginLeft: -3,
         }}
         onPress={() =>
           props.navigation.navigate("ProductInfo", {
@@ -93,17 +94,32 @@ function CartList(props) {
         }
       >
         <Left style={{ maxWidth: width / 6 }}>
-          <Thumbnail
-            source={{ uri: item.image ? get_image(item.image) : null }}
-            style={{ maxWidth: "100%" }}
+          <Image
+            source={{
+              uri: item.image
+                ? get_image(item.image)
+                : "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
+            }}
+            style={{
+              width: width / 6,
+              height: width / 6,
+              borderRadius: width / 6,
+            }}
           />
         </Left>
-        <Body style={{ maxWidth: width / 3 + 30 }}>
-          <Textpopins
-            style={{ fontSize: 14 }}
-            children={convertaz(item.name)}
-          />
-          <Textpopins>{pric_e(item.qyt, item.price)} ₼</Textpopins>
+        <Body
+          style={{
+            maxWidth: width / 3,
+            marginRight: Constants.statusBarHeight,
+          }}
+        >
+          <Textpopins style={{ fontSize: 14 }} children={item.name} />
+          <Textpopins>
+            {Math.fround(pric_e(item.qyt, item.price))
+              .toString()
+              .substring(0, 5)}{" "}
+            ₼
+          </Textpopins>
         </Body>
         <Right style={{ flexDirection: "row" }}>
           <NumericInput

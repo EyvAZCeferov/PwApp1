@@ -6,6 +6,7 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
+  Image
 } from "react-native";
 import Header from "./components/BucketHeader";
 import { t } from "../../../functions/lang";
@@ -156,7 +157,7 @@ class Beforebuy extends React.Component {
         style={{
           width: width,
           height: 90,
-          marginLeft: -Constants.statusBarHeight,
+          marginLeft: -3,
         }}
         onPress={() =>
           this.props.navigation.navigate("ProductInfo", {
@@ -166,17 +167,25 @@ class Beforebuy extends React.Component {
         }
       >
         <Left style={{ maxWidth: width / 6 }}>
-          <Thumbnail
-            source={{ uri: item.image ? get_image(item.image) : null }}
-            style={{ maxWidth: "100%" }}
-          />
+        <Image
+          source={{
+            uri: item.image
+              ? get_image(item.image)
+              : "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
+          }}
+          style={{
+            width: width / 6,
+            height: width / 6,
+            borderRadius: width / 6,
+          }}
+        />
         </Left>
         <Body style={{ maxWidth: width / 3 + 30 }}>
           <Textpopins
-            style={{ fontSize: 14 }}
-            children={convertaz(item.name)}
+            style={{ fontSize: 13 }}
+            children={item.name}
           />
-          <Textpopins>{this.pric_e(item.qyt, item.price)} ₼</Textpopins>
+          <Textpopins>{Math.fround(this.pric_e(item.qyt, item.price)).toString().substring(0, 5)} ₼</Textpopins>
         </Body>
         <Right style={{ flexDirection: "row" }}>
           <NumericInput
