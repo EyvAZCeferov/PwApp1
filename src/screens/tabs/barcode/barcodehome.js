@@ -101,7 +101,8 @@ class BarcodeHome extends React.Component {
             data
         )
         .then((e) => {
-          if (e.data.length != 0) {
+          console.log(e.data);
+          if (e.data.id != null) {
             var data = e.data;
             data.qyt = 1;
             this.props.addtoCard(data);
@@ -159,6 +160,7 @@ class BarcodeHome extends React.Component {
           <NumericInput
             value={item.qyt}
             onChange={(value) => {
+              that.callSound();
               that.props.updateVal({ item, value });
               that.handleRefresh();
             }}
@@ -179,7 +181,10 @@ class BarcodeHome extends React.Component {
           <Button
             transparent
             style={styles.buttonStyle}
-            onPress={() => that.props.deleteCard(item)}
+            onPress={() => {
+              that.props.deleteCard(item);
+              that.getInfo();
+            }}
           >
             <EvilIcons name="trash" size={30} color="#BF360C" />
           </Button>
@@ -270,6 +275,7 @@ class BarcodeHome extends React.Component {
       });
       var formData = new FormData();
       formData.append("payed", true);
+      formdata.append("allprice", this.state.price);
       await axios
         .put("actions/shops/" + this.props.route.params.checkid, formData)
         .then((e) => {

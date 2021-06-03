@@ -357,7 +357,7 @@ export default class OneCheck extends React.Component {
               />
               <Textpopins
                 style={{ maxWidth: "50%", minWidth: "10%" }}
-                children={this.state.checkid}
+                children={this.state.check.ficsalid}
               />
             </View>
             <View style={styles.tableFooterElements}>

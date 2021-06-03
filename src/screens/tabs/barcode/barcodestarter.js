@@ -150,7 +150,7 @@ export default class BucketStarter extends React.Component {
       var id = 0;
 
       var data = new FormData();
-      data.append("shoptype", "bucket");
+      data.append("shoptype", "barcode");
       data.append("ficsal", this.state.checkid);
       // data.append("selectedCard", this.state.selectedCard);
       data.append("selectedMarket", this.state.selectedMarket.value);

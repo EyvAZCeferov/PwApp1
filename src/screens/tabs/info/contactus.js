@@ -183,7 +183,7 @@ export default class ContactUs extends React.Component {
         <View style={styles.footer}>
           <View
             style={{
-              marginTop: Constants.statusBarHeight * 3,
+              marginTop: Constants.statusBarHeight * 1,
               backgroundColor: "transparent",
               borderColor: "#5C0082",
               borderTopWidth: 2,
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   },
   footerTab: {
     backgroundColor: "transparent",
-    marginVertical: Constants.statusBarHeight,
+    marginVertical: Constants.statusBarHeight/2,
     marginTop: Constants.statusBarHeight,
   },
 });

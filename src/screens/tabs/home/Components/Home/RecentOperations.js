@@ -14,7 +14,6 @@ import { t } from "../../../../../functions/lang";
 import Textpopins from "../../../../../functions/screenfunctions/text";
 import { Entypo, FontAwesome, Ionicons, Fontisto } from "@expo/vector-icons";
 import axios from "axios";
-import { ScrollView } from "react-native";
 import Constants from "expo-constants";
 
 const { width, height } = Dimensions.get("window");
@@ -40,6 +39,14 @@ export default function RecentOperations(props) {
     });
     setRefresh(false);
     renderContent();
+  }
+
+  function priceCollector(items) {
+    var price = 0;
+    items.map((e) => {
+      price = parseFloat(price) + e.price;
+    });
+    return price;
   }
 
   function renderItem({ item, index }) {
@@ -100,15 +107,6 @@ export default function RecentOperations(props) {
       return fulldate;
     }
 
-    function priceCollector(items) {
-      var price = 0;
-      items.map((e) => {
-        var p = parseFloat(e.price * e.qyt);
-        price = parseFloat(price) + parseFloat(p);
-      });
-      return price;
-    }
-
     return (
       <ListItem
         thumbnail
@@ -130,7 +128,7 @@ export default function RecentOperations(props) {
         </Body>
         <Right>
           <Button transparent>
-            <Textpopins children={priceCollector(item.pay_items) + " AZN"} />
+            <Textpopins children={item.info.allprice + " ₼"} />
           </Button>
         </Right>
       </ListItem>
