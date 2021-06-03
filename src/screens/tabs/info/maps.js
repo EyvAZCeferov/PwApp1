@@ -22,6 +22,7 @@ import MapViewDirections from "react-native-maps-directions";
 import { get_image } from "../../../functions/standart/helper";
 import axios from "axios";
 const { width } = Dimensions.get("screen");
+import { mapStyle } from "./components/mapstyle";
 
 export default class Map extends React.Component {
   constructor(props) {
@@ -260,13 +261,14 @@ export default class Map extends React.Component {
           <View style={styles.top}>
             <MapView
               style={styles.mapStyle}
+              customMapStyle={mapStyle}
               followsUserLocation={true}
               cacheEnabled={true}
               zoomEnabled={true}
               zoomControlEnabled={true}
               zoomTapEnabled={true}
               maxZoomLevel={50}
-              minZoomLevel={5}
+              minZoomLevel={1}
               showsScale={true}
               userLocationAnnotationTitle={
                 this.state.user
@@ -280,7 +282,7 @@ export default class Map extends React.Component {
               scrollEnabled={true}
               paddingAdjustmentBehavior="always"
               rotateEnabled={true}
-              mapType="hybrid"
+              mapType="satellite"
               loadingIndicatorColor="#5C0082"
               provider="google"
               showsMyLocationButton={true}
