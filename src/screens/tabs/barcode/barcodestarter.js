@@ -8,11 +8,12 @@ import {
   Modal,
 } from "react-native";
 import Constants from "expo-constants";
+
 const { width, height } = Dimensions.get("screen");
-import { Picker } from "native-base";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
 import Textpopins from "../../../functions/screenfunctions/text";
+import DropDownPicker from "react-native-dropdown-picker";
 import BarcodeMask from "react-native-barcode-mask";
 import { Camera } from "expo-camera";
 import { StatusBar } from "expo-status-bar";
@@ -23,7 +24,7 @@ import axios from "axios";
 
 const succesImage = require("../../../../assets/images/Alert/tick.png");
 
-export default class BarcodeStarter extends React.Component {
+export default class BucketStarter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,7 +58,6 @@ export default class BarcodeStarter extends React.Component {
       .then((json) => {
         json.map((e) => {
           var d = {
-            // icon:() => <MaterialIcons name="house" size={24} color="black" />,
             value: e.id,
             label: e.name["az_name"],
           };
@@ -119,15 +119,9 @@ export default class BarcodeStarter extends React.Component {
     }
   }
 
-  async qrCodeScanned(item) {
+  qrCodeScanned(item) {
     this.setState({ openQr: false });
-    await axios.get(String(item.data)).then((e) => {
-      this.setState({
-        selectedMarket: e.data.customer_id,
-        selectedFilial: e.data.id,
-      });
-    });
-    this.renderArena();
+    this.setState({ selectedMarket: item.barcode });
   }
 
   change_customer(text) {
@@ -141,6 +135,7 @@ export default class BarcodeStarter extends React.Component {
           var d = {
             value: e.id,
             label: e.name["az_name"],
+            location_key: e.key,
           };
           locations.push(d);
         });
@@ -155,14 +150,13 @@ export default class BarcodeStarter extends React.Component {
       var id = 0;
 
       var data = new FormData();
-      data.append("shoptype", "barcode");
+      data.append("shoptype", "bucket");
       data.append("ficsal", this.state.checkid);
       // data.append("selectedCard", this.state.selectedCard);
       data.append("selectedMarket", this.state.selectedMarket.value);
       data.append("selectedFilial", this.state.selectedFilial.value);
       data.append("location_key", this.state.selectedFilial.location_key);
       // data.append("bonus_card", this.state.bonus_card);
-
       await axios
         .post("actions/shops", data)
         .then((e) => {
@@ -177,130 +171,6 @@ export default class BarcodeStarter extends React.Component {
         t("barcode.starter.selectRetry")
       );
     }
-  }
-
-  renderArena() {
-    return (
-      <View style={styles.content}>
-        <View style={styles.top}>
-          <Picker
-            enabled
-            mode="dropdown"
-            selectedValue={this.state.selectedMarket}
-            onValueChange={(val) => this.change_customer(val)}
-            style={{
-              width: width - 50,
-              backgroundColor: "#fff",
-              borderColor: "#5C0082",
-              borderWidth: 2,
-            }}
-            iosIcon={<AntDesign name="down" size={24} color="black" />}
-            itemStyle={{
-              backgroundColor: "#fff",
-              marginLeft: 0,
-              paddingLeft: 10,
-              borderColor: "#5C0082",
-              borderWidth: 2,
-            }}
-          >
-            <Picker.Item value={0} label="Seç" />
-            {this.state.allMarkets.map((e) => {
-              return <Picker.Item value={e} label={e.label} color="#5C0082" />;
-            })}
-          </Picker>
-        </View>
-        <View style={styles.footer}>
-          {this.state.selectedMarket ? (
-            <View
-              style={[
-                styles.center,
-                {
-                  flexDirection: "column",
-                  marginBottom: Constants.statusBarHeight,
-                },
-              ]}
-            >
-              <Textpopins>{t("barcode.starter.selectfilial")}</Textpopins>
-              <Picker
-                enabled
-                mode="dropdown"
-                selectedValue={this.state.selectedFilial}
-                onValueChange={(val) => this.setState({ selectedFilial: val })}
-                style={{
-                  width: width - 50,
-                  backgroundColor: "#fff",
-                  borderColor: "#5C0082",
-                  borderWidth: 2,
-                }}
-                iosIcon={<AntDesign name="down" size={24} color="black" />}
-                itemStyle={{
-                  backgroundColor: "#fff",
-                  marginLeft: 0,
-                  paddingLeft: 10,
-                  borderColor: "#5C0082",
-                  borderWidth: 2,
-                }}
-              >
-                <Picker.Item value={0} label="Seç" />
-                {this.state.filials.map((e) => {
-                  return (
-                    <Picker.Item value={e} label={e.label} color="#5C0082" />
-                  );
-                })}
-              </Picker>
-            </View>
-          ) : null}
-          {this.state.cards.length > 0 ? (
-            <RadioButtonRN
-              data={this.state.cards}
-              selectedBtn={(e) => this.setState({ selectedCard: e.id })}
-              icon={<AntDesign name="creditcard" size={25} color="#5C0082" />}
-              animationTypes={["zoomIn", "pulse", "shake", "rotate"]}
-              deactiveColor="#5C0082"
-              duration={500}
-            />
-          ) : null}
-
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: Constants.statusBarHeight,
-              justifyContent: "center",
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <TouchableOpacity
-              style={[
-                styles.addToCart,
-                {
-                  paddingHorizontal: Constants.statusBarHeight * 2,
-                  paddingVertical: Constants.statusBarHeight / 2,
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                  alignContent: "center",
-                },
-              ]}
-              onPress={() => this.next()}
-            >
-              <Textpopins
-                style={{
-                  color: "#5C0082",
-                  marginRight: Constants.statusBarHeight / 3,
-                  fontSize: 20,
-                  fontWeight: "bold",
-                }}
-                onPress={() => this.next()}
-              >
-                {t("form.buttons.continue")}
-              </Textpopins>
-              <AntDesign name="arrowright" size={24} color="#5C0082" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    );
   }
 
   render() {
@@ -337,7 +207,130 @@ export default class BarcodeStarter extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-        {this.renderArena()}
+        <View style={styles.content}>
+          <View style={styles.top}>
+            <DropDownPicker
+              arrowSize={24}
+              items={this.state.allMarkets}
+              label={t("barcode.starter.selectmar")}
+              placeholder={t("barcode.starter.selectmar")}
+              containerStyle={{ height: 80, width: width - 50 }}
+              dropDownMaxHeight={300}
+              searchable={true}
+              searchableStyle={styles.searchable}
+              style={{
+                backgroundColor: "#fff",
+                margin: 10,
+                height: 50,
+                borderColor: "#5C0082",
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+              itemStyle={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+              onChangeItem={(text) => this.change_customer(text)}
+              activeLabelStyle={{ color: "#5C0082" }}
+              selectedLabelStyle={{ color: "#5C0082" }}
+              activeItemStyle={{ color: "#5C0082" }}
+              arrowColor="#5C0082"
+              autoScrollToDefaultValue={Constants.statusBarHeight}
+              min={15}
+              max={100}
+            />
+          </View>
+          <View style={styles.footer}>
+            {this.state.selectedMarket ? (
+              <View style={[styles.center, { flexDirection: "column" }]}>
+                <Textpopins>{t("barcode.starter.selectfilial")}</Textpopins>
+                <DropDownPicker
+                  arrowSize={24}
+                  items={this.state.filials}
+                  label={t("barcode.starter.selectfilial")}
+                  placeholder={t("barcode.starter.selectfilial")}
+                  containerStyle={{
+                    height: 90,
+                    width: width - 50,
+                  }}
+                  dropDownMaxHeight={height}
+                  searchable={true}
+                  searchableStyle={styles.searchable}
+                  style={{
+                    backgroundColor: "#fff",
+                    margin: 10,
+                    height: 50,
+                    borderColor: "#5C0082",
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                  }}
+                  itemStyle={{
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                  }}
+                  onChangeItem={(text) =>
+                    this.setState({ selectedFilial: text })
+                  }
+                  activeLabelStyle={{ color: "#5C0082" }}
+                  selectedLabelStyle={{ color: "#5C0082" }}
+                  activeItemStyle={{ color: "#5C0082" }}
+                  arrowColor="#5C0082"
+                  autoScrollToDefaultValue={Constants.statusBarHeight}
+                  min={15}
+                  max={100}
+                />
+              </View>
+            ) : null}
+            {this.state.cards.length > 0 ? (
+              <RadioButtonRN
+                data={this.state.cards}
+                selectedBtn={(e) => this.setState({ selectedCard: e.id })}
+                icon={<AntDesign name="creditcard" size={25} color="#5C0082" />}
+                animationTypes={["zoomIn", "pulse", "shake", "rotate"]}
+                deactiveColor="#5C0082"
+                duration={500}
+              />
+            ) : null}
+
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: Constants.statusBarHeight,
+                justifyContent: "center",
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <TouchableOpacity
+                style={[
+                  styles.addToCart,
+                  {
+                    paddingHorizontal: Constants.statusBarHeight * 2,
+                    paddingVertical: Constants.statusBarHeight / 2,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    alignContent: "center",
+                  },
+                ]}
+                onPress={() => this.next()}
+              >
+                <Textpopins
+                  style={{
+                    color: "#5C0082",
+                    marginRight: Constants.statusBarHeight / 3,
+                    fontSize: 20,
+                    fontWeight: "bold",
+                  }}
+                  onPress={() => this.next()}
+                >
+                  {t("form.buttons.continue")}
+                </Textpopins>
+                <AntDesign name="arrowright" size={24} color="#5C0082" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
         <Modal
           visible={this.state.openQr}
           animated={true}
@@ -504,6 +497,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 4,
+    marginTop: 5,
     flexDirection: "column",
   },
   addToCart: {

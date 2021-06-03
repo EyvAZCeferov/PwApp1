@@ -1,512 +1,575 @@
-import React from "react";
+import * as React from "react";
 import {
   View,
-  SafeAreaView,
   StyleSheet,
+  FlatList,
+  ActivityIndicator,
   TouchableOpacity,
   Dimensions,
-  Modal,
 } from "react-native";
+
 import Constants from "expo-constants";
+import {
+  Body,
+  Button,
+  Left,
+  List,
+  ListItem,
+  Right,
+  Thumbnail,
+} from "native-base";
+import { Camera } from "expo-camera";
+import BarcodeMask from "react-native-barcode-mask";
+import { StatusBar } from "expo-status-bar";
 
 const { width, height } = Dimensions.get("screen");
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign, EvilIcons } from "@expo/vector-icons";
 import { t } from "../../../functions/lang";
+import { connect } from "react-redux";
 import Textpopins from "../../../functions/screenfunctions/text";
-import DropDownPicker from "react-native-dropdown-picker";
-import BarcodeMask from "react-native-barcode-mask";
-import { Camera } from "expo-camera";
-import { StatusBar } from "expo-status-bar";
-import RadioButtonRN from "radio-buttons-react-native";
-import { hideNumb, makeid } from "../../../functions/standart/helper";
-import DropdownAlert from "react-native-dropdownalert";
+import NoBarcode from "./components/noBarcode";
 import axios from "axios";
+import FormData from "form-data";
+import NumericInput from "react-native-numeric-input";
+import { convertaz } from "../../../functions/standart/helper";
+import { Audio } from "expo-av";
 
-const succesImage = require("../../../../assets/images/Alert/tick.png");
-
-export default class BarCodeStarter extends React.Component {
+class BarcodeHome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      allMarkets: [],
-      filials: [],
-      cards: [],
-      selectedMarket: null,
-      selectedFilial: null,
-      openQr: false,
-      flashMode: "off",
-      selectedCard: null,
-      checkid: null,
+      refresh: true,
+      hasPermission: null,
+      card: null,
+      price: 0,
+      customer: 0,
+      active: false,
     };
   }
 
-  setId() {
-    let id = makeid(7);
-    this.setState({ checkid: id });
-  }
-
-  componentDidMount() {
-    this.setId();
-    this.startCam();
-    this.getDat();
-  }
-
-  async getDat() {
-    var customers = [];
-    fetch("https://admin.paygo.az/api/customers/customers")
-      .then((response) => response.json())
-      .then((json) => {
-        json.map((e) => {
-          var d = {
-            value: e.id,
-            label: e.name["az_name"],
-          };
-          customers.push(d);
-        });
-        this.setState({ allMarkets: customers });
-      })
-      .catch((error) => console.error(error));
-
-    var cards = [];
-    await axios.get("actions/cards").then((e) => {
-      if (e.data.length > 0) {
-        e.data.map((en) => {
-          var d = {
-            label: hideNumb(en.number) + "  -  " + en.price + " ₼",
-            type: en.cardType,
-            id: en.id,
-          };
-          cards.push(d);
-        });
+  async getInfo() {
+    var cardid = null;
+    await axios
+      .get("actions/shops/" + this.props.route.params.checkid)
+      .then((e) => {
         this.setState({
-          cards: cards,
+          customer: e.data.customer,
         });
-      }
+        cardid = e.data.pay_card ?? null;
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(async (e) => {
+        if (cardid) {
+          await axios
+            .get("actions/cards/" + cardid)
+            .then((e) => {
+              this.setState({
+                card: e.data,
+              });
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+        this.setState({
+          refresh: false,
+        });
+        this.handleRefresh();
+      });
+  }
+
+  async callSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../../../assets/sounds/barcode_scanned.mp3")
+    );
+    await sound.playAsync();
+  }
+
+  async barcodeScanned(data) {
+    this.callSound();
+    this.setState({ refresh: true });
+    if (data) {
+      await axios
+        .get(
+          "customers/product/" +
+            this.state.customer +
+            "/" +
+            this.state.customer +
+            "_" +
+            data
+        )
+        .then((e) => {
+          if (e.data.length != 0) {
+            var data = e.data;
+            data.qyt = 1;
+            this.props.addtoCard(data);
+            this.handleRefresh();
+            this.setState({ refresh: false });
+          } else {
+            this.setState({ refresh: false });
+            alert("Məhsul tapılmadı");
+          }
+        });
+    } else {
+      this.setState({ refresh: false });
+      alert("Məhsul tapılmadı");
+    }
+  }
+
+  price(qyt, price) {
+    return qyt * price;
+  }
+
+  renderItems({ item, index }) {
+    var that = this;
+
+    return (
+      <ListItem
+        key={index}
+        style={{
+          width: width,
+          height: 80,
+          marginLeft: -Constants.statusBarHeight,
+        }}
+        onPress={() =>
+          props.navigation.navigate("ProductInfo", {
+            customer: this.state.customer,
+            barcode: item.barcode,
+          })
+        }
+      >
+        <Left style={{ maxWidth: width / 6 }}>
+          <Thumbnail
+            source={{ uri: item.image ? get_image(item.image) : null }}
+            style={{ maxWidth: "100%" }}
+          />
+        </Left>
+        <Body style={{ maxWidth: width / 3 + 30 }}>
+          <Textpopins children={item.name} />
+          <Textpopins>
+            {Math.fround(this.price(item.qyt, item.price))
+              .toString()
+              .substring(0, 5)}
+            ₼
+          </Textpopins>
+        </Body>
+        <Right style={{ flexDirection: "row" }}>
+          <NumericInput
+            value={item.qyt}
+            onChange={(value) => {
+              that.props.updateVal({ item, value });
+              that.handleRefresh();
+            }}
+            onLimitReached={(isMax, msg) => alert(t("cards.minimal"))}
+            totalWidth={width / 3}
+            totalHeight={50}
+            iconSize={25}
+            step={1}
+            minValue={1}
+            maxValue={100}
+            valueType="integer"
+            rounded
+            textColor="#5C0082"
+            iconStyle={{ color: "white" }}
+            rightButtonBackgroundColor="#5C0082"
+            leftButtonBackgroundColor="#E56B70"
+          />
+          <Button
+            transparent
+            style={styles.buttonStyle}
+            onPress={() => that.props.deleteCard(item)}
+          >
+            <EvilIcons name="trash" size={30} color="#BF360C" />
+          </Button>
+        </Right>
+      </ListItem>
+    );
+  }
+
+  handleRefresh() {
+    this.setState({ refresh: true });
+    this.priceCollect();
+    this.renderContent();
+    this.setState({ refresh: false });
+  }
+
+  async getPerm() {
+    this.setState({ refresh: true });
+    const { status } = await Camera.requestPermissionsAsync();
+  }
+
+  priceCollect() {
+    var price = 0;
+    this.props.bucketitems.map((e) => {
+      var p = this.price(e.qyt, e.price);
+      price = parseFloat(price) + parseFloat(p);
+    });
+    this.setState({
+      price: price,
     });
   }
 
-  async startCam() {
-    await Camera.requestPermissionsAsync();
+  componentDidMount() {
+    this.getPerm();
+    this.getInfo();
   }
 
-  flashToggle() {
-    if (this.state.flashMode == "torch") {
-      this.setState({ flashMode: "off" });
-    } else {
-      this.setState({ flashMode: "torch" });
-    }
-  }
-
-  iconRender() {
-    if (this.state.flashMode == "torch") {
+  renderContent() {
+    if (this.state.refresh) {
       return (
-        <Entypo
-          name="flash"
-          style={{ paddingHorizontal: 5, paddingVertical: 2 }}
-          size={40}
-          color="rgb(255,255,255)"
-        />
+        <View style={[styles.container, styles.center]}>
+          <ActivityIndicator
+            size="large"
+            color="#5C0082"
+            focusable={true}
+            animating={true}
+          />
+        </View>
       );
     } else {
-      return (
-        <Entypo
-          name="flash"
-          style={{ paddingHorizontal: 5, paddingVertical: 2 }}
-          size={40}
-          color="rgba(255,255,255,.3)"
-        />
-      );
+      if (this.props.bucketitems.length == 0) {
+        return (
+          <View style={[styles.container, styles.center]}>
+            <Textpopins style={styles.nullObject}>
+              {t("actions.noResult")}
+            </Textpopins>
+          </View>
+        );
+      } else {
+        return (
+          <FlatList
+            data={this.props.bucketitems}
+            renderItem={this.renderItems.bind(this)}
+            keyExtractor={(item, index) => index.toString()}
+            refreshing={this.state.refresh}
+            onRefresh={this.handleRefresh.bind(this)}
+          />
+        );
+      }
     }
   }
-
-  qrCodeScanned(item) {
-    this.setState({ openQr: false });
-    this.setState({ selectedMarket: item.barcode });
-  }
-
-  change_customer(text) {
-    var locations = [];
-    fetch(
-      "https://admin.paygo.az/api/customers/customers/locations/" + text.value
-    )
-      .then((response) => response.json())
-      .then((json) => {
-        json.map((e) => {
-          var d = {
-            value: e.id,
-            label: e.name["az_name"],
-            location_key: e.key,
-          };
-          locations.push(d);
-        });
-        this.setState({ filials: locations });
-      })
-      .catch((error) => console.error(error));
-    this.setState({ selectedMarket: text });
-  }
-
   async next() {
-    if (this.state.selectedMarket != null && this.state.selectedFilial) {
-      var id = 0;
-
-      var data = new FormData();
-      data.append("shoptype", "bucket");
-      data.append("ficsal", this.state.checkid);
-      // data.append("selectedCard", this.state.selectedCard);
-      data.append("selectedMarket", this.state.selectedMarket.value);
-      data.append("selectedFilial", this.state.selectedFilial.value);
-      data.append("location_key", this.state.selectedFilial.location_key);
-      // data.append("bonus_card", this.state.bonus_card);
+    if (this.props.bucketitems.length > 0) {
+      this.props.bucketitems.map(async (e) => {
+        var formdata = new FormData();
+        var price = this.price(e.qyt, e.price);
+        formdata.append("barcode", convertaz(e.barcode));
+        formdata.append("pay_id", this.props.route.params.checkid);
+        formdata.append("product_name", convertaz(e.name));
+        formdata.append("product_qyt", e.qyt);
+        formdata.append("price", price);
+        formdata.append("product_edv", true);
+        await axios.post(
+          "actions/products/" +
+            this.props.route.params.checkid +
+            "/add_pay_item",
+          formdata
+        );
+      });
+      var formData = new FormData();
+      formData.append("payed", true);
       await axios
-        .post("actions/shops", data)
+        .put("actions/shops/" + this.props.route.params.checkid, formData)
         .then((e) => {
-          this.props.navigation.navigate("BarcodeHome", { checkid: e.data });
-        })
-        .catch((e) => {
-          console.log(e);
+          this.props.navigation.navigate("PayThanks", {
+            checkid: this.props.route.params.checkid,
+          });
         });
     } else {
-      this.dropDownAlertRef.alertWithType(
-        "info",
-        t("barcode.starter.selectRetry")
-      );
+      alert("Məhsul yoxdur");
     }
   }
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
-        <DropdownAlert
-          ref={(ref) => (this.dropDownAlertRef = ref)}
-          useNativeDriver={true}
-          closeInterval={1000}
-          updateStatusBar={true}
-          tapToCloseEnabled={true}
-          showCancel={true}
-          elevation={5}
-          isInteraction={false}
-          successImageSrc={succesImage}
-        />
-        <View style={styles.header}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: Constants.statusBarHeight,
-            }}
-          >
-            <View />
-            <Textpopins style={styles.title}>
-              {t("barcode.starter.selectmarketandcard")}
-            </Textpopins>
-            <TouchableOpacity
-              style={styles.addToCart}
-              onPress={() => this.setState({ openQr: true })}
-            >
-              <AntDesign name="camera" size={26} color="#5C0082" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.content}>
-          <View style={styles.top}>
-            <DropDownPicker
-              arrowSize={24}
-              items={this.state.allMarkets}
-              label={t("barcode.starter.selectmar")}
-              placeholder={t("barcode.starter.selectmar")}
-              containerStyle={{ height: 80, width: width - 50 }}
-              dropDownMaxHeight={300}
-              searchable={true}
-              searchableStyle={styles.searchable}
-              style={{
-                backgroundColor: "#fff",
-                margin: 10,
-                height: 50,
-                borderColor: "#5C0082",
-                flexDirection: "row",
-                justifyContent: "space-around",
-              }}
-              itemStyle={{
-                flexDirection: "row",
-                justifyContent: "space-around",
-              }}
-              onChangeItem={(text) => this.change_customer(text)}
-              activeLabelStyle={{ color: "#5C0082" }}
-              selectedLabelStyle={{ color: "#5C0082" }}
-              activeItemStyle={{ color: "#5C0082" }}
-              arrowColor="#5C0082"
-              autoScrollToDefaultValue={Constants.statusBarHeight}
-              min={15}
-              max={100}
-            />
-          </View>
-          <View style={styles.footer}>
-            {this.state.selectedMarket ? (
-              <View style={[styles.center, { flexDirection: "column" }]}>
-                <Textpopins>{t("barcode.starter.selectfilial")}</Textpopins>
-                <DropDownPicker
-                  arrowSize={24}
-                  items={this.state.filials}
-                  label={t("barcode.starter.selectfilial")}
-                  placeholder={t("barcode.starter.selectfilial")}
-                  containerStyle={{
-                    height: 90,
-                    width: width - 50,
-                  }}
-                  dropDownMaxHeight={height}
-                  searchable={true}
-                  searchableStyle={styles.searchable}
-                  style={{
-                    backgroundColor: "#fff",
-                    margin: 10,
-                    height: 50,
-                    borderColor: "#5C0082",
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                  }}
-                  itemStyle={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                  }}
-                  onChangeItem={(text) =>
-                    this.setState({ selectedFilial: text })
-                  }
-                  activeLabelStyle={{ color: "#5C0082" }}
-                  selectedLabelStyle={{ color: "#5C0082" }}
-                  activeItemStyle={{ color: "#5C0082" }}
-                  arrowColor="#5C0082"
-                  autoScrollToDefaultValue={Constants.statusBarHeight}
-                  min={15}
-                  max={100}
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: "#ecf0f1",
+            paddingTop: Constants.statusBarHeight,
+          },
+        ]}
+      >
+        {this.state.active ? (
+          <NoBarcode
+            {...this.props}
+            bar={(e) => this.barcodeScanned(e)}
+            togMod={() => this.setState({ active: !this.state.active })}
+          />
+        ) : (
+          <View style={styles.container}>
+            <StatusBar backgroundColor="#5C0082" style="light" />
+            {this.state.refresh ? (
+              <View
+                style={[
+                  styles.container,
+                  styles.center,
+                  { backgroundColor: "transparent", zIndex: 5 },
+                ]}
+              >
+                <ActivityIndicator
+                  size="large"
+                  color="#5C0082"
+                  focusable={true}
+                  animating={true}
                 />
               </View>
-            ) : null}
-            {this.state.cards.length > 0 ? (
-              <RadioButtonRN
-                data={this.state.cards}
-                selectedBtn={(e) => this.setState({ selectedCard: e.id })}
-                icon={<AntDesign name="creditcard" size={25} color="#5C0082" />}
-                animationTypes={["zoomIn", "pulse", "shake", "rotate"]}
-                deactiveColor="#5C0082"
-                duration={500}
-              />
-            ) : null}
+            ) : (
+              <View style={styles.container}>
+                <View style={styles.footer}>
+                  <View
+                    style={{
+                      top: 0,
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: "#AF0045",
+                          borderTopLeftRadius: Constants.statusBarHeight,
+                          borderTopRightRadius: Constants.statusBarHeight,
+                          borderBottomRightRadius: Constants.statusBarHeight,
+                          borderBottomLeftRadius: Constants.statusBarHeight,
+                        }}
+                        onPress={() => this.props.navigation.pop()}
+                      >
+                        <AntDesign
+                          name="arrowleft"
+                          size={24}
+                          color="#fff"
+                          style={{
+                            fontSize: 18,
+                            padding: Constants.statusBarHeight / 4,
+                            paddingHorizontal: Constants.statusBarHeight / 3,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                marginTop: Constants.statusBarHeight,
-                justifyContent: "center",
-                alignContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <TouchableOpacity
-                style={[
-                  styles.addToCart,
-                  {
-                    paddingHorizontal: Constants.statusBarHeight * 2,
-                    paddingVertical: Constants.statusBarHeight / 2,
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    alignContent: "center",
-                  },
-                ]}
-                onPress={() => this.next()}
-              >
-                <Textpopins
-                  style={{
-                    color: "#5C0082",
-                    marginRight: Constants.statusBarHeight / 3,
-                    fontSize: 20,
-                    fontWeight: "bold",
-                  }}
-                  onPress={() => this.next()}
-                >
-                  {t("form.buttons.continue")}
-                </Textpopins>
-                <AntDesign name="arrowright" size={24} color="#5C0082" />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <Modal
-          visible={this.state.openQr}
-          animated={true}
-          animationType="slide"
-          statusBarTranslucent={true}
-          hardwareAccelerated={true}
-          transparent={false}
-          presentationStyle="fullScreen"
-          supportedOrientations="portrait"
-        >
-          <View style={[styles.container, styles.center]}>
-            <StatusBar hidden={true} />
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Textpopins
+                        style={{
+                          color: "rgba(255,255,255,.7)",
+                          fontSize: 22,
+                        }}
+                      >
+                        {Math.fround(this.state.price)
+                          .toString()
+                          .substring(0, 5)}
+                        ₼
+                      </Textpopins>
+                      <Textpopins
+                        style={{
+                          color: "rgba(255,255,255,.7)",
+                          fontSize: 14,
+                        }}
+                      >
+                        {t("barcode.paying.totalBalance")}
+                      </Textpopins>
+                    </View>
+                    {this.state.card != null ? (
+                      <View
+                        style={{
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Textpopins
+                          style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 20,
+                          }}
+                        >
+                          300 ₼
+                        </Textpopins>
+                        <Textpopins
+                          style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 14,
+                          }}
+                        >
+                          {t("barcode.paying.balance")}
+                        </Textpopins>
+                      </View>
+                    ) : null}
 
-            <Camera
-              style={{ width: width, height: height }}
-              type="back"
-              videoStabilizationMode={20}
-              focusable={true}
-              onBarCodeScanned={(item) => this.qrCodeScanned(item)}
-              flashMode={this.state.flashMode}
-              autoFocus
-              ratio="portrait"
-              useCamera2Api
-            >
-              <BarcodeMask
-                outerMaskOpacity={0.6}
-                edgeBorderWidth={3}
-                edgeColor={"#5C0082"}
-                animatedLineColor="#DD2C00"
-                animatedLineHeight={2}
-                showAnimatedLine={true}
-                animated={true}
-                animatedLineWidth={"90%"}
-                lineAnimationDuration={1400}
-                useNativeDriver={true}
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  alignContent: "center",
-                  textAlign: "center",
-                  margin: "auto",
-                  padding: "auto",
-                }}
-              />
-            </Camera>
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: "#AF0045",
+                          borderTopLeftRadius: Constants.statusBarHeight,
+                          borderTopRightRadius: Constants.statusBarHeight,
+                          borderBottomRightRadius: Constants.statusBarHeight,
+                          borderBottomLeftRadius: Constants.statusBarHeight,
+                        }}
+                        onPress={() => this.next()}
+                      >
+                        <Textpopins
+                          style={{
+                            color: "rgba(255,255,255,.7)",
+                            fontSize: 14,
+                            padding: Constants.statusBarHeight / 4,
+                            paddingHorizontal: Constants.statusBarHeight / 3,
+                          }}
+                        >
+                          {t("bucket.header.cartlists.finishpayment")}
+                        </Textpopins>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+                <View style={[styles.header, styles.center]}>
+                  <Camera
+                    style={{
+                      width: width / 1,
+                      height: "100%",
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                    }}
+                    type="back"
+                    focusable={true}
+                    onBarCodeScanned={(item) => {
+                      this.barcodeScanned(item.data);
+                    }}
+                    autoFocus={true}
+                    focusDepth={10}
+                    videoStabilizationMode={500}
+                  >
+                    <BarcodeMask
+                      outerMaskOpacity={0.6}
+                      edgeBorderWidth={3}
+                      edgeColor={"#C90052"}
+                      animatedLineColor="#DD2C00"
+                      animatedLineHeight={2}
+                      showAnimatedLine={true}
+                      animated={true}
+                      animatedLineWidth={"90%"}
+                      lineAnimationDuration={1400}
+                      useNativeDriver={true}
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignContent: "center",
+                        textAlign: "center",
+                        margin: "auto",
+                        padding: "auto",
+                      }}
+                      width={width / 1.5}
+                      height={width / 2.7}
+                    />
+                  </Camera>
+                </View>
+                <View style={styles.content}>
+                  <View
+                    style={{
+                      backgroundColor: "#AF0045",
+                      width: width,
+                      height: 40,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: Constants.statusBarHeight,
+                        paddingVertical: Constants.statusBarHeight / 4,
+                        flexDirection: "column",
+                        zIndex: 10,
+                      }}
+                    >
+                      <Textpopins
+                        style={{
+                          color: "#fff",
+                        }}
+                      >
+                        Məhsul sayı &nbsp;
+                        {this.props.bucketitems.length}
+                      </Textpopins>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: Constants.statusBarHeight / 3,
+                        paddingVertical: Constants.statusBarHeight / 3,
+                        flexDirection: "column",
+                      }}
+                      onPress={() => this.setState({ active: true })}
+                    >
+                      <AntDesign
+                        name="edit"
+                        size={24}
+                        style={{ marginRight: Constants.statusBarHeight / 4 }}
+                        color="#ffffff"
+                      />
+                    </TouchableOpacity>
+                  </View>
+
+                  <List style={[styles.container, styles.center]}>
+                    {this.renderContent()}
+                  </List>
+                </View>
+              </View>
+            )}
           </View>
-          <View
-            style={{
-              position: "absolute",
-              top: 15,
-              width: width,
-              height: 140,
-              flexDirection: "column",
-              justifyContent: "space-between",
-              alignContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                width: width,
-                height: 50,
-                marginTop: 30,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                alignContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  minHeight: 45,
-                  maxHeight: 60,
-                  minWidth: 45,
-                  maxWidth: 60,
-                  marginLeft: 30,
-                  borderRadius: 5,
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  alignContent: "center",
-                  textAlign: "center",
-                  backgroundColor: "rgba(0,0,0,.5)",
-                }}
-                onPress={() => {
-                  this.setState({ openQr: false });
-                }}
-              >
-                <AntDesign name="left" size={25} color="#fff" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  minHeight: 45,
-                  maxHeight: 60,
-                  minWidth: 45,
-                  maxWidth: 60,
-                  marginRight: 30,
-                  borderRadius: 5,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  alignContent: "center",
-                  textAlign: "center",
-                  backgroundColor: "#5C0082",
-                }}
-                onPress={() => {
-                  this.flashToggle();
-                }}
-              >
-                {this.iconRender()}
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View
-            style={{
-              position: "absolute",
-              bottom: 15,
-              right: 0,
-              left: 0,
-              width: width,
-              height: 80,
-            }}
-          ></View>
-        </Modal>
-      </SafeAreaView>
+        )}
+      </View>
     );
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    bucketitems: state.bucketitems,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addtoCard: (product) => dispatch({ type: "ADD_TO_CART", payload: product }),
+    updateVal: (product, value) =>
+      dispatch({ type: "UPDATE_CART", payload: product }),
+    deleteCard: (product) =>
+      dispatch({ type: "REMOVE_FROM_CART", payload: product }),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(BarcodeHome);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   header: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "center",
+    flex: 0.3,
+    backgroundColor: "#5C0082",
+  },
+  content: {
+    flex: 0.6,
+  },
+  footer: {
+    flex: 0.1,
+    backgroundColor: "#5C0082",
   },
   center: {
     textAlign: "center",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 20,
-    color: "rgba(0,0,0,.8)",
-    fontWeight: "bold",
-    marginLeft: Constants.statusBarHeight * 2,
-    marginTop: Constants.statusBarHeight / 4,
-  },
-  content: {
-    flex: 8,
-    backgroundColor: "#ebecf0",
-    borderTopLeftRadius: Constants.statusBarHeight,
-    borderTopRightRadius: Constants.statusBarHeight,
-  },
-  top: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-  },
-  footer: {
-    flex: 4,
-    marginTop: 5,
-    flexDirection: "column",
-  },
-  addToCart: {
-    paddingHorizontal: Constants.statusBarHeight / 2.5,
-    paddingVertical: 4,
-    backgroundColor: "#fff",
-    borderRadius: Constants.statusBarHeight,
-    borderColor: "#5C0082",
-    borderWidth: 2,
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
