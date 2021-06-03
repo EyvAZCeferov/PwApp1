@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     height: width / 5,
     width: width / 5,
     backgroundColor: "transparent",
-    borderRadius: width / 5,
+    borderRadius: width,
   },
   footerButton: {
     flexDirection: "column",

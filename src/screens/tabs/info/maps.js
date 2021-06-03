@@ -12,7 +12,8 @@ import {
 import HeaderDrawer from "./components/header";
 import { t } from "../../../functions/lang";
 import Constants from "expo-constants";
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Callout, Marker } from "react-native-maps";
+
 import * as Permissions from "expo-permissions";
 import Textpopins from "../../../functions/screenfunctions/text";
 import { Body, Left, ListItem, Right, Thumbnail } from "native-base";
@@ -281,7 +282,7 @@ export default class Map extends React.Component {
               rotateEnabled={true}
               mapType="hybrid"
               loadingIndicatorColor="#5C0082"
-              provider={PROVIDER_GOOGLE}
+              provider="google"
               showsMyLocationButton={true}
               initialRegion={{
                 latitude: this.state.latitude,
