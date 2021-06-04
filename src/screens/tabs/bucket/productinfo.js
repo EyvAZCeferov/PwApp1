@@ -12,10 +12,9 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { connect } from "react-redux";
 import { t } from "../../../functions/lang";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign,FontAwesome } from "@expo/vector-icons";
 import Textpopins from "../../../functions/screenfunctions/text";
 import Header from "./components/BucketHeader";
-import * as Localization from "expo-localization";
 import axios from "axios";
 const { width, height } = Dimensions.get("window");
 import Constants from "expo-constants";
@@ -50,6 +49,13 @@ class ProductInfo extends React.Component {
     this.getInfo();
   }
 
+  addProduct(item) {
+    var data = item;
+    data.qyt = 1;
+    this.props.addtoCard(data);
+  }
+
+
   content() {
     const header = (image) => {
       return (
@@ -61,8 +67,9 @@ class ProductInfo extends React.Component {
               "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
           }}
           style={{
-            width: "100%",
-            height: "100%",
+            width: width,
+            height: 200,
+            zIndex: 1,
           }}
         >
           <View
@@ -71,18 +78,25 @@ class ProductInfo extends React.Component {
               flexDirection: "row",
               height: 25,
               position: "absolute",
-              bottom: Constants.statusBarHeight / 2,
+              bottom: Constants.statusBarHeight,
               left: 0,
               right: 0,
               alignContent: "center",
               justifyContent: "center",
+              zIndex: 2,
             }}
           >
             <TouchableOpacity
-              onPress={() => this.props.addtoCard(this.state.product)}
+              onPress={() => this.addProduct(this.state.product)}
               style={styles.addToCart}
             >
-              <AntDesign name="shoppingcart" size={24} color="black" />
+              {this.props.bucketitems.find(
+                (element) => element.id == this.state.product.id
+              ) ? (
+                <FontAwesome name="cart-arrow-down" size={24} color="black" />
+              ) : (
+                <AntDesign name="shoppingcart" size={24} color="black" />
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.addToCart}
@@ -97,7 +111,7 @@ class ProductInfo extends React.Component {
               )}
             </TouchableOpacity>
             <TouchableOpacity style={styles.addToCart}>
-              <Textpopins>{this.state.product.price}₼</Textpopins>
+              <Textpopins>{this.state.product.price} ₼</Textpopins>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -108,10 +122,12 @@ class ProductInfo extends React.Component {
       <ScrollView style={{ flexDirection: "column" }}>
         <Textpopins
           style={{
-            margin: Constants.statusBarHeight,
-            fontSize: 30,
+            marginVertical: Constants.statusBarHeight * 3,
+            marginBottom: Constants.statusBarHeight,
+            fontSize: 25,
             fontWeight: "bold",
             color: "#5C0082",
+            textAlign: "center",
           }}
         >
           {product.name}
@@ -148,7 +164,7 @@ class ProductInfo extends React.Component {
         return (
           <View style={styles.container}>
             <View style={styles.header}>
-              <Header button={true} title={this.state.product.name} />
+              <Header button={true} title={this.state.product.name} titleLeft />
             </View>
             <View style={styles.content}>
               <View style={styles.top}>{header(this.state.product.image)}</View>

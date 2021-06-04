@@ -380,6 +380,7 @@ export default class OneCheck extends React.Component {
   }
 
   renderProducts({ item, index }) {
+    console.log(item)
     function countSum(item) {
       var result = null;
       var qyt = item.qty ? parseFloat(item.qty) : 1;

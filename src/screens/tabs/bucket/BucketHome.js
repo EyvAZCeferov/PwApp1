@@ -21,7 +21,11 @@ import Textpopins from "../../../functions/screenfunctions/text";
 import { Button } from "native-base";
 import Filter from "./components/filter";
 import axios from "axios";
-import { convertaz, get_image } from "../../../functions/standart/helper";
+import {
+  convertaz,
+  get_image,
+  string_to_slug,
+} from "../../../functions/standart/helper";
 
 class BucketHome extends React.Component {
   constructor(props) {
@@ -47,7 +51,6 @@ class BucketHome extends React.Component {
     await axios
       .get("actions/shops/" + this.props.route.params.checkid)
       .then((e) => {
-        console.log(e.data)
         this.setState({
           customer: e.data.customer,
         });
@@ -66,6 +69,21 @@ class BucketHome extends React.Component {
           this.state.page === 1
             ? e.data.data
             : [...this.state.datas, ...e.data.data];
+
+        datas.map((es) => {
+          var found = cat.find(
+            (element) => element.slug == string_to_slug(es.home_cat)
+          );
+
+          if (!found) {
+            var d = {
+              label: es.home_cat,
+              slug: string_to_slug(es.home_cat),
+            };
+            cat.push(d);
+          }
+        });
+
         this.setState({
           datas: datas,
           brands: cat,
@@ -77,20 +95,38 @@ class BucketHome extends React.Component {
   }
 
   LoadMoreRandomData = () => {
-    console.log(this.state.page);
     this.setState(
       {
-        refresh: true,
+        loadingExtraData: true,
         page: this.state.page + 1,
       },
-      () => this.getInfo()
+      () => {
+        axios
+          .get(
+            "customers/products/" +
+              this.state.customer +
+              "?page=" +
+              this.state.page
+          )
+          .then((e) => {
+            var datas =
+              this.state.page === 1
+                ? e.data.data
+                : [...this.state.datas, ...e.data.data];
+            this.setState({
+              datas: datas,
+            });
+          })
+          .finally(() => {
+            this.setState({ refresh: false, loadingExtraData: false });
+          });
+      }
     );
   };
 
   addProduct(item) {
     var data = item;
     data.qyt = 1;
-    console.log(data)
     this.props.addtoCard(data);
   }
 
@@ -101,12 +137,12 @@ class BucketHome extends React.Component {
           style={styles.topListsProduct}
           onPress={() =>
             this.props.navigation.navigate("InCustomer", {
-              catid: e,
+              catid: e.id,
+              customer: this.state.customer,
             })
           }
-          key={index}
         >
-          <Text style={styles.productTitle}>{e}</Text>
+          <Text style={styles.productTitle}>{convertaz(e.label)}</Text>
         </TouchableOpacity>
       );
     });
@@ -131,9 +167,9 @@ class BucketHome extends React.Component {
               : "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
           }}
           style={{
-            width: width / 2.3,
-            height: width / 2.3,
-            borderRadius: width / 2.3,
+            width: width / 2.5,
+            height: width / 2.5,
+            borderRadius: width / 2.5,
           }}
         />
         <Text style={[styles.productTitle, { color: "#5C0082" }]}>
@@ -172,44 +208,61 @@ class BucketHome extends React.Component {
   }
 
   renderFooter = () => {
-    return (
-      //Footer View with Load More button
-      <View
-        style={[
-          styles.center,
-          {
-            flex: 1,
-            marginTop: Constants.statusBarHeight,
-          },
-        ]}
-      >
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={this.LoadMoreRandomData}
-          //On Click of button load more data
+    if (this.state.loadingExtraData) {
+      return (
+        //Footer View with Load More button
+        <View
           style={[
             styles.center,
             {
-              backgroundColor: "#5C0082",
               flex: 1,
-              width,
+              marginTop: Constants.statusBarHeight,
             },
           ]}
         >
-          <Textpopins
-            style={{
-              fontSize: 20,
-              color: "#fff",
-            }}
+          <ActivityIndicator color="#5C0082" size="large" />
+        </View>
+      );
+    } else {
+      return (
+        //Footer View with Load More button
+        <View
+          style={[
+            styles.center,
+            {
+              flex: 1,
+              marginTop: Constants.statusBarHeight,
+            },
+          ]}
+        >
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={this.LoadMoreRandomData}
+            //On Click of button load more data
+            style={[
+              styles.center,
+              {
+                backgroundColor: "#5C0082",
+                flex: 1,
+                width,
+              },
+            ]}
           >
-            Load More
-          </Textpopins>
-          {this.state.refresh ? (
-            <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
-          ) : null}
-        </TouchableOpacity>
-      </View>
-    );
+            <Textpopins
+              style={{
+                fontSize: 20,
+                color: "#fff",
+              }}
+            >
+              Load More
+            </Textpopins>
+            {this.state.refresh ? (
+              <ActivityIndicator color="white" style={{ marginLeft: 8 }} />
+            ) : null}
+          </TouchableOpacity>
+        </View>
+      );
+    }
   };
 
   render() {
@@ -230,7 +283,7 @@ class BucketHome extends React.Component {
               alwaysBounceVertical={true}
               horizontal={true}
             >
-              {/* {this.renderHorizontalList()} */}
+              {this.state.brands != null ? this.renderHorizontalList() : null}
             </ScrollView>
           </View>
           <Button
@@ -335,10 +388,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: Constants.statusBarHeight,
   },
   top: {
-    flex: 0.1,
+    flex: 0.075,
   },
   footer: {
-    flex: 0.9,
+    flex: 0.925,
     marginTop: 5,
     flexDirection: "column",
   },
@@ -352,7 +405,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     textAlign: "center",
-    paddingHorizontal: Constants.statusBarHeight + 10,
+    paddingHorizontal: Constants.statusBarHeight,
     marginRight: Constants.statusBarHeight / 3,
     flexDirection: "row",
   },
@@ -369,12 +422,12 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
   },
   productTitle: {
-    fontSize: 15,
+    fontSize: 14,
     color: "rgba(0,0,0,.8)",
     fontWeight: "bold",
   },
   productDescription: {
-    fontSize: 14,
+    fontSize: 13,
     color: "rgba(0,0,0,.6)",
   },
   actions: {

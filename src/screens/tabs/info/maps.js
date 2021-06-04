@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  AppRegistry,
   View,
   StyleSheet,
   Dimensions,
@@ -418,3 +419,5 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
 });
+
+AppRegistry.registerComponent('Map', () => Map);

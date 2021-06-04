@@ -36,10 +36,25 @@ function BucketHeader(props) {
             }}
           />
         )}
-        <Textpopins style={styles.text}>{props.title}</Textpopins>
+        <Textpopins
+          style={[
+            styles.text,
+            {
+              marginLeft: props.titleLeft ? 0 : Constants.statusBarHeight * 2.4,
+              fontSize: props.titleLeft ? 15 : 20,
+            },
+          ]}
+        >
+          {props.title}
+        </Textpopins>
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <TouchableOpacity
-            style={styles.button}
+            style={[
+              styles.button,
+              {
+                marginRight: Constants.statusBarHeight / 3,
+              },
+            ]}
             onPress={() =>
               navigation.navigate("CartList", {
                 checkid: props.checkid,
@@ -93,9 +108,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "rgba(0,0,0,.8)",
-    fontSize: 20,
     fontWeight: "bold",
-    marginLeft: Constants.statusBarHeight * 2.4,
   },
   badge: {
     position: "absolute",

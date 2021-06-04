@@ -283,6 +283,17 @@ class BarcodeHome extends React.Component {
             checkid: this.props.route.params.checkid,
           });
         });
+        
+      axios.get("auth/me").then(async (e) => {
+        var pinprice = (this.state.totalBalance * 10) / 100 + e.data.pin.price;
+        var formDataLast = new FormData();
+        formDataLast.append("price", pinprice);
+        await axios
+          .put("actions/cards/" + e.data.pin.id, formDataLast)
+          .then((e) => {
+            console.log(e.data);
+          });
+      });
     } else {
       alert("Məhsul yoxdur");
     }

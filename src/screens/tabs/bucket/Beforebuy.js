@@ -6,7 +6,7 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
-  Image
+  Image,
 } from "react-native";
 import Header from "./components/BucketHeader";
 import { t } from "../../../functions/lang";
@@ -75,7 +75,7 @@ class Beforebuy extends React.Component {
         var price = this.pric_e(e.qyt, e.price);
         formdata.append("barcode", convertaz(e.barcode));
         formdata.append("pay_id", this.props.route.params.checkid);
-        formdata.append("product_name", convertaz(e.name));
+        formdata.append("product_name", e.name);
         formdata.append("product_qyt", e.qyt);
         formdata.append("price", price);
         formdata.append("product_edv", true);
@@ -88,6 +88,7 @@ class Beforebuy extends React.Component {
       });
       var formData = new FormData();
       formData.append("payed", true);
+      formData.append("allprice", this.state.totalBalance);
       await axios
         .put("actions/shops/" + this.props.route.params.checkid, formData)
         .then((e) => {
@@ -95,6 +96,16 @@ class Beforebuy extends React.Component {
             checkid: this.props.route.params.checkid,
           });
         });
+      axios.get("auth/me").then(async (e) => {
+        var pinprice = (this.state.totalBalance * 10) / 100 + e.data.pin.price;
+        var formDataLast = new FormData();
+        formDataLast.append("price", pinprice);
+        await axios
+          .put("actions/cards/" + e.data.pin.id, formDataLast)
+          .then((e) => {
+            console.log(e.data);
+          });
+      });
     } else {
       alert("Məhsul yoxdur");
     }
@@ -112,7 +123,7 @@ class Beforebuy extends React.Component {
       .get("actions/shops/" + this.props.route.params.checkid)
       .then((e) => {
         this.setState({
-          location_key: e.data.info["location_key"],
+          location_key: e.data.info["location_key"] ?? null,
           customer: e.data.customer,
         });
         cardid = e.data.pay_card ?? null;
@@ -167,25 +178,27 @@ class Beforebuy extends React.Component {
         }
       >
         <Left style={{ maxWidth: width / 6 }}>
-        <Image
-          source={{
-            uri: item.image
-              ? get_image(item.image)
-              : "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
-          }}
-          style={{
-            width: width / 6,
-            height: width / 6,
-            borderRadius: width / 6,
-          }}
-        />
+          <Image
+            source={{
+              uri: item.image
+                ? get_image(item.image)
+                : "https://micoedward.com/wp-content/uploads/2018/04/Love-your-product.png",
+            }}
+            style={{
+              width: width / 6,
+              height: width / 6,
+              borderRadius: width / 6,
+            }}
+          />
         </Left>
         <Body style={{ maxWidth: width / 3 + 30 }}>
-          <Textpopins
-            style={{ fontSize: 13 }}
-            children={item.name}
-          />
-          <Textpopins>{Math.fround(this.pric_e(item.qyt, item.price)).toString().substring(0, 5)} ₼</Textpopins>
+          <Textpopins style={{ fontSize: 13 }} children={item.name} />
+          <Textpopins>
+            {Math.fround(this.pric_e(item.qyt, item.price))
+              .toString()
+              .substring(0, 5)}{" "}
+            ₼
+          </Textpopins>
         </Body>
         <Right style={{ flexDirection: "row" }}>
           <NumericInput
