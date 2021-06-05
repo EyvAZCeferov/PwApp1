@@ -85,7 +85,7 @@ export default function RecentOperations(props) {
         </Body>
         <Right>
           <Button transparent>
-            <Textpopins children={item.info.allprice + " ₼"} />
+            <Textpopins children={priceCollector(item.pay_items) + " ₼"} />
           </Button>
         </Right>
       </ListItem>

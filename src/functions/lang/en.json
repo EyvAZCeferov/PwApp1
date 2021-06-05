@@ -44,6 +44,9 @@
     "minimal": "Must be at least 1 piece",
     "cartadd": "Add a card"
   },
+  "pin": {
+    "pincount": "Pin numbers"
+  },
   "bonuses": {
     "cartadd": "Add a bonus card"
   },

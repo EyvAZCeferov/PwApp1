@@ -72,9 +72,19 @@ function CartList(props) {
   }
 
   async function next() {
-    props.navigation.navigate("BeforeBuy", {
-      checkid: props.route.params.checkid,
-    });
+    if (card != null) {
+      if (totalBalance > card.price) {
+        alert("Miqdar aşıldı");
+      } else {
+        props.navigation.navigate("BeforeBuy", {
+          checkid: props.route.params.checkid,
+        });
+      }
+    } else {
+      props.navigation.navigate("BeforeBuy", {
+        checkid: props.route.params.checkid,
+      });
+    }
   }
 
   function renderBucket({ item, index }) {
@@ -196,11 +206,7 @@ function CartList(props) {
                 justifyContent: "space-around",
               },
             ]}
-            onPress={() =>
-              props.navigation.navigate("BeforeBuy", {
-                checkid: props.route.params.checkid,
-              })
-            }
+            onPress={() => next()}
           >
             <Textpopins
               style={{

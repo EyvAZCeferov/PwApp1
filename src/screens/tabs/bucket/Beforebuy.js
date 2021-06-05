@@ -70,6 +70,11 @@ class Beforebuy extends React.Component {
 
   async next() {
     if (this.props.bucketitems.length > 0) {
+      if (this.state.card != null) {
+        if (this.state.totalBalance > this.state.card.price) {
+          alert("Məbləğ aşıldı");
+        }
+      }
       this.props.bucketitems.map(async (e) => {
         var formdata = new FormData();
         var price = this.pric_e(e.qyt, e.price);

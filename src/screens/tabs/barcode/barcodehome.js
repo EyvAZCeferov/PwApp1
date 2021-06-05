@@ -259,27 +259,34 @@ class BarcodeHome extends React.Component {
 
   async next() {
     if (this.props.bucketitems.length > 0) {
+      if (this.state.card != null) {
+        if (this.state.price > this.state.card.price) {
+          alert("Məbləğ aşıldı");
+        }
+      }
       this.props.bucketitems.map(async (e) => {
-        var formdata = new FormData();
+        var formdata1 = new FormData();
         var price = this.price(e.qyt, e.price);
-        formdata.append("barcode", convertaz(e.barcode));
-        formdata.append("pay_id", this.props.route.params.checkid);
-        formdata.append("product_name", convertaz(e.name));
-        formdata.append("product_qyt", e.qyt);
-        formdata.append("price", price);
-        formdata.append("product_edv", true);
+        formdata1.append("barcode", convertaz(e.barcode));
+        formdata1.append("pay_id", this.props.route.params.checkid);
+        formdata1.append("product_name", convertaz(e.name));
+        formdata1.append("product_qyt", e.qyt);
+        formdata1.append("price", price);
+        formdata1.append("product_edv", true);
         await axios.post(
           "actions/products/" +
             this.props.route.params.checkid +
             "/add_pay_item",
-          formdata
+          formdata1
         );
       });
-      var formData = new FormData();
-      formData.append("payed", true);
-      formdata.append("allprice", this.state.price);
+
+      var formData2 = new FormData();
+      formData2.append("payed", true);
+      formData2.append("allprice", this.state.price);
+
       await axios
-        .put("actions/shops/" + this.props.route.params.checkid, formData)
+        .put("actions/shops/" + this.props.route.params.checkid, formData2)
         .then((e) => {
           this.props.navigation.navigate("PayThanks", {
             checkid: this.props.route.params.checkid,
@@ -301,7 +308,7 @@ class BarcodeHome extends React.Component {
     }
   }
 
-  render() { 
+  render() {
     return (
       <View
         style={[
