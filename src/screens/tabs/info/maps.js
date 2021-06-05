@@ -14,11 +14,9 @@ import HeaderDrawer from "./components/header";
 import { t } from "../../../functions/lang";
 import Constants from "expo-constants";
 import MapView, { Callout, Marker } from "react-native-maps";
-
 import * as Permissions from "expo-permissions";
 import Textpopins from "../../../functions/screenfunctions/text";
-import { Body, Left, ListItem, Right, Thumbnail } from "native-base";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { Body, Input, Left, ListItem, Right, Thumbnail } from "native-base";
 import MapViewDirections from "react-native-maps-directions";
 import { get_image } from "../../../functions/standart/helper";
 import axios from "axios";
@@ -79,6 +77,8 @@ export default class Map extends React.Component {
     this.getInfo();
   }
 
+  search() {}
+
   renderMarker() {
     return this.state.markers.map((element, index) => {
       const { latitude, longitude } = element.geometry;
@@ -108,7 +108,7 @@ export default class Map extends React.Component {
               latitude: parseFloat(latitude),
               longitude: parseFloat(longitude),
             }}
-            apikey="AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
+            apikey="AIzaSyDo1vSGQb4Ov88X4A38NskQwVgwTjcD7b8"
             strokeWidth={3}
             strokeColor="hotpink"
           />
@@ -125,7 +125,7 @@ export default class Map extends React.Component {
           longitude: longitude,
         }}
         destination={item.geometry}
-        apikey="AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
+        apikey="AIzaSyDo1vSGQb4Ov88X4A38NskQwVgwTjcD7b8"
         strokeWidth={3}
         strokeColor="hotpink"
       />
@@ -297,82 +297,10 @@ export default class Map extends React.Component {
               {this.state.markerCount > 0 ? this.renderMarker() : null}
             </MapView>
           </View>
-          <View style={styles.footer}>
-            <View
-              style={[
-                styles.top,
-                {
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignContent: "center",
-                  marginTop: Constants.statusBarHeight,
-                  flex: 0.2,
-                },
-              ]}
-            >
-              <GooglePlacesAutocomplete
-                placeholder={t("bucket.header.search")}
-                onPress={(data, details = null) => {
-                  // 'details' is provided when fetchDetails = true
-                  console.log(data, details);
-                  console.log(data);
-                }}
-                query={{
-                  key: "AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg",
-                  language: "az",
-                }}
-                currentLocation
-                currentLocationLabel={t("maps.currentLoc")}
-                minLength={2}
-                autoFocus={false}
-                returnKeyType={"default"}
-                fetchDetails={true}
-                styles={{
-                  textInputContainer: {
-                    backgroundColor: "transparent",
-                  },
-                  textInput: {
-                    height: 42,
-                    backgroundColor: "transparent",
-                    borderBottomColor: "#5C0082",
-                    borderBottomWidth: 2,
-                    fontSize: 17,
-                    color: "rgba(0,0,0,.8)",
-                  },
-                  poweredContainer: {
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                    borderBottomRightRadius: 5,
-                    borderBottomLeftRadius: 5,
-                    borderColor: "#c8c7cc",
-                    borderTopWidth: 0.5,
-                  },
-                  powered: {},
-                  listView: {},
-                  row: {
-                    backgroundColor: "#FFFFFF",
-                    padding: 13,
-                    height: 44,
-                    flexDirection: "row",
-                  },
-                  separator: {
-                    height: 0.5,
-                    backgroundColor: "#c8c7cc",
-                  },
-                  description: {},
-                  loader: {
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    height: 20,
-                  },
-                }}
-                requestUrl={{
-                  useOnPlatform: "all", // or "all"
-                  url: "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api", // or any proxy server that hits https://maps.googleapis.com/maps/api
-                }}
-              />
-            </View>
-            <ScrollView style={[styles.footer, { marginTop: 0, flex: 0.8 }]}>
+          <View
+            style={[styles.footer, { marginTop: Constants.statusBarHeight }]}
+          >
+            <ScrollView style={[styles.footer, { flex: 1 }]}>
               <FlatList
                 data={this.state.markers}
                 renderItem={this.renderList.bind(this)}
@@ -420,4 +348,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('Map', () => Map);
+AppRegistry.registerComponent("Map", () => Map);

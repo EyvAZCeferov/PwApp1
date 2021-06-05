@@ -124,9 +124,12 @@
       "balance": "баланс",
       "cardNumb": "Номер карты",
       "totalBalance": "Итоговая цена",
+      "cardBalance": "Баланс карты",
       "remainingBalance": "Оставшееся количество",
       "edv": "НДС",
-      "noBarcode": "Нет штрих-кода?"
+      "noBarcode": "Нет штрих-кода?",
+      "productCount": "Количество продуктов",
+      "productnotfound": "Товаров не найдено"
     },
     "thanksBuying": {
       "title": "Thanks for shopping",

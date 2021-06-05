@@ -29,6 +29,7 @@ import Constants from "expo-constants";
 import Textpopins from "../../../functions/screenfunctions/text";
 import axios from "axios";
 import FormData from "form-data";
+import { convertStampDate } from "../../../functions/standart/helper";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -39,10 +40,13 @@ Notifications.setNotificationHandler({
 });
 
 export default function Notification(props) {
+  const [notification, setNotification] = React.useState(null);
   const [notifies, setNotifies] = React.useState(null);
   const [refresh, setRefresh] = React.useState(true);
   const [token, setToken] = React.useState(null);
-  const [modal, setModal] = React.useState(false);
+
+  const notificationListener = React.useRef();
+  const responseListener = React.useRef();
 
   async function getNotifyPerform() {
     registerForPushNotificationsAsync().then((token) =>
@@ -51,41 +55,50 @@ export default function Notification(props) {
 
     async function setTokenFunction(token) {
       await axios.get("auth/me").then(async (e) => {
-        console.log(e.data.notify_token);
-      });
-      await axios.get("auth/me").then(async (e) => {
-        if (e.data.notify_token == null) {
+        if (
+          e.data.notify_token.token == null ||
+          e.data.notify_token.token == undefined ||
+          e.data.notify_token.token == "undefined"
+        ) {
           var formdata = new FormData();
           formdata.append("token", token);
           await axios.post("auth/set_notify_token", formdata).then((e) => {
-            alert("Token Setted");
-          });
-        } else if (e.data.notify_token.token == null) {
-          var formdata = new FormData();
-          formdata.append("token", token);
-          await axios.post("auth/set_notify_token", formdata).then((e) => {
-            alert("Token Setted");
+            console.log(e.data);
           });
         }
       });
 
-      console.log(token);
       setToken(token);
     }
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }
 
   async function getInfo() {
-    var datas = [];
-    firebase
-      .database()
-      .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/notifications")
-      .on("value", (data) => {
-        data.forEach((data) => {
-          datas.push(data.val());
-        });
-        setRefresh(false);
-        renderContent();
-      });
+    setRefresh(true);
+    await axios.get("actions/notifications").then((e) => {
+      if (e.data.length > 0) {
+        setNotifies(e.data);
+      }
+    });
+    setRefresh(false);
   }
 
   async function registerForPushNotificationsAsync() {
@@ -120,29 +133,23 @@ export default function Notification(props) {
         enableVibrate: true,
       });
     }
+
     return token;
   }
 
   React.useEffect(() => {
-    getInfo();
     getNotifyPerform();
-  }, []);
-
-  function handleRefresh() {
-    setRefresh(true);
     getInfo();
-  }
+  }, []);
 
   function renderItem({ item, index }) {
     return (
       <ListItem
         style={styles.firstList}
         thumbnail
-        onPress={(item) =>
+        onPress={() =>
           props.navigation.navigate("Notification", {
-            params: {
-              notifyid: item.id,
-            },
+            notifyid: item.id,
           })
         }
       >
@@ -156,44 +163,20 @@ export default function Notification(props) {
           />
         </Left>
         <Body>
-          <Text style={styles.cardNumbText} children={item.content[0].title} />
+          <Text style={styles.cardNumbText} children={item.name} />
           <Text
             style={{ fontSize: 15, color: "rgba(0,0,0,.5)" }}
-            children={item.date}
+            children={convertStampDate(new Date(item.created_at))}
           />
         </Body>
         <Right>
           <Entypo
             name="dot-single"
             size={33}
-            color={!item.read ? "#BF360C" : "#5C0082"}
+            color={!item.readed ? "#BF360C" : "#5C0082"}
           />
         </Right>
       </ListItem>
-    );
-  }
-
-  function deleteNotifies() {
-    Alert.alert(
-      t("actions.wantdelete"),
-      t("actions.notrecovered"),
-      [
-        {
-          text: t("actions.cancel"),
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: t("actions.delete"),
-          onPress: () =>
-            firebase
-              .database()
-              .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/notifications")
-              .remove(),
-          style: "destructive",
-        },
-      ],
-      { cancelable: true }
     );
   }
 
@@ -209,13 +192,12 @@ export default function Notification(props) {
         },
         {
           text: t("actions.submit"),
-          onPress: () =>
-            firebase
-              .database()
-              .ref("users/Dj8BIGEYS1OIE7mnOd1D2RdmchF3/notifications")
-              .orderByValue("noOrder")
-              .isEqual("yea")
-              .limitToFirst(100),
+          onPress: async () =>
+            await axios.post("notifications/readAll").then((e) => {
+              if (e.data == "Success") {
+                Alert("Bütün notifikasiyalar oxundu olaraq işarələndi");
+              }
+            }),
           style: "destructive",
         },
       ],
@@ -261,7 +243,7 @@ export default function Notification(props) {
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               refreshing={refresh}
-              onRefresh={handleRefresh}
+              onRefresh={getInfo}
             />
           </List>
         )}
@@ -304,13 +286,6 @@ export default function Notification(props) {
             flexDirection: "row",
           }}
         >
-          <Button
-            transparent
-            style={{ marginHorizontal: 10 }}
-            onPress={() => deleteNotifies()}
-          >
-            <Feather name="trash-2" size={24} color="#5C0082" />
-          </Button>
           <Button
             transparent
             style={{ marginLeft: 8 }}

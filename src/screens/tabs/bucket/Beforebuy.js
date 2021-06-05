@@ -325,6 +325,9 @@ class Beforebuy extends React.Component {
           styles.footer,
           {
             flex: this.state.card != null ? 0.8 : 0.4,
+            borderTopLeftRadius: Constants.statusBarHeight,
+            borderTopRightRadius: Constants.statusBarHeight,
+            paddingHorizontal: Constants.statusBarHeight,
           },
         ]}
       >
@@ -390,7 +393,7 @@ class Beforebuy extends React.Component {
                 fontSize: 20,
               }}
             >
-              {t("barcode.paying.balance")}
+              {t("barcode.paying.cardBalance")}
             </Textpopins>
             <Textpopins
               style={{
@@ -515,8 +518,6 @@ const styles = StyleSheet.create({
     flex: 0.5,
     flexDirection: "column",
     backgroundColor: "#5C0082",
-    borderTopLeftRadius: Constants.statusBarHeight,
-    borderTopRightRadius: Constants.statusBarHeight,
   },
   center: {
     textAlign: "center",

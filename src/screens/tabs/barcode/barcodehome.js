@@ -88,6 +88,7 @@ class BarcodeHome extends React.Component {
   }
 
   async barcodeScanned(data) {
+    console.log(data);
     this.callSound();
     this.setState({ refresh: true });
     if (data) {
@@ -110,12 +111,12 @@ class BarcodeHome extends React.Component {
             this.setState({ refresh: false });
           } else {
             this.setState({ refresh: false });
-            alert("Məhsul tapılmadı");
+            alert(t("barcode.paying.productnotfound"));
           }
         });
     } else {
       this.setState({ refresh: false });
-      alert("Məhsul tapılmadı");
+      alert(t("barcode.paying.productnotfound"));
     }
   }
 
@@ -255,6 +256,7 @@ class BarcodeHome extends React.Component {
       }
     }
   }
+
   async next() {
     if (this.props.bucketitems.length > 0) {
       this.props.bucketitems.map(async (e) => {
@@ -283,7 +285,7 @@ class BarcodeHome extends React.Component {
             checkid: this.props.route.params.checkid,
           });
         });
-        
+
       axios.get("auth/me").then(async (e) => {
         var pinprice = (this.state.totalBalance * 10) / 100 + e.data.pin.price;
         var formDataLast = new FormData();
@@ -295,11 +297,11 @@ class BarcodeHome extends React.Component {
           });
       });
     } else {
-      alert("Məhsul yoxdur");
+      alert(t("barcode.paying.productnotfound"));
     }
   }
 
-  render() {
+  render() { 
     return (
       <View
         style={[
@@ -412,7 +414,7 @@ class BarcodeHome extends React.Component {
                             fontSize: 20,
                           }}
                         >
-                          300 ₼
+                          {this.state.card.price} ₼
                         </Textpopins>
                         <Textpopins
                           style={{
@@ -420,7 +422,7 @@ class BarcodeHome extends React.Component {
                             fontSize: 14,
                           }}
                         >
-                          {t("barcode.paying.balance")}
+                          {t("barcode.paying.cardBalance")}
                         </Textpopins>
                       </View>
                     ) : null}
@@ -520,7 +522,7 @@ class BarcodeHome extends React.Component {
                           color: "#fff",
                         }}
                       >
-                        Məhsul sayı &nbsp;
+                        {t("barcode.paying.productCount")} &nbsp;
                         {this.props.bucketitems.length}
                       </Textpopins>
                     </TouchableOpacity>

@@ -125,9 +125,12 @@
       "balance": "Balance",
       "cardNumb": "Card number",
       "totalBalance": "Total price",
+      "cardBalance": "Card balance",
       "remainingBalance": "Remaining amount",
       "edv": "VAT",
-      "noBarcode": "No barcode?"
+      "noBarcode": "No barcode?",
+      "productCount": "Number of products",
+      "productnotfound": "No products found"
     },
     "thanksBuying": {
       "title": "Thanks for shopping",

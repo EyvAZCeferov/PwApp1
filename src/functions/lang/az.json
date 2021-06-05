@@ -131,8 +131,11 @@
       "cardNumb": "Kart nömrəsi",
       "totalBalance": "Yekun məbləğ",
       "remainingBalance": "Qalan məbləğ",
+      "cardBalance": "Kart balansı",
       "edv": "Ədv",
-      "noBarcode": "Barkod yoxdur?"
+      "noBarcode": "Barkod yoxdur?",
+      "productCount": "Məhsul sayı",
+      "productnotfound": "Məhsul tapılmadı"
     },
     "thanksBuying": {
       "title": "Alış veriş üçün təşəkkürlər",

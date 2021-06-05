@@ -41,7 +41,6 @@ class Campaigns extends React.Component {
     await axios
       .get("customers/campaigns" + "?page=" + this.state.page)
       .then((e) => {
-        console.log(e.data);
         var datas =
           this.state.page === 1
             ? e.data.data

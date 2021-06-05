@@ -15,6 +15,7 @@ import Textpopins from "../../../../../functions/screenfunctions/text";
 import { Entypo, FontAwesome, Ionicons, Fontisto } from "@expo/vector-icons";
 import axios from "axios";
 import Constants from "expo-constants";
+import { convertStampDate } from "../../../../../functions/standart/helper";
 
 const { width, height } = Dimensions.get("window");
 export default function RecentOperations(props) {
@@ -61,50 +62,6 @@ export default function RecentOperations(props) {
         default:
           return <Fontisto name="shopping-store" size={30} color="#AF0045" />;
       }
-    }
-
-    function convertStampDate(unixtimestamp) {
-      var months_arr = [
-        "Yanvar",
-        "Fevral",
-        "Mart",
-        "Aprel",
-        "May",
-        "İyun",
-        "İyul",
-        "Avqust",
-        "Sentyabr",
-        "Oktyabr",
-        "Noyabr",
-        "Dekabr",
-      ];
-
-      var date = new Date(unixtimestamp * 1);
-
-      var year = date.getFullYear();
-
-      var month = months_arr[date.getMonth()];
-
-      var day = date.getDate();
-
-      var hours = date.getHours();
-
-      var minutes = "0" + date.getMinutes();
-
-      var seconds = "0" + date.getSeconds();
-
-      var fulldate =
-        day +
-        " " +
-        month +
-        " " +
-        year +
-        " -Saat: " +
-        hours +
-        " : " +
-        minutes.substr(-2);
-
-      return fulldate;
     }
 
     return (

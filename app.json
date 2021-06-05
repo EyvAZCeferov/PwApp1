@@ -23,7 +23,7 @@
       "icon": "./assets/icon-ios.png",
       "backgroundColor": "#ffffff",
       "config": {
-        "googleMapsApiKey": "AIzaSyDvX734iG3u_7t-AENTvvBNYNmy0kfgltg"
+        "googleMapsApiKey": "AIzaSyDo1vSGQb4Ov88X4A38NskQwVgwTjcD7b8"
       }
     },
     "android": {

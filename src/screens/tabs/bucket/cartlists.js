@@ -78,7 +78,6 @@ function CartList(props) {
   }
 
   function renderBucket({ item, index }) {
-    console.log(item)
     return (
       <ListItem
         key={index}
@@ -310,7 +309,7 @@ function CartList(props) {
                 fontSize: 20,
               }}
             >
-              {t("barcode.paying.balance")}
+              {t("barcode.paying.cardBalance")}
             </Textpopins>
             <Textpopins
               style={{

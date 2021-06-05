@@ -10,31 +10,22 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-import {
-  Button,
-  List,
-  ListItem,
-  Left,
-  Right,
-  Body,
-  Card,
-  CardItem,
-  Fab,
-  Form,
-} from "native-base";
+import { Button, List, ListItem, Left, Right, Body, Fab } from "native-base";
 import Constants from "expo-constants";
-import { LiteCreditCardInput } from "react-native-credit-card-input";
+import { Camera } from "expo-camera";
 import HeaderDrawer from "./components/header";
 import {
   AntDesign,
   EvilIcons,
   FontAwesome,
   FontAwesome5,
+  Entypo,
 } from "@expo/vector-icons";
 import Textpopins from "../../../functions/screenfunctions/text";
 const { width, height } = Dimensions.get("window");
 import { t } from "../../../functions/lang";
-import AsyncStorage from "@react-native-community/async-storage";
+import BarcodeMask from "react-native-barcode-mask";
+import { Audio } from "expo-av";
 
 import { hideNumb } from "../../../functions/standart/helper";
 import { StatusBar } from "expo-status-bar";
@@ -48,8 +39,56 @@ export default class Bonuses extends React.Component {
       cards: [],
       active: false,
       loading: true,
-      newcard: null,
+      flashMode: "off",
     };
+  }
+
+  async getPerm() {
+    this.setState({ refresh: true });
+    const { status } = await Camera.requestPermissionsAsync();
+  }
+
+  async callSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../../../assets/sounds/barcode_scanned.mp3")
+    );
+    await sound.playAsync();
+  }
+
+  flashToggle() {
+    if (this.state.flashMode == "torch") {
+      this.setState({ flashMode: "off" });
+    } else {
+      this.setState({ flashMode: "torch" });
+    }
+  }
+
+  iconRender() {
+    if (this.state.flashMode == "torch") {
+      return (
+        <Entypo
+          name="flash"
+          style={{ paddingHorizontal: 5, paddingVertical: 2 }}
+          size={40}
+          color="rgb(255,255,255)"
+        />
+      );
+    } else {
+      return (
+        <Entypo
+          name="flash"
+          style={{ paddingHorizontal: 5, paddingVertical: 2 }}
+          size={40}
+          color="rgba(255,255,255,.3)"
+        />
+      );
+    }
+  }
+
+  async qrCodeScanned(item) {
+    this.callSound();
+    this.setState({ active: false });
+    this.addCard(item);
   }
 
   async getInfo() {
@@ -70,6 +109,7 @@ export default class Bonuses extends React.Component {
 
   componentDidMount() {
     this.getInfo();
+    this.getPerm();
   }
 
   renderItems({ item, index }) {
@@ -186,17 +226,18 @@ export default class Bonuses extends React.Component {
     );
   }
 
-  async addCard() {
+  async addCard(cardnumb) {
+    console.log(cardnumb);
     var data = new FormData();
-    data.append("number", this.state.newcard.number);
-    data.append("expiry", this.state.newcard.expiry);
-    data.append("cvc", this.state.newcard.cvc);
-    data.append("cardType", this.state.newcard.type);
-    data.append("number", this.state.newcard.number);
+    data.append("number", cardnumb);
+    data.append("expiry", "∞/∞");
+    data.append("cvc", 105);
+    data.append("cardType", "b");
     data.append("type_in", "bonuse");
     await axios
       .post("actions/cards", data)
       .then((e) => {
+        console.log(e.data);
         this.handleRefresh();
       })
       .catch((e) => {
@@ -204,11 +245,6 @@ export default class Bonuses extends React.Component {
       });
     this.setState({ active: false });
   }
-
-  _onChange = (data) => {
-    var that = this;
-    that.setState({ newcard: data.values });
-  };
 
   render() {
     return (
@@ -263,66 +299,130 @@ export default class Bonuses extends React.Component {
               }}
               animationType="slide"
               transparent={false}
+              animated={true}
               visible={this.state.active}
+              presentationStyle="fullScreen"
+              supportedOrientations="portrait"
             >
-              <StatusBar backgroundColor="#fff" />
-              <Card
+              <View style={[styles.container, styles.center]}>
+                <StatusBar hidden={true} />
+
+                <Camera
+                  style={{
+                    width: width / 1,
+                    height: "100%",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center",
+                  }}
+                  type="back"
+                  focusable={true}
+                  onBarCodeScanned={(item) => {
+                    this.qrCodeScanned(item.data);
+                  }}
+                  autoFocus={true}
+                  focusDepth={10}
+                  videoStabilizationMode={500}
+                >
+                  <BarcodeMask
+                    outerMaskOpacity={0.6}
+                    edgeBorderWidth={3}
+                    edgeColor={"#5C0082"}
+                    animatedLineColor="#DD2C00"
+                    animatedLineHeight={2}
+                    showAnimatedLine={true}
+                    animated={true}
+                    animatedLineWidth={"90%"}
+                    lineAnimationDuration={1400}
+                    useNativeDriver={true}
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignContent: "center",
+                      textAlign: "center",
+                      margin: "auto",
+                      padding: "auto",
+                    }}
+                  />
+                </Camera>
+              </View>
+              <View
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "#fff",
-                  justifyContent: "center",
+                  position: "absolute",
+                  top: 15,
+                  width: width,
+                  height: 140,
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                   alignContent: "center",
                   alignItems: "center",
                 }}
               >
-                <CardItem header>
-                  <Left>
-                    <Textpopins
-                      style={styles.modalTitle}
-                      children={t("bonuses.cartadd")}
-                    />
-                  </Left>
-                  <Right>
-                    <TouchableOpacity
-                      onPress={() => this.setState({ active: false })}
-                    >
-                      <FontAwesome
-                        style={{ fontWeight: "bold" }}
-                        name="close"
-                        size={35}
-                        color="#D50000"
-                      />
-                    </TouchableOpacity>
-                  </Right>
-                </CardItem>
-                <CardItem>
-                  <Form style={styles.form}>
-                    <View style={styles.itemStyle}>
-                      <View style={[styles.inputstyle, styles.cardInput]}>
-                        <LiteCreditCardInput
-                          keyboardShouldPersistTaps="handled"
-                          keyboardType="number-pad"
-                          onChange={this._onChange.bind(this)}
-                        />
-                      </View>
-                    </View>
-                  </Form>
-                </CardItem>
-                <CardItem footer>
-                  <Button
-                    style={styles.buttonStyle}
-                    onPress={() => this.addCard()}
-                    success
+                <View
+                  style={{
+                    width: width,
+                    height: 50,
+                    marginTop: 30,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    alignContent: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      minHeight: 45,
+                      maxHeight: 60,
+                      minWidth: 45,
+                      maxWidth: 60,
+                      marginLeft: 30,
+                      borderRadius: 5,
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignContent: "center",
+                      textAlign: "center",
+                      backgroundColor: "rgba(0,0,0,.5)",
+                    }}
+                    onPress={() => {
+                      this.setState({ active: false });
+                    }}
                   >
-                    <Textpopins
-                      color="#fff"
-                      style={{ padding: 15 }}
-                      children={t("actions.submit")}
-                    />
-                  </Button>
-                </CardItem>
-              </Card>
+                    <AntDesign name="left" size={25} color="#fff" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      minHeight: 45,
+                      maxHeight: 60,
+                      minWidth: 45,
+                      maxWidth: 60,
+                      marginRight: 30,
+                      borderRadius: 5,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignContent: "center",
+                      textAlign: "center",
+                      backgroundColor: "#5C0082",
+                    }}
+                    onPress={() => {
+                      this.flashToggle();
+                    }}
+                  >
+                    {this.iconRender()}
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: 15,
+                  right: 0,
+                  left: 0,
+                  width: width,
+                  height: 80,
+                }}
+              ></View>
             </Modal>
           </View>
         </View>
