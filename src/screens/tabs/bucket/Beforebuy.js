@@ -7,6 +7,7 @@ import {
   Dimensions,
   ScrollView,
   Image,
+  Picker,
 } from "react-native";
 import Header from "./components/BucketHeader";
 import { t } from "../../../functions/lang";
@@ -14,6 +15,7 @@ import { connect } from "react-redux";
 import {
   Body,
   Button,
+  DatePicker,
   Left,
   List,
   ListItem,
@@ -23,7 +25,12 @@ import {
 import Textpopins from "../../../functions/screenfunctions/text";
 import NumericInput from "react-native-numeric-input";
 import * as Permissions from "expo-permissions";
-import { EvilIcons, AntDesign } from "@expo/vector-icons";
+import {
+  EvilIcons,
+  AntDesign,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import axios from "axios";
 import { convertaz, get_image } from "../../../functions/standart/helper";
 
@@ -39,7 +46,11 @@ class Beforebuy extends React.Component {
       totalBalance: 0,
       latitude: null,
       longitude: null,
-      markers: null,
+      emnov: null,
+      myLoc: {
+        latitude: null,
+        longitude: null,
+      },
     };
   }
 
@@ -75,40 +86,47 @@ class Beforebuy extends React.Component {
           alert("Məbləğ aşıldı");
         }
       }
-      this.props.bucketitems.map(async (e) => {
-        var formdata = new FormData();
-        var price = this.pric_e(e.qyt, e.price);
-        formdata.append("barcode", convertaz(e.barcode));
-        formdata.append("pay_id", this.props.route.params.checkid);
-        formdata.append("product_name", e.name);
-        formdata.append("product_qyt", e.qyt);
-        formdata.append("price", price);
-        formdata.append("product_edv", true);
-        await axios.post(
-          "actions/products/" +
-            this.props.route.params.checkid +
-            "/add_pay_item",
-          formdata
-        );
-      });
-      var formData = new FormData();
-      formData.append("payed", true);
-      formData.append("allprice", this.state.totalBalance);
-      await axios
-        .put("actions/shops/" + this.props.route.params.checkid, formData)
+      this.props.bucketitems
+        .map(async (e) => {
+          var formdata1 = new FormData();
+          var price = this.pric_e(e.qyt, e.price);
+          formdata1.append("barcode", convertaz(e.barcode));
+          formdata1.append("pay_id", this.props.route.params.checkid);
+          formdata1.append("product_name", e.name);
+          formdata1.append("image", e.image);
+          formdata1.append("product_qyt", e.qyt);
+          formdata1.append("price", price);
+          formdata1.append("product_edv", true);
+          await axios.post(
+            "actions/products/" +
+              this.props.route.params.checkid +
+              "/add_pay_item",
+            formdata1
+          );
+        })
         .then((e) => {
+          console.log(e);
+        });
+      var formdata2 = new FormData();
+      formdata2.append("payed", true);
+      formdata2.append("allprice", this.state.totalBalance);
+      formdata2.append("geometry", this.state.myLoc);
+      await axios
+        .put("actions/shops/" + this.props.route.params.checkid, formdata2)
+        .then((e) => {
+          console.log(e);
           this.props.navigation.navigate("PayThanks", {
             checkid: this.props.route.params.checkid,
           });
         });
       axios.get("auth/me").then(async (e) => {
-        var pinprice = (this.state.totalBalance * 10) / 100 + e.data.pin.price;
-        var formDataLast = new FormData();
-        formDataLast.append("price", pinprice);
+        var pinprice = this.state.totalBalance / 100 + e.data.pin.price;
+        var formdata3 = new FormData();
+        formdata3.append("price", pinprice);
         await axios
-          .put("actions/cards/" + e.data.pin.id, formDataLast)
+          .put("actions/cards/" + e.data.pin.id, formdata3)
           .then((e) => {
-            console.log(e.data);
+            console.log(e);
           });
       });
     } else {
@@ -118,11 +136,6 @@ class Beforebuy extends React.Component {
 
   async getInfo() {
     this.priceCollect();
-    await axios.get("paygo/maps").then((e) => {
-      this.setState({
-        markers: e.data,
-      });
-    });
     var cardid = null;
     await axios
       .get("actions/shops/" + this.props.route.params.checkid)
@@ -150,7 +163,7 @@ class Beforebuy extends React.Component {
             });
         }
         this.renderContent();
-        this.renderLocs();
+        this.renderLocArena();
         this.renderFooter();
       });
   }
@@ -172,7 +185,7 @@ class Beforebuy extends React.Component {
         key={index}
         style={{
           width: width,
-          height: 90,
+          height: 100,
           marginLeft: -3,
         }}
         onPress={() =>
@@ -182,7 +195,7 @@ class Beforebuy extends React.Component {
           })
         }
       >
-        <Left style={{ maxWidth: width / 6 }}>
+        <Left style={{ maxWidth: width / 6, marginRight: 8 }}>
           <Image
             source={{
               uri: item.image
@@ -279,48 +292,111 @@ class Beforebuy extends React.Component {
     }
   }
 
-  renderLocs() {
-    if (this.state.markers) {
-      return this.state.markers.map((item) => {
-        return (
-          <ListItem style={{ flex: 1 }}>
-            <Left style={{ flex: 0.2 }}>
-              <Thumbnail source={{ uri: get_image(item.images[0]) }} />
-            </Left>
-            <Body style={{ flex: 0.7 }}>
-              <Textpopins
+  renderLocArena() {
+    return (
+      <ScrollView
+        style={{ flex: 1, paddingHorizontal: Constants.statusBarHeight }}
+      >
+        <Textpopins style={styles.center}>Çatdırılma</Textpopins>
+        <Picker
+          enabled
+          mode="dropdown"
+          selectedValue={this.state.emnov}
+          onValueChange={(val) => this.setState({ emnov: val })}
+          style={{ width: width / 1.2, zIndex: 9999 }}
+        >
+          <Picker.Item value="" label="Əməliyyat növü" />
+          <Picker.Item value="reach" label="Çatdırılma" />
+          <Picker.Item value="take" label="Götürəcəm" />
+        </Picker>
+        {this.state.emnov != null || this.state.emnov !== null ? (
+          this.state.emnov == "reach" ? (
+            <List style={[styles.center, { flex: 1 }]}>
+              <ListItem
                 style={{
-                  fontSize: 14,
-                  color: "rgba(0,0,0,.8)",
+                  borderWidth: 0,
+                  borderColor: "transparent",
                 }}
               >
-                {item.name["az_name"]}
-              </Textpopins>
-              <Textpopins
+                <Textpopins>Vaxtı təyin et</Textpopins>
+                <DatePicker
+                  androidMode="calendar"
+                  animationType="slide"
+                  defaultDate={new Date()}
+                  is24Hour={true}
+                  display="compact"
+                />
+              </ListItem>
+              <ListItem
                 style={{
-                  fontSize: 15,
-                  color: "rgba(0,0,0,.4)",
+                  borderWidth: 0,
+                  borderColor: "transparent",
                 }}
               >
-                {item.get_customer.name["az_name"]}
-              </Textpopins>
-            </Body>
-            <Right style={{ flex: 0.2 }}>
-              <Textpopins
+                <Textpopins>Çatdırılma məkanı</Textpopins>
+              </ListItem>
+              <ListItem
                 style={{
-                  fontSize: 15,
-                  color: "rgba(124,157,50,.8)",
+                  borderWidth: 0,
+                  borderColor: "transparent",
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                }}
+                onPress={() => {
+                  this.setState({
+                    myLoc: {
+                      latitude: this.state.latitude,
+                      longitude: this.state.longitude,
+                    },
+                  });
                 }}
               >
-                51516 m
-              </Textpopins>
-            </Right>
-          </ListItem>
-        );
-      });
-    } else {
-      return <View />;
-    }
+                {this.state.myLoc.latitude != null &&
+                this.state.myLoc.longitude != null ? (
+                  <MaterialIcons
+                    name="add-location-alt"
+                    size={24}
+                    color="#5C0082"
+                    style={{
+                      marginRight: Constants.statusBarHeight,
+                    }}
+                  />
+                ) : (
+                  <Ionicons
+                    name="locate-sharp"
+                    size={24}
+                    color="#2196f3"
+                    style={{
+                      marginRight: Constants.statusBarHeight,
+                    }}
+                  />
+                )}
+
+                <Textpopins>Your loc</Textpopins>
+              </ListItem>
+            </List>
+          ) : (
+            <List style={[styles.center, { flex: 1 }]}>
+              <ListItem
+                style={{
+                  borderWidth: 0,
+                  borderColor: "transparent",
+                }}
+              >
+                <Textpopins>Vaxtı təyin et</Textpopins>
+                <DatePicker
+                  androidMode="calendar"
+                  animationType="slide"
+                  defaultDate={new Date()}
+                  is24Hour={true}
+                  display="compact"
+                />
+              </ListItem>
+            </List>
+          )
+        ) : null}
+      </ScrollView>
+    );
   }
 
   renderFooter() {
@@ -329,10 +405,11 @@ class Beforebuy extends React.Component {
         style={[
           styles.footer,
           {
-            flex: this.state.card != null ? 0.8 : 0.4,
+            flex: 1,
             borderTopLeftRadius: Constants.statusBarHeight,
             borderTopRightRadius: Constants.statusBarHeight,
             paddingHorizontal: Constants.statusBarHeight,
+            // position: "relative",
           },
         ]}
       >
@@ -381,7 +458,7 @@ class Beforebuy extends React.Component {
           >
             {Math.fround((((this.state.totalBalance * 18) / 100) * 10) / 100)
               .toString()
-              .substring(0, 4)}{" "}
+              .substring(0, 4)}
             ₼
           </Textpopins>
         </View>
@@ -418,9 +495,6 @@ class Beforebuy extends React.Component {
               zIndex: 150,
               paddingHorizontal: Constants.statusBarHeight,
               flexDirection: "row",
-              position: "absolute",
-              bottom: 0,
-              right: 0,
               borderTopLeftRadius: Constants.statusBarHeight,
               borderTopRightRadius: Constants.statusBarHeight,
               borderBottomRightRadius: Constants.statusBarHeight,
@@ -458,23 +532,28 @@ class Beforebuy extends React.Component {
           <Header button title={t("bucket.header.beforeorder")} />
         </View>
         <View style={styles.content}>
-          <View style={styles.top}>{this.renderContent()}</View>
-          <View style={styles.footer}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                borderTopWidth: 1,
-                flex: 0.8,
-                borderTopColor: "#5C0082",
-              }}
-            >
-              <ScrollView
-                style={{ marginTop: 0, flex: 1, backgroundColor: "#fff" }}
-              >
-                {this.renderLocs()}
-              </ScrollView>
-            </View>
+          <View
+            style={[
+              styles.top,
+              this.state.card ? { flex: 0.5 } : { flex: 0.5 },
+            ]}
+          >
+            {this.renderContent()}
+          </View>
+          <View
+            style={[
+              styles.top,
+              this.state.card ? { flex: 0.35 } : { flex: 0.325 },
+            ]}
+          >
+            {this.renderLocArena()}
+          </View>
+          <View
+            style={[
+              styles.footer,
+              this.state.card ? { flex: 0.25 } : { flex: 0.175 },
+            ]}
+          >
             {this.renderFooter()}
           </View>
         </View>
@@ -517,12 +596,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: Constants.statusBarHeight,
   },
   top: {
-    flex: 0.5,
+    flex: 0.8,
   },
   footer: {
-    flex: 0.5,
+    flex: 0.2,
     flexDirection: "column",
     backgroundColor: "#5C0082",
+    borderTopLeftRadius: Constants.statusBarHeight,
+    borderTopRightRadius: Constants.statusBarHeight,
   },
   center: {
     textAlign: "center",

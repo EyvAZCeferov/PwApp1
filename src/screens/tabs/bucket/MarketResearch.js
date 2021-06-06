@@ -33,11 +33,11 @@ class InCustomer extends React.Component {
     };
   }
 
-  getInfo() {
+  async getInfo() {
     this.setState({
       refresh: true,
     });
-    axios
+    await axios
       .get(
         "customers/product/bycat/" +
           this.props.route.params.customer +

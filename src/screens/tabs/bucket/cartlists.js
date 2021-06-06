@@ -93,7 +93,7 @@ function CartList(props) {
         key={index}
         style={{
           width: width,
-          height: 90,
+          height: 100,
           marginLeft: -3,
         }}
         onPress={() =>
@@ -103,7 +103,7 @@ function CartList(props) {
           })
         }
       >
-        <Left style={{ maxWidth: width / 6 }}>
+        <Left style={{ maxWidth: width / 6, marginRight: 8 }}>
           <Image
             source={{
               uri: item.image

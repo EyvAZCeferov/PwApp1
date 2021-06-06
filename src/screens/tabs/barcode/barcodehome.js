@@ -132,7 +132,7 @@ class BarcodeHome extends React.Component {
         key={index}
         style={{
           width: width,
-          height: 80,
+          height: 100,
           marginLeft: -Constants.statusBarHeight,
         }}
         onPress={() =>
@@ -142,7 +142,7 @@ class BarcodeHome extends React.Component {
           })
         }
       >
-        <Left style={{ maxWidth: width / 6 }}>
+        <Left style={{ maxWidth: width / 6, marginRight: 8 }}>
           <Thumbnail
             source={{ uri: item.image ? get_image(item.image) : null }}
             style={{ maxWidth: "100%" }}
@@ -294,7 +294,7 @@ class BarcodeHome extends React.Component {
         });
 
       axios.get("auth/me").then(async (e) => {
-        var pinprice = (this.state.totalBalance * 10) / 100 + e.data.pin.price;
+        var pinprice = this.state.price / 100 + e.data.pin.price;
         var formDataLast = new FormData();
         formDataLast.append("price", pinprice);
         await axios

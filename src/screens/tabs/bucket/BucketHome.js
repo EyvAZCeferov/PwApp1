@@ -137,7 +137,7 @@ class BucketHome extends React.Component {
           style={styles.topListsProduct}
           onPress={() =>
             this.props.navigation.navigate("InCustomer", {
-              catid: e.id,
+              catid: e.label,
               customer: this.state.customer,
             })
           }

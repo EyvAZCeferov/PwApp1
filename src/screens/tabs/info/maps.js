@@ -42,14 +42,15 @@ export default class Map extends React.Component {
     if (status !== "granted") {
       const response = await Permissions.askAsync(Permissions.LOCATION);
     }
+
     navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) =>
+      ({ coords: { latitude, longitude } }) => {
         this.setState({
           latitude: latitude,
           longitude: longitude,
           refresh: false,
-        }),
-      (error) => console.log("Error:", error)
+        });
+      }
     );
   }
 
