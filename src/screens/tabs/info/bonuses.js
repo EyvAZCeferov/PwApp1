@@ -193,7 +193,11 @@ export default class Bonuses extends React.Component {
               style={styles.cardNumbText}
               children={hideNumb(item.number)}
             />
-            <Text children={item.price + " Azn"} />
+            <Text
+              children={
+                Math.fround(item.price).toString().substring(0, 4) + " Azn"
+              }
+            />
           </Body>
           <Right>
             {item.type == "pin" ? (

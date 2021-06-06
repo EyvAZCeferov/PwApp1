@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   buttons: {
-    maxHeight: "80%",
+    maxHeight: "85%",
     minHeight: "10%",
     width: width,
   },

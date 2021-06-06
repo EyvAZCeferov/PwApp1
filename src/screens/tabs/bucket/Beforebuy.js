@@ -108,7 +108,8 @@ class Beforebuy extends React.Component {
       formdata2.append("payed", true);
       formdata2.append("allprice", this.state.totalBalance);
       if (this.state.myLoc.latitude != null && this.state.myLoc != null) {
-        formdata2.append("geometry", this.state.myLoc);
+        formdata2.append("latitude", this.state.myLoc.latitude);
+        formdata2.append("longitude", this.state.myLoc.longitude);
       }
       await axios
         .put("actions/shops/" + this.props.route.params.checkid, formdata2)
@@ -120,7 +121,7 @@ class Beforebuy extends React.Component {
 
       if (this.state.card != null) {
         var price = 0;
-        axios.get("actions/cards/" + this.state.card.id).then((e) => {
+        await axios.get("actions/cards/" + this.state.card.id).then((e) => {
           price = e.data.price;
         });
 
@@ -135,7 +136,7 @@ class Beforebuy extends React.Component {
         );
       }
 
-      axios.get("auth/me").then(async (e) => {
+      await axios.get("auth/me").then(async (e) => {
         var pinprice = this.state.totalBalance / 100 + e.data.pin.price;
         var formdata3 = new FormData();
         formdata3.append("price", pinprice);

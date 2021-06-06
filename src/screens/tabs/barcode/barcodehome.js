@@ -264,7 +264,7 @@ class BarcodeHome extends React.Component {
         var price = this.price(e.qyt, e.price);
         formdata1.append("barcode", convertaz(e.barcode));
         formdata1.append("pay_id", this.props.route.params.checkid);
-        formdata1.append("product_name", convertaz(e.name));
+        formdata1.append("product_name", e.name);
         formdata1.append("image", e.image);
         formdata1.append("product_qyt", e.qyt);
         formdata1.append("price", price);
@@ -291,7 +291,7 @@ class BarcodeHome extends React.Component {
 
       if (this.state.card != null) {
         var price = 0;
-        axios.get("actions/cards/" + this.state.card.id).then((e) => {
+        await axios.get("actions/cards/" + this.state.card.id).then((e) => {
           price = e.data.price;
         });
 
@@ -306,15 +306,14 @@ class BarcodeHome extends React.Component {
         );
       }
 
-      axios.get("auth/me").then(async (e) => {
-        var pinprice = this.state.price / 100 + e.data.pin.price;
-        var formDataLast = new FormData();
-        formDataLast.append("price", pinprice);
-        await axios
-          .post("actions/cards/updatecart/" + e.data.pin.id, formDataLast)
-          .then((e) => {
-            console.log(e.data);
-          });
+      await axios.get("auth/me").then(async (e) => {
+        var pinprice = this.state.totalBalance / 100 + e.data.pin.price;
+        var formdata3 = new FormData();
+        formdata3.append("price", pinprice);
+        await axios.post(
+          "actions/cards/updatecart/" + e.data.pin.id,
+          formdata3
+        );
       });
     } else {
       alert(t("barcode.paying.productnotfound"));

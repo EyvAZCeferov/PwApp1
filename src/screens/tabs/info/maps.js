@@ -198,13 +198,8 @@ export default class Map extends React.Component {
         style={{ flex: 1 }}
         onPress={() => this.toLoc(item)}
       >
-        <Left style={{ flex: 0.2 }}>
-          <Thumbnail
-            source={{ uri: get_image(item.images[0]) }}
-            style={{
-              marginRight: Constants.statusBarHeight,
-            }}
-          />
+        <Left style={{ flex: 0.2, marginRight: Constants.statusBarHeight / 3 }}>
+          <Thumbnail source={{ uri: get_image(item.images[0]) }} />
         </Left>
         <Body style={{ flex: 0.8 }}>
           <Textpopins

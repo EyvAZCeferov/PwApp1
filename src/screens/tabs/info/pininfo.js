@@ -235,7 +235,13 @@ export default class Pininfo extends React.Component {
                 />
                 <Textpopins
                   style={{ fontSize: 22, color: "#fff" }}
-                  children={this.state.pinData ? this.state.pinData.price : 0.0}
+                  children={
+                    this.state.pinData
+                      ? Math.fround(this.state.pinData.price)
+                          .toString()
+                          .substring(0, 4)
+                      : 0.0
+                  }
                 />
               </View>
             </View>

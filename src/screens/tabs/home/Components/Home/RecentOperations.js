@@ -127,6 +127,7 @@ export default function RecentOperations(props) {
             }}
             showsVerticalScrollIndicator
             scrollEnabled
+            style={{ marginBottom: Constants.statusBarHeight }}
           />
         );
       } else {

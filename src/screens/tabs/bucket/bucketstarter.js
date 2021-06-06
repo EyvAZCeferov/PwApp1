@@ -69,7 +69,7 @@ export default class BucketStarter extends React.Component {
       if (e.data.length > 0) {
         e.data.map((en) => {
           var d = {
-            label: hideNumb(en.number) + "  -  " + en.price + " ₼",
+            label: hideNumb(en.number) + "  -  " + en.price.toString().substring(0, 4) + " ₼",
             type: en.cardType,
             id: en.id,
           };

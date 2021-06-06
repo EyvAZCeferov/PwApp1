@@ -123,7 +123,11 @@ export default function CardOne({ index, y, item, cardcount, user }) {
               />
               <Text
                 style={styles.priceText}
-                children={item.price ? item.price + " ₼" : 0 + " ₼"}
+                children={
+                  item.price
+                    ? item.price.toString().substring(0, 4) + " ₼"
+                    : 0 + " ₼"
+                }
               />
             </Left>
             <Right style={styles.right}>
