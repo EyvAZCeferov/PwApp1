@@ -131,6 +131,7 @@ export default function SelectedMarketAndFilial(props) {
         <List
           style={{
             width: width,
+            paddingHorizontal: 3,
           }}
         >
           {renderContent()}

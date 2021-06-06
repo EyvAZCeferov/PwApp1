@@ -23,6 +23,7 @@ import { hideNumb, makeid } from "../../../functions/standart/helper";
 import DropdownAlert from "react-native-dropdownalert";
 import axios from "axios";
 import SelectedMarketAndFilial from "./components/SelectMarketAndFilial";
+import AsyncStorage from "@react-native-community/async-storage";
 const succesImage = require("../../../../assets/images/Alert/tick.png");
 
 export default class BucketStarter extends React.Component {
@@ -55,6 +56,7 @@ export default class BucketStarter extends React.Component {
   }
 
   async getDat() {
+    console.log(await AsyncStorage.getItem("token"))
     fetch("https://admin.paygo.az/api/customers/customers")
       .then((response) => response.json())
       .then((json) => {

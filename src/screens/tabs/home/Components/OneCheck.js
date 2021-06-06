@@ -276,22 +276,12 @@ export default class OneCheck extends React.Component {
                 style={{ fontSize: 16, fontWeight: "bold" }}
               />
               <Textpopins
-                children={Math.fround(this.state.priceAll)
-                  .toString()
-                  .substring(0, 4)}
+                children={this.state.priceAll}
                 style={{ fontSize: 16, fontWeight: "bold" }}
               />
             </View>
             <View style={styles.tableFooterElements}>
               <Textpopins children={t("check.edv18")} />
-              <Textpopins
-                children={Math.fround(this.state.edv)
-                  .toString()
-                  .substring(0, 4)}
-              />
-            </View>
-            <View style={styles.tableFooterElements}>
-              <Textpopins children={t("check.sumVergi")} />
               <Textpopins
                 children={Math.fround(this.state.edv)
                   .toString()
@@ -306,9 +296,7 @@ export default class OneCheck extends React.Component {
             <View style={styles.tableFooterElements}>
               <Textpopins children={t("check.nagdsiz")} />
               <Textpopins
-                children={Math.fround(this.state.priceAll)
-                  .toString()
-                  .substring(0, 4)}
+                children={this.state.priceAll}
               />
             </View>
             <View style={styles.tableFooterElements}>
@@ -380,7 +368,6 @@ export default class OneCheck extends React.Component {
   }
 
   renderProducts({ item, index }) {
-    console.log(item)
     function countSum(item) {
       var result = null;
       var qyt = item.qty ? parseFloat(item.qty) : 1;

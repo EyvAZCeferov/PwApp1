@@ -150,12 +150,7 @@ class BarcodeHome extends React.Component {
         </Left>
         <Body style={{ maxWidth: width / 3 + 30 }}>
           <Textpopins children={item.name} />
-          <Textpopins>
-            {Math.fround(this.price(item.qyt, item.price))
-              .toString()
-              .substring(0, 5)}
-            ₼
-          </Textpopins>
+          <Textpopins>{this.price(item.qyt, item.price)} ₼</Textpopins>
         </Body>
         <Right style={{ flexDirection: "row" }}>
           <NumericInput
@@ -270,6 +265,7 @@ class BarcodeHome extends React.Component {
         formdata1.append("barcode", convertaz(e.barcode));
         formdata1.append("pay_id", this.props.route.params.checkid);
         formdata1.append("product_name", convertaz(e.name));
+        formdata1.append("image", e.image);
         formdata1.append("product_qyt", e.qyt);
         formdata1.append("price", price);
         formdata1.append("product_edv", true);
@@ -293,12 +289,29 @@ class BarcodeHome extends React.Component {
           });
         });
 
+      if (this.state.card != null) {
+        var price = 0;
+        axios.get("actions/cards/" + this.state.card.id).then((e) => {
+          price = e.data.price;
+        });
+
+        var formdata = new FormData();
+        var lastprice = parseFloat(price) - parseFloat(this.state.price);
+
+        formdata.append("price", lastprice);
+
+        await axios.post(
+          "actions/cards/updatecart/" + this.state.card.id,
+          formdata
+        );
+      }
+
       axios.get("auth/me").then(async (e) => {
         var pinprice = this.state.price / 100 + e.data.pin.price;
         var formDataLast = new FormData();
         formDataLast.append("price", pinprice);
         await axios
-          .put("actions/cards/" + e.data.pin.id, formDataLast)
+          .post("actions/cards/updatecart/" + e.data.pin.id, formDataLast)
           .then((e) => {
             console.log(e.data);
           });
@@ -394,10 +407,7 @@ class BarcodeHome extends React.Component {
                           fontSize: 22,
                         }}
                       >
-                        {Math.fround(this.state.price)
-                          .toString()
-                          .substring(0, 5)}
-                        ₼
+                        {this.state.price} ₼
                       </Textpopins>
                       <Textpopins
                         style={{

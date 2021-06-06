@@ -124,12 +124,7 @@ function CartList(props) {
           }}
         >
           <Textpopins style={{ fontSize: 14 }} children={item.name} />
-          <Textpopins>
-            {Math.fround(pric_e(item.qyt, item.price))
-              .toString()
-              .substring(0, 5)}
-            ₼
-          </Textpopins>
+          <Textpopins>{pric_e(item.qyt, item.price)} ₼</Textpopins>
         </Body>
         <Right style={{ flexDirection: "row" }}>
           <NumericInput
@@ -273,7 +268,7 @@ function CartList(props) {
               fontSize: 22,
             }}
           >
-            {Math.fround(totalBalance).toString().substring(0, 5)} ₼
+            {totalBalance} ₼
           </Textpopins>
         </View>
         <View
@@ -298,7 +293,7 @@ function CartList(props) {
           >
             {Math.fround((((totalBalance * 18) / 100) * 10) / 100)
               .toString()
-              .substring(0, 4)}{" "}
+              .substring(0, 4)}
             ₼
           </Textpopins>
         </View>

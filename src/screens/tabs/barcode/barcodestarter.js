@@ -134,10 +134,10 @@ export default class BucketStarter extends React.Component {
 
   async next() {
     if (this.state.selectedMarket != null && this.state.selectedFilial) {
-      var id = 0;
+      var id = 0; 
 
       var data = new FormData();
-      data.append("shoptype", "bucket");
+      data.append("shoptype", "barcode");
       data.append("ficsal", this.state.checkid);
       if (this.state.selectedCard) {
         data.append("selectedCard", this.state.selectedCard);

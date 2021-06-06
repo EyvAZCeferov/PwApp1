@@ -86,51 +86,66 @@ class Beforebuy extends React.Component {
           alert("Məbləğ aşıldı");
         }
       }
-      this.props.bucketitems
-        .map(async (e) => {
-          var formdata1 = new FormData();
-          var price = this.pric_e(e.qyt, e.price);
-          formdata1.append("barcode", convertaz(e.barcode));
-          formdata1.append("pay_id", this.props.route.params.checkid);
-          formdata1.append("product_name", e.name);
-          formdata1.append("image", e.image);
-          formdata1.append("product_qyt", e.qyt);
-          formdata1.append("price", price);
-          formdata1.append("product_edv", true);
-          await axios.post(
-            "actions/products/" +
-              this.props.route.params.checkid +
-              "/add_pay_item",
-            formdata1
-          );
-        })
-        .then((e) => {
-          console.log(e);
-        });
+      this.props.bucketitems.map(async (e) => {
+        var formdata1 = new FormData();
+        var price = this.pric_e(e.qyt, e.price);
+        formdata1.append("barcode", convertaz(e.barcode));
+        formdata1.append("pay_id", this.props.route.params.checkid);
+        formdata1.append("product_name", e.name);
+        formdata1.append("image", e.image);
+        formdata1.append("product_qyt", e.qyt);
+        formdata1.append("price", price);
+        formdata1.append("product_edv", true);
+        await axios.post(
+          "actions/products/" +
+            this.props.route.params.checkid +
+            "/add_pay_item",
+          formdata1
+        );
+      });
+
       var formdata2 = new FormData();
       formdata2.append("payed", true);
       formdata2.append("allprice", this.state.totalBalance);
-      formdata2.append("geometry", this.state.myLoc);
+      if (this.state.myLoc.latitude != null && this.state.myLoc != null) {
+        formdata2.append("geometry", this.state.myLoc);
+      }
       await axios
         .put("actions/shops/" + this.props.route.params.checkid, formdata2)
         .then((e) => {
-          console.log(e);
           this.props.navigation.navigate("PayThanks", {
             checkid: this.props.route.params.checkid,
           });
         });
+
+      if (this.state.card != null) {
+        var price = 0;
+        axios.get("actions/cards/" + this.state.card.id).then((e) => {
+          price = e.data.price;
+        });
+
+        var formdataz = new FormData();
+        var lastprice = parseFloat(price) - parseFloat(this.state.totalBalance);
+
+        formdataz.append("price", lastprice);
+
+        await axios.post(
+          "actions/cards/updatecart/" + this.state.card.id,
+          formdataz
+        );
+      }
+
       axios.get("auth/me").then(async (e) => {
         var pinprice = this.state.totalBalance / 100 + e.data.pin.price;
         var formdata3 = new FormData();
         formdata3.append("price", pinprice);
-        await axios
-          .put("actions/cards/" + e.data.pin.id, formdata3)
-          .then((e) => {
-            console.log(e);
-          });
+        await axios.post(
+          "actions/cards/updatecart/" + e.data.pin.id,
+          formdata3
+        );
       });
     } else {
-      alert("Məhsul yoxdur");
+      alert(t("barcode.paying.productnotfound"));
     }
   }
 
@@ -211,12 +226,7 @@ class Beforebuy extends React.Component {
         </Left>
         <Body style={{ maxWidth: width / 3 + 30 }}>
           <Textpopins style={{ fontSize: 13 }} children={item.name} />
-          <Textpopins>
-            {Math.fround(this.pric_e(item.qyt, item.price))
-              .toString()
-              .substring(0, 5)}{" "}
-            ₼
-          </Textpopins>
+          <Textpopins>{this.pric_e(item.qyt, item.price)}₼</Textpopins>
         </Body>
         <Right style={{ flexDirection: "row" }}>
           <NumericInput
@@ -341,6 +351,7 @@ class Beforebuy extends React.Component {
                   borderColor: "transparent",
                   flexDirection: "row",
                   justifyContent: "space-around",
+                  width: "100%",
                 }}
                 onPress={() => {
                   this.setState({
@@ -433,7 +444,7 @@ class Beforebuy extends React.Component {
               fontSize: 22,
             }}
           >
-            {Math.fround(this.state.totalBalance).toString().substring(0, 5)} ₼
+            {this.state.totalBalance} ₼
           </Textpopins>
         </View>
         <View

@@ -192,7 +192,7 @@ class InCustomer extends React.Component {
           {item.name}
         </Text>
         <Text style={styles.productDescription}>
-          {convertaz(item.home_cat)}
+          {convertaz(item.child_cat1)}
         </Text>
         <View style={styles.actions}>
           <TouchableOpacity
@@ -244,6 +244,7 @@ class InCustomer extends React.Component {
           <View style={[styles.content, { flex: 0.9 }]}>
             <View style={[styles.footer, { flex: 1 }]}>
               <ScrollView style={styles.productLists} vertical={true}>
+              {this.state.datas != null && this.state.datas.length > 10 ? (
                 <FlatList
                   data={this.state.datas}
                   numColumns={2}
@@ -254,6 +255,14 @@ class InCustomer extends React.Component {
                   ListFooterComponent={this.renderFooter}
                   enableEmptySections={true}
                 />
+              ) : (
+                <FlatList
+                  data={this.state.datas}
+                  numColumns={2}
+                  renderItem={this.renderFlatList.bind(this)}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              )}
               </ScrollView>
             </View>
           </View>
