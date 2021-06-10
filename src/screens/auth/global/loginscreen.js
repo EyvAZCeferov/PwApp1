@@ -61,18 +61,6 @@ export default class LoginScreen extends React.Component {
     }
   };
 
-  componentDidMount() {
-    this.getInfo();
-  }
-
-  getInfo() {
-    // fetch("https://localhost:8000/api/pwabout/settings").then(response => response.json()).then(res => {
-    //     console.log(res)
-    // }).catch(error => {
-    //     console.log(error)
-    // })
-  }
-
   navigationreset() {
     return this.props.navigation.dispatch(
       CommonActions.reset({

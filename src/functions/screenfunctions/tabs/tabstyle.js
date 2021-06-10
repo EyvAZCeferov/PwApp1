@@ -4,6 +4,7 @@ import { Transition, Transitioning } from "react-native-reanimated";
 import ICONS from "./src/ICONS";
 import { Ionicons } from "@expo/vector-icons";
 import Textpopins from "../text";
+// import { BlurView } from "@react-native-community/blur";
 
 const { width } = Dimensions.get("window");
 

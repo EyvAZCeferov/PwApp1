@@ -58,7 +58,7 @@ export default function Codefield(prop) {
           })
         : animationsColor[index].interpolate({
             inputRange: [0, 1],
-            outputRange: ["#fff", ACTIVE_CELL_BG_COLOR],
+            outputRange: ["#EBECF0", ACTIVE_CELL_BG_COLOR],
           }),
       borderRadius: animationsScale[index].interpolate({
         inputRange: [0, 1],

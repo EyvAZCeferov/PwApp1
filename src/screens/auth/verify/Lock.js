@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StyleSheet, Dimensions, View, SafeAreaView } from "react-native";
 import { Button } from "native-base";
+import { Snackbar } from 'react-native-paper';
 
 import * as Animatable from "react-native-animatable";
 import Constants from "expo-constants";
@@ -14,16 +15,12 @@ var reqems = "";
 const icon = require("../../../../assets/icon-ios.png");
 import AsyncStorage from "@react-native-community/async-storage";
 import Textpopins from "../../../functions/screenfunctions/text";
-import DropdownAlert from "react-native-dropdownalert";
 import { Entypo, FontAwesome5 } from "@expo/vector-icons";
 import { ProgramLockContext } from "../../../functions/Hooks/Authentication/Lock/ProgramLockContext";
 import * as LocalAuthentication from "expo-local-authentication";
-import { setting } from "../../../functions/standart/helper";
 import NumberButtons from "./Components/NumberButtons";
 import Codefield from "./Components/ProgramLock/CodeField";
 import axios from "axios";
-
-const succesImage = require("../../../../assets/images/Alert/tick.png");
 
 export default class Lock extends React.Component {
   static contextType = ProgramLockContext;
@@ -35,6 +32,7 @@ export default class Lock extends React.Component {
       hasFingerPrintHardware: false,
       pass: "",
       refresh: true,
+      visible: false,
     };
   }
 
@@ -82,10 +80,7 @@ export default class Lock extends React.Component {
 
   completed() {
     const { program, setProgram } = this.context;
-    this.dropDownAlertRef.alertWithType(
-      "success",
-      t("form.validation.loginregister.login.success")
-    );
+    this.setState({visible:true})
     setProgram(true);
   }
 
@@ -114,7 +109,7 @@ export default class Lock extends React.Component {
     this.callFinger();
   }
 
-  changeVal(val) {
+  async changeVal(val) {
     reqems = reqems + val;
     if (reqems.length > 4) {
       //
@@ -134,7 +129,7 @@ export default class Lock extends React.Component {
         style={{
           flex: 1,
           justifyContent: "space-between",
-          marginBottom: Constants.statusBarHeight * 2,
+          // marginBottom: Constants.statusBarHeight * 2,
         }}
       >
         <Codefield
@@ -154,18 +149,16 @@ export default class Lock extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <DropdownAlert
-          ref={(ref) => (this.dropDownAlertRef = ref)}
-          useNativeDriver={true}
-          closeInterval={1000}
-          updateStatusBar={true}
-          tapToCloseEnabled={true}
-          showCancel={true}
-          elevation={5}
-          isInteraction={false}
-          successImageSrc={succesImage}
-        />
-        <StatusBar backgroundColor="#6d7587" style="light" />
+        <StatusBar backgroundColor="#EBECF0" style="dark" />
+        <Snackbar
+          visible={this.state.visible}
+          onDismiss={() => this.setState({ visible: false })}
+          action={{
+            label: 'Undo',
+          }}
+        >
+          Hey there! I'm a Snackbar.
+        </Snackbar>
         <View style={styles.header}>
           <Animatable.Image
             animation="fadeIn"
@@ -179,12 +172,7 @@ export default class Lock extends React.Component {
             }
             useNativeDriver={true}
             resizeMode="stretch"
-            style={[
-              styles.logo,
-              {
-                marginTop: Constants.statusBarHeight,
-              },
-            ]}
+            style={[styles.logo]}
           />
           <Animatable.Text
             animation="fadeIn"
@@ -193,7 +181,7 @@ export default class Lock extends React.Component {
             useNativeDriver={true}
             style={{
               textAlign: "center",
-              color: "#5C0082",
+              color: "#96CA00",
               fontSize: 20,
               marginTop: Constants.statusBarHeight / 4,
             }}
@@ -217,9 +205,9 @@ export default class Lock extends React.Component {
                 style={[styles.footerButton, { marginRight: 5 }]}
                 onPress={() => this.props.navigation.navigate("ForgotPass")}
               >
-                <Entypo name="lock" size={24} color="#5C0082" />
+                <Entypo name="lock" size={24} color="#96CA00" />
                 <Textpopins
-                  style={{ color: "#5C0082", fontSize: 15, marginTop: 25 }}
+                  style={{ color: "#96CA00", fontSize: 15, marginTop: 25 }}
                 >
                   {t("loginregister.forgetpass.title")}
                 </Textpopins>
@@ -229,10 +217,10 @@ export default class Lock extends React.Component {
                 onPress={() => this.callFinger()}
                 transparent
               >
-                <FontAwesome5 name="fingerprint" size={24} color="#5C0082" />
+                <FontAwesome5 name="fingerprint" size={24} color="#96CA00" />
                 <Textpopins
                   style={{
-                    color: "#5C0082",
+                    color: "#96CA00",
                     fontSize: 15,
                     marginTop: 25,
                   }}
@@ -248,9 +236,9 @@ export default class Lock extends React.Component {
               style={[styles.footerButton, styles.center]}
               onPress={() => this.props.navigation.navigate("ForgotPass")}
             >
-              <Entypo name="lock" size={24} color="#5C0082" />
+              <Entypo name="lock" size={24} color="#96CA00" />
               <Textpopins
-                style={{ color: "#5C0082", fontSize: 15, marginTop: 5 }}
+                style={{ color: "#96CA00", fontSize: 15, marginTop: 5 }}
               >
                 {t("loginregister.forgetpass.title")}
               </Textpopins>
@@ -265,24 +253,24 @@ export default class Lock extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D1D1D1",
+    backgroundColor: "#EBECF0",
   },
   header: {
-    flex: 0.2,
+    flex: 0.3,
     justifyContent: "center",
     alignItems: "center",
   },
   content: {
-    flex: 0.7,
+    flex: 0.6,
     borderTopLeftRadius: Constants.statusBarHeight,
     borderTopRightRadius: Constants.statusBarHeight,
     borderBottomLeftRadius: Constants.statusBarHeight * 1.2,
     borderBottomRightRadius: Constants.statusBarHeight * 1.2,
-    backgroundColor: "#fff",
+    backgroundColor: "#EBECF0",
   },
   footer: {
     flex: 0.1,
-    backgroundColor: "#D1D1D1",
+    backgroundColor: "#EBECF0",
   },
   center: {
     textAlign: "center",
@@ -291,8 +279,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    height: width / 5,
-    width: width / 5,
+    marginTop: Constants.statusBarHeight,
+    height: width / 3,
+    width: width / 3,
     backgroundColor: "transparent",
     borderRadius: width,
   },

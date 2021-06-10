@@ -14,6 +14,7 @@ import RecentOperations from "./Components/Home/RecentOperations";
 import SliderCards from "./Components/Home/SliderCards";
 import axios from "axios";
 const icon = require("../../../../assets/adaptive-icon.png");
+import { Snackbar } from "react-native-paper";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export default class Home extends React.Component {
       cards: null,
       refresh: true,
       user: null,
+      visible: false,
     };
   }
 
@@ -29,6 +31,7 @@ export default class Home extends React.Component {
     this.getInfo();
     setInterval(() => {
       this.getInfo();
+      this.setState({ visible: true });
     }, 10000);
   }
 
@@ -95,6 +98,9 @@ export default class Home extends React.Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
+        <Snackbar visible={this.state.visible}>
+          Hey there! I'm a Snackbar.
+        </Snackbar>
         <View style={styles.header}>
           <Button
             transparent
