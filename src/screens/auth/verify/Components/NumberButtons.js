@@ -193,12 +193,12 @@ const styles = StyleSheet.create({
     borderWidth: 1.8,
     borderRadius: 35,
     shadowColor: "#96CA00",
-    shadowRadius: 1,
+    shadowRadius: 8,
     shadowOffset: {
       width: 2,
       height: 3,
     },
-    shadowOpacity: 1,
+    shadowOpacity: 0.8,
   },
   btnText: {
     fontSize: 36,

@@ -58,6 +58,7 @@ import Lock from "./src/screens/auth/verify/Lock";
 import ChangePass from "./src/screens/auth/global/changepass";
 import BarcodeHome from "./src/screens/tabs/barcode/barcodehome";
 import BarcodeStarter from "./src/screens/tabs/barcode/barcodestarter";
+import SwipeRow from "./src/screens/tabs/bucket/SwiperList";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (

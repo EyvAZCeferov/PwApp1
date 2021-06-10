@@ -81,6 +81,7 @@ export default class Lock extends React.Component {
   completed() {
     const { program, setProgram } = this.context;
     this.setState({visible:true})
+    
     setProgram(true);
   }
 
@@ -134,6 +135,7 @@ export default class Lock extends React.Component {
       >
         <Codefield
           completed={() => this.completed()}
+          clearVal={() => this.clearVal()}
           value={this.state.pass}
           {...this.props}
         />

@@ -99,9 +99,14 @@ export default function Codefield(prop) {
     checkPass();
   });
 
-  function checkPass() {
-    if (val.length == 4) {
+  async function checkPass() {
+    if (
+      val.length == 4 &&
+      val == (await AsyncStorage.getItem("localAuthPass"))
+    ) {
       prop.completed();
+    } else {
+      prop.clearVal();
     }
   }
 
