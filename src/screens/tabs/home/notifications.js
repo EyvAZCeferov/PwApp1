@@ -17,19 +17,18 @@ import {
   Left,
   Right,
   Body,
+  StatusBar
 } from "native-base";
-import firebase from "../../../functions/firebase/firebaseConfig";
 import { t } from "../../../functions/lang";
 const { width, height } = Dimensions.get("window");
 import { AntDesign, Feather, Entypo } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
 import * as Permissions from "expo-permissions";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
-import Textpopins from "../../../functions/screenfunctions/text";
+import TextComponent from "../../../constants/Text";
 import axios from "axios";
 import FormData from "form-data";
-import { convertStampDate } from "../../../functions/standart/helper";
+import { convertStampDate } from "../../../constants/helper";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -225,7 +224,7 @@ export default function Notification(props) {
               alignItems: "center",
             }}
           >
-            <Textpopins
+            <TextComponent
               style={styles.nullObject}
               children={t("actions.noResult")}
             />
@@ -253,7 +252,7 @@ export default function Notification(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar backgroundColor="#fff" style="dark" />
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <View
         style={{
           flexDirection: "row",
